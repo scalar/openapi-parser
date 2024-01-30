@@ -1,11 +1,11 @@
 {
-  "requiredString": {
-    "$ref": "required-string.yaml"
-  },
-  "string": {
-    "$ref": "#/requiredString/type"
-  },
-  "name": {
-    "$ref": "../definitions/name.yaml"
-  }
+    "requiredString": {
+        "$ref": "required-string.yaml"
+    },
+    "string": {
+        "$ref": "#/requiredString/type"
+    },
+    "name": {
+        "$ref": "../definitions/name.yaml"
+    }
 }

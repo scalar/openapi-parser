@@ -31,7 +31,7 @@
                         "description": "A paged array of pets",
                         "content": {
                             "application/json": {
-                                "schema":{
+                                "schema": {
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/Pet"
@@ -48,10 +48,7 @@
         "schemas": {
             "Pet": {
                 "type": "object",
-                "required": [
-                    "id",
-                    "name"
-                ],
+                "required": ["id", "name"],
                 "properties": {
                     "id": {
                         "type": "integer",

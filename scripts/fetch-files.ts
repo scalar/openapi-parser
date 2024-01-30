@@ -14,10 +14,10 @@ const apis = await fetchApiList()
 console.log(`✓ Received a list of ${apis.length} APIs from apis.guru.`)
 
 console.log()
-console.log(`Start downloading …`)
+console.log('Start downloading …')
 
 // Take only one
-apis.slice(0, 10).forEach(api => {
+for (const api of apis.slice(0, 10)) {
   console.log(`Fetch ${api.swaggerYamlUrl}…`)
 
   fetch(api.swaggerYamlUrl).then(async (response) => {
@@ -31,66 +31,66 @@ apis.slice(0, 10).forEach(api => {
       }
     })
   })
-})
+}
 
-export async function fetchApiList () {
-  let response = await fetch("https://api.apis.guru/v2/list.json");
+export async function fetchApiList() {
+  const response = await fetch('https://api.apis.guru/v2/list.json')
 
   if (!response.ok) {
-    throw new Error("Unable to downlaod real-world APIs from apis.guru");
+    throw new Error('Unable to downlaod real-world APIs from apis.guru')
   }
 
-  let apiMap = await response.json();
+  const apiMap = await response.json()
 
-  deleteProblematicAPIs(apiMap);
-  let apiArray = flatten(apiMap);
+  deleteProblematicAPIs(apiMap)
+  const apiArray = flatten(apiMap)
 
-  return apiArray;
+  return apiArray
 }
 
 /**
  * Removes certain APIs that are known to cause problems
  */
-function deleteProblematicAPIs (apis) {
+function deleteProblematicAPIs(apis) {
   // TODO:
   // GitHub's CORS policy blocks this request
-  delete apis["googleapis.com:adsense"];
+  delete apis['googleapis.com:adsense']
 
   // These APIs cause infinite loops in json-schema-ref-parser.  Still investigating.
   // https://github.com/APIDevTools/json-schema-ref-parser/issues/56
-  delete apis["bungie.net"];
-  delete apis["stripe.com"];
-  delete apis["docusign.net"];
-  delete apis["kubernetes.io"];
-  delete apis["microsoft.com:graph"];
+  delete apis['bungie.net']
+  delete apis['stripe.com']
+  delete apis['docusign.net']
+  delete apis['kubernetes.io']
+  delete apis['microsoft.com:graph']
 
   // hangs
-  delete apis["presalytics.io:ooxml"];
+  delete apis['presalytics.io:ooxml']
 
   // base security declaration in path/get operation (error message below)
   // "type array but found type null at #/paths//vault/callback/get/security"
-  delete apis["apideck.com:vault"];
+  delete apis['apideck.com:vault']
 }
 
 /**
  * Flattens the API object structure into an array containing all versions of all APIs.
  */
-function flatten (apimap) {
-  let apiArray: {
-    name: string,
-    version: string,
-    swaggerYamlUrl: string,
-  }[] = [];
+function flatten(apimap) {
+  const apiArray: {
+    name: string
+    version: string
+    swaggerYamlUrl: string
+  }[] = []
 
-  for (let [name, api] of Object.entries(apimap)) {
-    let latestVersion = api.versions[api.preferred];
+  for (const [name, api] of Object.entries(apimap)) {
+    const latestVersion = api.versions[api.preferred]
 
     apiArray.push({
       name,
       version: api.preferred,
       swaggerYamlUrl: latestVersion.swaggerYamlUrl,
-    });
+    })
   }
 
-  return apiArray;
+  return apiArray
 }

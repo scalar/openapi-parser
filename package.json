@@ -6,12 +6,18 @@
   "type": "module",
   "scripts": {
     "fetch:files": "vite-node scripts/fetch-files.ts",
+    "lint": "pnpm dlx @biomejs/biome lint .",
+    "format": "pnpm dlx @biomejs/biome check . --apply",
+    "format:check": "pnpm dlx @biomejs/biome check .",
+    "types:check": "tsc --noEmit --skipLibCheck",
     "test": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@biomejs/biome": "1.5.3",
+    "typescript": "^5.3.3",
     "vitest": "^1.2.2"
   },
   "dependencies": {
