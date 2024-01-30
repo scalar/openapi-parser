@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "fetch:files": "vite-node scripts/fetch-files.ts",
     "test": "vitest"
   },
   "keywords": [],
@@ -12,5 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "vitest": "^1.2.2"
+  },
+  "dependencies": {
+    "github-slugger": "^2.0.0",
+    "glob": "^10.3.10",
+    "vite-node": "^1.2.2"
   }
 }
