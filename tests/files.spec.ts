@@ -6,7 +6,7 @@ import { parse, validate } from '../src/'
 describe('files', async () => {
   const files = await glob('./tests/files/*.yaml')
 
-  for (const file in files) {
+  files.forEach((file) => {
     const filename = file.split('/').pop()
 
     it(`[${filename}] validate`, async () => {
@@ -22,5 +22,5 @@ describe('files', async () => {
 
       expect(result.info.title).not.toBe(undefined)
     })
-  }
+  })
 })

@@ -15,6 +15,9 @@
             "recommended": true,
             "performance": {
                 "noDelete": "off"
+            },
+            "complexity": {
+                "noForEach": "off"
             }
         },
         "ignore": ["dist/**/*", "**/*.js"]

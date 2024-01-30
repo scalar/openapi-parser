@@ -17,7 +17,7 @@ console.log()
 console.log('Start downloading …')
 
 // Take only one
-for (const api of apis.slice(0, 10)) {
+apis.slice(0, 30).forEach((api) => {
   console.log(`Fetch ${api.swaggerYamlUrl}…`)
 
   fetch(api.swaggerYamlUrl).then(async (response) => {
@@ -31,7 +31,7 @@ for (const api of apis.slice(0, 10)) {
       }
     })
   })
-}
+})
 
 export async function fetchApiList() {
   const response = await fetch('https://api.apis.guru/v2/list.json')
