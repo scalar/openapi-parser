@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "tsBuildInfoFile": null,
+      "composite": true,
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "Node",
+      "esModuleInterop": true,
+      "module": "esnext",
+      "allowSyntheticDefaultImports": true,
+      "outDir": "dist",
+      "sourceMap": false,
+      "lib": ["es2015"]
+    },
+    "include": [
+      "src/**/*",
+      "tests/**/*",
+    ]
+  }

@@ -9,3 +9,41 @@ Node.js package to parse OpenAPI files.
 * Well tested
 * Small bundlesize
 * Support for OpenAPI 4.0 👀
+
+## Usage
+
+### Parse
+
+```ts
+import { parse } from '@scalar/openapi-parser'
+
+const file = `{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}`
+
+const result = await parse(file)
+```
+
+### Validate
+
+```ts
+import { validate } from '@scalar/openapi-validater'
+
+const file = `{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}`
+
+const result = await parse(file)
+
+console.log(result.valid)
+```
