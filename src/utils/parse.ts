@@ -1,14 +1,17 @@
 import { Validator } from '@seriousme/openapi-schema-validator'
-import { OpenAPI } from 'openapi-types'
+import { ParseResult } from '../types'
 
-export async function parse(value: string): Promise<OpenAPI.Document> {
+/**
+ * Validates an OpenAPI schema and resolves all references.
+ */
+export async function parse(value: string): Promise<ParseResult> {
   const validator = new Validator()
+
   const result = await validator.validate(value)
 
-  if (result.valid) {
-    const schema = validator.resolveRefs() as OpenAPI.Document
-    return schema
+  if (!result.valid) {
+    throw new Error(`Invalid Schema: ${result.errors}`)
   }
 
-  throw new Error(`Invalid schema: ${result.errors}`)
+  return validator.resolveRefs() as ParseResult
 }

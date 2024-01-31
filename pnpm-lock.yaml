@@ -11,6 +11,9 @@ dependencies:
   '@types/node':
     specifier: ^20.11.10
     version: 20.11.13
+  ajv:
+    specifier: ^8.12.0
+    version: 8.12.0
   github-slugger:
     specifier: ^2.0.0
     version: 2.0.0

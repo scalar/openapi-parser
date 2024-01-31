@@ -14,6 +14,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
+      exclude: ['scripts', 'tests'],
       enabled: true,
       reporter: 'text',
     },

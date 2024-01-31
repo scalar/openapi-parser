@@ -14,10 +14,13 @@
         "rules": {
             "recommended": true,
             "performance": {
-                "noDelete": "off"
+                "noDelete": "warn"
             },
             "complexity": {
                 "noForEach": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "warn"
             }
         },
         "ignore": ["dist/**/*", "**/*.js"]

@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { glob } from 'glob'
 import { describe, expect, test } from 'vitest'
-import { parse, validate } from '../src/'
+import { parse, validate } from '../src'
 
 const invalidFiles = [
   'tests/files/statsocialcom.yaml',
