@@ -1,6 +1,6 @@
-# @scalar/openapi-parser
+# Scalar OpenAPI Parser
 
-Node.js package to parse OpenAPI files.
+Node.js package to parse OpenAPI files
 
 ## Goals
 
@@ -9,6 +9,12 @@ Node.js package to parse OpenAPI files.
 * Well tested
 * Small bundlesize
 * Support for OpenAPI 4.0 👀
+
+## Installation
+
+```
+npm add @scalar/openapi-parser
+```
 
 ## Usage
 
@@ -43,7 +49,7 @@ const file = `{
   "paths": {}
 }`
 
-const result = await parse(file)
+const result = await validate(file)
 
 console.log(result.valid)
 ```
