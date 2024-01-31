@@ -19,17 +19,21 @@ console.log('Start downloading …')
 apis.forEach((api) => {
   console.log(`Fetch ${api.swaggerYamlUrl}…`)
 
-  fetch(api.swaggerYamlUrl).then(async (response) => {
-    const content = await response.text()
+  fetch(api.swaggerYamlUrl)
+    .then(async (response) => {
+      const content = await response.text()
 
-    const filename = `${slugger.slug(api.name)}.yaml`
+      const filename = `${slugger.slug(api.name)}.yaml`
 
-    fs.writeFile(`./tests/files/${filename}`, content, (err) => {
-      if (err) {
-        throw err
-      }
+      fs.writeFile(`./tests/files/${filename}`, content, (err) => {
+        if (err) {
+          throw err
+        }
+      })
     })
-  })
+    .catch((err) => {
+      console.error(`[ERROR] Failed to fetch ${api.swaggerYamlUrl}`, err)
+    })
 })
 
 export async function fetchApiList() {
