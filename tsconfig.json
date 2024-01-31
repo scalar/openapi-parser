@@ -10,7 +10,8 @@
       "allowSyntheticDefaultImports": true,
       "outDir": "dist",
       "sourceMap": false,
-      "lib": ["es2015"]
+      "lib": ["ESNext"],
+      "target": "ESNext"
     },
     "include": [
       "src/**/*",

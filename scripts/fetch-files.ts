@@ -16,8 +16,7 @@ console.log(`✓ Received a list of ${apis.length} APIs from apis.guru.`)
 console.log()
 console.log('Start downloading …')
 
-// Take only one
-apis.slice(0, 30).forEach((api) => {
+apis.forEach((api) => {
   console.log(`Fetch ${api.swaggerYamlUrl}…`)
 
   fetch(api.swaggerYamlUrl).then(async (response) => {

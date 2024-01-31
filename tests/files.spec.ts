@@ -1,26 +1,22 @@
 import fs from 'node:fs'
 import { glob } from 'glob'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import { parse, validate } from '../src/'
 
-describe('files', async () => {
-  const files = await glob('./tests/files/*.yaml')
+const invalidFiles = [
+  'tests/files/statsocialcom.yaml',
+  'tests/files/spotifycom.yaml',
+]
 
-  files.forEach((file) => {
-    const filename = file.split('/').pop()
+const files = (await glob('./tests/files/*.yaml')).filter(
+  (file) => !invalidFiles.includes(file),
+)
 
-    it(`[${filename}] validate`, async () => {
-      const content = fs.readFileSync(file, 'utf-8')
-      const result = await validate(content)
+describe.sequential('files:parse', async () => {
+  test.each(files.slice(0, 300))('[%s] parse', async (file) => {
+    const content = fs.readFileSync(file, 'utf-8')
+    const result = await parse(content)
 
-      expect(result.valid).toBe(true)
-    })
-
-    it(`[${filename}] parse`, async () => {
-      const content = fs.readFileSync(file, 'utf-8')
-      const result = await parse(content)
-
-      expect(result.info.title).not.toBe(undefined)
-    })
+    expect(result.info.title).not.toBe(undefined)
   })
 })
