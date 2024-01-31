@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scalar OpenAPI Parser</title>
+</head>
+<body>
+    Open Console
+
+    <script type="module">
+        import { parse } from './src/index.ts';
+
+        console.log(await parse(`{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}`))
+    </script>
+</body>
+</html>
