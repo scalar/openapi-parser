@@ -44,7 +44,7 @@ const result = await parse(file)
 ### Validate
 
 ```ts
-import { validate } from '@scalar/openapi-validater'
+import { validate } from '@scalar/openapi-parser'
 
 const file = `{
   "openapi": "3.1.0",
