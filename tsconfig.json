@@ -10,7 +10,7 @@
       "allowSyntheticDefaultImports": true,
       "outDir": "dist",
       "sourceMap": false,
-      "lib": ["ESNext"],
+      "lib": ["ESNext", "DOM"],
       "target": "ESNext"
     },
     "include": [

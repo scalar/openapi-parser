@@ -11,6 +11,14 @@ export type ParseResult = OpenAPI.Document
 
 export type EmptyObject = Record<string, never>
 
+export type AjvOptions = {
+  strict?: boolean | 'log'
+}
+
+export type Specification = {
+  $id?: string
+}
+
 /**
  * These types are copied from 'openapi-types', but the `ReferenceObject` type is removed.
  * After an OpenAPI schema is parsed, all references are resolved and replaced with the actual object.

@@ -10,9 +10,9 @@ Node.js package to parse OpenAPI files
 ## Goals
 
 - [x] TypeScript FTW
-- [ ] No Node.js polyfills required
-- [ ] Well tested
-- [ ] Small bundlesize
+- [x] No Node.js polyfills required
+- [x] Well tested
+- [x] Small bundlesize
 - [ ] Support for OpenAPI 4.0 👀
 
 ## Installation

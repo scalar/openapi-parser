@@ -1,4 +1,4 @@
-import { Validator } from '@seriousme/openapi-schema-validator'
+import { Validator } from '../lib'
 import { ParseResult } from '../types'
 
 /**

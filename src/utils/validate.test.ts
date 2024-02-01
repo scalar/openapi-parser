@@ -16,6 +16,7 @@ describe('validate', async () => {
       }`)
 
     expect(result.valid).toBe(false)
+
     expect(Array.isArray(result.errors) ? result.errors[0].message : '').toBe(
       `must have required property 'info'`,
     )
