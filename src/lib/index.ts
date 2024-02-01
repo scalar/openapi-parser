@@ -5,7 +5,7 @@ import { JSON_SCHEMA, load } from 'js-yaml'
 import type {
   AjvOptions,
   Specification,
-  ValidationResult,
+  ValidateResult,
   ValidateOptions,
 } from '../types'
 import { checkRefs, replaceRefs } from './resolve'
@@ -164,7 +164,7 @@ export class Validator {
   async validate(
     data: string | object,
     options?: ValidateOptions,
-  ): Promise<ValidationResult> {
+  ): Promise<ValidateResult> {
     try {
       const specification = await getSpecFromData(data)
 
@@ -205,7 +205,7 @@ export class Validator {
         return checkRefs(specification)
       }
 
-      const result: ValidationResult = {
+      const result: ValidateResult = {
         valid: schemaResult,
       }
 

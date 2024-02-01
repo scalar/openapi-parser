@@ -6,7 +6,17 @@ describe('validate', async () => {
     const result = await validate('')
 
     expect(result.valid).toBe(false)
-    expect(result.errors).toBe('Cannot find JSON, YAML or filename in data')
+    expect(result.errors).toMatchObject([
+      {
+        error: 'Cannot find JSON, YAML or filename in data',
+        path: '',
+        start: {
+          column: 1,
+          line: 1,
+          offset: 0,
+        },
+      },
+    ])
   })
 
   it('returns errors for an invalid schema', async () => {

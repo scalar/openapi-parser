@@ -1,18 +1,16 @@
-import { type ErrorObject } from 'ajv'
-
-export type { ErrorObject } from 'ajv'
-
-export type ValidationResult = {
+export type ValidateResult = {
   valid: boolean
-  errors?: {
-    start: {
-      line: number
-      column: number
-      offset: number
-    }
-    error: string
-    path: string
-  }[]
+  errors?: ErrorObject[]
+}
+
+export type ErrorObject = {
+  start: {
+    line: number
+    column: number
+    offset: number
+  }
+  error: string
+  path: string
 }
 
 export type ValidateOptions = {
@@ -20,7 +18,11 @@ export type ValidateOptions = {
   indent?: number
 }
 
-export type ParseResult = OpenAPI.Document
+export type ParseResult = {
+  valid: boolean
+  document?: OpenAPI.Document
+  errors?: ErrorObject[]
+}
 
 export type EmptyObject = Record<string, never>
 
