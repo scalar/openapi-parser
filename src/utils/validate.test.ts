@@ -10,15 +10,26 @@ describe('validate', async () => {
   })
 
   it('returns errors for an invalid schema', async () => {
-    const result = await validate(`{
+    const result = await validate(
+      `{
         "openapi": "3.1.0",
         "paths": {}
-      }`)
+      }`,
+    )
 
     expect(result.valid).toBe(false)
 
-    expect(Array.isArray(result.errors) ? result.errors[0].message : '').toBe(
-      `must have required property 'info'`,
-    )
+    expect(result.errors).toBeTypeOf('object')
+    expect(Array.isArray(result.errors)).toBe(true)
+    expect(result.errors.length).toBe(1)
+    expect(result.errors[0]).toMatchObject({
+      error: " must have required property 'info'",
+      path: '',
+      start: {
+        column: 1,
+        line: 1,
+        offset: 0,
+      },
+    })
   })
 })

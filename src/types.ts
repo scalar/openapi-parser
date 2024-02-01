@@ -7,6 +7,11 @@ export type ValidationResult = {
   errors?: string | ErrorObject[]
 }
 
+export type ValidateOptions = {
+  format?: 'js' | 'cli'
+  indent?: number
+}
+
 export type ParseResult = OpenAPI.Document
 
 export type EmptyObject = Record<string, never>

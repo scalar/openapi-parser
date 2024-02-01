@@ -2,8 +2,14 @@ import Ajv04 from 'ajv-draft-04'
 import addFormats from 'ajv-formats'
 import Ajv2020 from 'ajv/dist/2020'
 import { JSON_SCHEMA, load } from 'js-yaml'
-import type { AjvOptions, Specification, ValidationResult } from '../types'
+import type {
+  AjvOptions,
+  Specification,
+  ValidationResult,
+  ValidateOptions,
+} from '../types'
 import { checkRefs, replaceRefs } from './resolve'
+import betterAjvErrors from '../utils/betterAjvErrors'
 
 const supportedVersions = new Set(['2.0', '3.0', '3.1'])
 
@@ -141,7 +147,10 @@ export class Validator {
     this.externalRefs[newUri] = spec
   }
 
-  async validate(data: string | object): Promise<ValidationResult> {
+  async validate(
+    data: string | object,
+    options?: ValidateOptions,
+  ): Promise<ValidationResult> {
     const specification = await getSpecFromData(data)
 
     this.specification = specification
@@ -185,7 +194,22 @@ export class Validator {
     }
 
     if (validateSchema.errors) {
-      result.errors = validateSchema.errors
+      if (typeof validateSchema.errors === 'string') {
+        result.errors = validateSchema.errors
+      } else {
+        result.errors = betterAjvErrors(
+          schemaResult,
+          {},
+          validateSchema.errors,
+          {
+            format: options?.format ?? 'js',
+            indent: options?.indent ?? 2,
+            colorize: false,
+          },
+        )
+      }
+
+      console.log(result.errors)
     }
 
     return result
