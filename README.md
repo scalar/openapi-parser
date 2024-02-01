@@ -57,4 +57,8 @@ const file = `{
 const result = await validate(file)
 
 console.log(result.valid)
+
+if (!result.valid) {
+  console.log(result.errors)
+}
 ```
