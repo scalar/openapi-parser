@@ -10,8 +10,7 @@ export async function parse(value: string): Promise<ParseResult> {
   const result = await validator.validate(value)
 
   if (!result.valid) {
-    // return result.errors
-    throw new Error(`Invalid Schema: ${result.errors}`)
+    throw new Error(JSON.stringify(result.errors, null, 2))
   }
 
   return validator.resolveRefs() as ParseResult

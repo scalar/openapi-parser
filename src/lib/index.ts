@@ -31,6 +31,20 @@ const ERRORS = {
 
 const inlinedRefs = 'x-inlined-refs'
 
+function makeErrorArray(error: string) {
+  return [
+    {
+      start: {
+        line: 1,
+        column: 1,
+        offset: 0,
+      },
+      error,
+      path: '',
+    },
+  ]
+}
+
 function getOpenApiVersion(specification: Specification) {
   for (const version of supportedVersions) {
     const specificationType = version === '2.0' ? 'swagger' : 'openapi'
@@ -151,68 +165,75 @@ export class Validator {
     data: string | object,
     options?: ValidateOptions,
   ): Promise<ValidationResult> {
-    const specification = await getSpecFromData(data)
+    try {
+      const specification = await getSpecFromData(data)
 
-    this.specification = specification
+      this.specification = specification
 
-    if (specification === undefined || specification === null) {
-      return {
-        valid: false,
-        errors: ERRORS.EMPTY_OR_INVALID,
+      if (specification === undefined || specification === null) {
+        return {
+          valid: false,
+          errors: makeErrorArray(ERRORS.EMPTY_OR_INVALID),
+        }
       }
-    }
 
-    if (Object.keys(this.externalRefs).length > 0) {
-      specification[inlinedRefs] = this.externalRefs
-    }
-
-    const { version, specificationType, specificationVersion } =
-      getOpenApiVersion(specification)
-    this.version = version
-    this.specificationVersion = specificationVersion
-    this.specificationType = specificationType
-
-    if (!version) {
-      return {
-        valid: false,
-        errors: ERRORS.OPENAPI_VERSION_NOT_SUPPORTED,
+      if (Object.keys(this.externalRefs).length > 0) {
+        specification[inlinedRefs] = this.externalRefs
       }
-    }
 
-    const validateSchema = await this.getAjvValidator(version)
+      const { version, specificationType, specificationVersion } =
+        getOpenApiVersion(specification)
 
-    // Check if the specification matches the JSON schema
-    const schemaResult = validateSchema(specification)
+      this.version = version
+      this.specificationVersion = specificationVersion
+      this.specificationType = specificationType
 
-    // Check if the references are valid as those can’t be validated bu JSON schema
-    if (schemaResult) {
-      return checkRefs(specification)
-    }
+      if (!version) {
+        return {
+          valid: false,
+          errors: makeErrorArray(ERRORS.OPENAPI_VERSION_NOT_SUPPORTED),
+        }
+      }
 
-    const result: ValidationResult = {
-      valid: schemaResult,
-    }
+      const validateSchema = await this.getAjvValidator(version)
 
-    if (validateSchema.errors) {
-      if (typeof validateSchema.errors === 'string') {
-        result.errors = validateSchema.errors
-      } else {
-        result.errors = betterAjvErrors(
-          schemaResult,
-          {},
-          validateSchema.errors,
-          {
+      // Check if the specification matches the JSON schema
+      const schemaResult = validateSchema(specification)
+
+      // Check if the references are valid as those can’t be validated bu JSON schema
+      if (schemaResult) {
+        return checkRefs(specification)
+      }
+
+      const result: ValidationResult = {
+        valid: schemaResult,
+      }
+
+      if (validateSchema.errors) {
+        let errors = []
+
+        if (typeof validateSchema.errors === 'string') {
+          errors = makeErrorArray(validateSchema.errors)
+        } else {
+          errors = validateSchema.errors
+        }
+
+        if (errors.length > 0) {
+          result.errors = betterAjvErrors(schemaResult, {}, errors, {
             format: options?.format ?? 'js',
             indent: options?.indent ?? 2,
             colorize: false,
-          },
-        )
+          })
+        }
       }
 
-      console.log(result.errors)
+      return result
+    } catch (error) {
+      return {
+        valid: false,
+        errors: makeErrorArray(error.message ?? error),
+      }
     }
-
-    return result
   }
 
   async getAjvValidator(version: string) {

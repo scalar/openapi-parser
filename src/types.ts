@@ -4,7 +4,15 @@ export type { ErrorObject } from 'ajv'
 
 export type ValidationResult = {
   valid: boolean
-  errors?: string | ErrorObject[]
+  errors?: {
+    start: {
+      line: number
+      column: number
+      offset: number
+    }
+    error: string
+    path: string
+  }[]
 }
 
 export type ValidateOptions = {
