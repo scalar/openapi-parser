@@ -13,6 +13,7 @@ Node.js package to parse OpenAPI files
 - [x] No Node.js polyfills required
 - [x] Well tested
 - [x] Small bundlesize
+- [ ] Better errors
 - [ ] Support for OpenAPI 4.0 👀
 
 ## Installation
