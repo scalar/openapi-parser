@@ -14,3 +14,6 @@ pnpm-lock.yaml
 cdn
 
 fixtures
+packages/openapi-parser/tests/files
+packages/openapi-parser/tests/**/*.yaml
+packages/openapi-parser/tests/**/*.json
