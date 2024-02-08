@@ -22,7 +22,7 @@
     "CHANGELOG.md"
   ],
   "main": "./dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
   "module": "./dist/index.js",
   "repository": {
     "type": "git",
@@ -36,7 +36,8 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@types/js-yaml": "^4.0.9"
+    "@types/js-yaml": "^4.0.9",
+    "vite-plugin-dts": "^3.7.2"
   },
   "dependencies": {
     "@humanwhocodes/momoa": "^3.0.0",
