@@ -17,23 +17,21 @@ console.log()
 console.log('Start downloading …')
 
 apis.forEach((api) => {
-  console.log(`Fetch ${api.swaggerYamlUrl}…`)
+  console.log(`Fetch ${api.swaggerYamlUrl}`)
 
   fetch(api.swaggerYamlUrl)
     .then(async (response) => {
       const content = await response.text()
 
       const filename = `${slugger.slug(api.name)}.yaml`
+      const file = `./packages/openapi-parser/tests/files/${filename}`
 
-      fs.writeFile(
-        `./packages/openapi-parser/tests/files/${filename}`,
-        content,
-        (err) => {
-          if (err) {
-            throw err
-          }
-        },
-      )
+      console.log('Write', file)
+      fs.writeFile(file, content, (err) => {
+        if (err) {
+          throw err
+        }
+      })
     })
     .catch((err) => {
       console.error(`[ERROR] Failed to fetch ${api.swaggerYamlUrl}`, err)

@@ -35,15 +35,16 @@ jobs:
         run: pnpm turbo build
       - name: Check types
         run: pnpm turbo types:check
-      - name: Cache example files
-        id: cache-real-world-examples
-        uses: actions/cache@v4
-        with:
-          path: packages/openapi-parser/tests/files
-          key: real-world-examples
-      - if: steps.cache-real-world-examples != 'true'
-        name: 'Prepare test environment (fetch example files)'
+      # - name: Cache example files
+      #   id: cache-real-world-examples
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: packages/openapi-parser/tests/files
+      #     key: real-world-examples
+      - name: 'Prepare test environment (fetch example files)'
         run: pnpm test:prepare
+      - name: Debug output
+        run: ls -la packages/openapi-parser/tests/files
       - name: Run tests
         run: pnpm turbo test
       # TODO: Make repository public first

@@ -15,6 +15,8 @@ const files = (
   await glob('./packages/openapi-parser/tests/files/*.yaml')
 ).filter((file) => !invalidFiles.includes(file))
 
+console.log('files', files)
+
 /**
  * This test suite parses a large number of real-world OpenAPI files
  */
