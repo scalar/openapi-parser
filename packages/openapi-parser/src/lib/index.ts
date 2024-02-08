@@ -12,6 +12,9 @@ import type {
 import betterAjvErrors from '../utils/betterAjvErrors'
 import { checkRefs, replaceRefs } from './resolve'
 
+/**
+ * Supported Swagger/OpenAPI versions
+ */
 const supportedVersions = new Set(['2.0', '3.0', '3.1'])
 
 const jsonSchemaVersions = {
@@ -32,7 +35,7 @@ const ERRORS = {
 
 const inlinedRefs = 'x-inlined-refs'
 
-function makeErrorArray(error: string) {
+function makeErrorArray(message: string) {
   return [
     {
       start: {
@@ -40,7 +43,7 @@ function makeErrorArray(error: string) {
         column: 1,
         offset: 0,
       },
-      error,
+      error: message,
       path: '',
     },
   ]
