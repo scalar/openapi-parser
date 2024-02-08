@@ -12,9 +12,6 @@ import type {
 import betterAjvErrors from '../utils/betterAjvErrors'
 import { checkRefs, replaceRefs } from './resolve'
 
-/**
- * Supported Swagger/OpenAPI versions
- */
 const supportedVersions = new Set(['2.0', '3.0', '3.1'])
 
 const jsonSchemaVersions = {
