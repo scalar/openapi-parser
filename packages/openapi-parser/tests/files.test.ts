@@ -20,7 +20,7 @@ const files = (
  */
 describe.sequential('files:parse', async () => {
   // Those tests take a while, let’s run them in CI only.
-  if (!process.env.CI) {
+  if (process.env.CI) {
     // TODO: We’re currently only testing a few of the files for performance reasons.
     test.each(files.slice(0, 500))('[%s] parse', async (file) => {
       const content = fs.readFileSync(file, 'utf-8')
