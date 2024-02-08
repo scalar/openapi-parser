@@ -118,7 +118,7 @@ export class Validator {
 
   protected specification: Specification
 
-  protected version: string
+  public version: string
 
   protected errors: string
 

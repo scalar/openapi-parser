@@ -82,4 +82,18 @@ paths: {}
 
     expect(result.document.info.title).toBe('Hello World')
   })
+
+  it('returns the version', async () => {
+    const result = await parse(`{
+      "openapi": "3.1.0",
+      "info": {
+          "title": "Hello World",
+          "version": "1.0.0"
+      },
+      "paths": {}
+    }`)
+
+    expect(result.valid).toBe(true)
+    expect(result.version).toBe('3.1')
+  })
 })

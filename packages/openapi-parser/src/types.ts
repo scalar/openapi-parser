@@ -20,6 +20,7 @@ export type ValidateOptions = {
 
 export type ParseResult = {
   valid: boolean
+  version: string | undefined
   document?: OpenAPI.Document
   errors?: ErrorObject[]
 }

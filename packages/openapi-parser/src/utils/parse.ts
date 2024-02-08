@@ -12,12 +12,16 @@ export async function parse(value: string): Promise<ParseResult> {
   if (!result.valid) {
     return {
       valid: false,
+      version: undefined,
       errors: result.errors,
     }
   }
 
+  const document = validator.resolveRefs() as OpenAPI.Document
+
   return {
     valid: true,
-    document: validator.resolveRefs() as OpenAPI.Document,
+    version: validator.version,
+    document,
   }
 }
