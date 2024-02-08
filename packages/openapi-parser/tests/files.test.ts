@@ -5,8 +5,8 @@ import { describe, expect, test } from 'vitest'
 import { parse } from '../src'
 
 const invalidFiles = [
-  'tests/files/statsocialcom.yaml',
-  'tests/files/spotifycom.yaml',
+  'packages/openapi-parser/tests/files/statsocialcom.yaml',
+  'packages/openapi-parser/tests/files/spotifycom.yaml',
 ]
 
 const files = (
@@ -15,7 +15,7 @@ const files = (
 
 describe.sequential('files:parse', async () => {
   // Those tests take a while, let’s run them in CI only.
-  if (process.env.CI) {
+  if (!process.env.CI) {
     test.each(files.slice(0, 300))('[%s] parse', async (file) => {
       const content = fs.readFileSync(file, 'utf-8')
       const result = await parse(content)
