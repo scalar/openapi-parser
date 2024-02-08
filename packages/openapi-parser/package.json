@@ -39,10 +39,8 @@
   "devDependencies": {
     "@biomejs/biome": "1.5.3",
     "@types/js-yaml": "^4.0.9",
-    "@vitest/coverage-v8": "^1.2.2",
     "typescript": "^5.3.3",
-    "vite-plugin-node-polyfills": "^0.19.0",
-    "vitest": "^1.2.2"
+    "vite-plugin-node-polyfills": "^0.19.0"
   },
   "dependencies": {
     "@babel/code-frame": "^7.23.5",

@@ -7,7 +7,9 @@
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "github-slugger": "^2.0.0",
-    "vite-node": "^1.2.2"
+    "vite-node": "^1.2.2",
+    "@vitest/coverage-v8": "^1.2.2",
+    "vitest": "^1.2.2"
   },
   "private": true,
   "scripts": {
@@ -17,7 +19,7 @@
     "format:check": "pnpm prettier --check .",
     "lint": "pnpm -r lint:check",
     "lint:fix": "pnpm -r lint:fix",
-    "test": "pnpm -r test",
+    "test": "vitest",
     "test:prepare": "vite-node scripts/fetch-files.ts",
     "types:check": "pnpm -r types:check"
   }
