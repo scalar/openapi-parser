@@ -25,11 +25,15 @@ apis.forEach((api) => {
 
       const filename = `${slugger.slug(api.name)}.yaml`
 
-      fs.writeFile(`./tests/files/${filename}`, content, (err) => {
-        if (err) {
-          throw err
-        }
-      })
+      fs.writeFile(
+        `./packages/openapi-parser/tests/files/${filename}`,
+        content,
+        (err) => {
+          if (err) {
+            throw err
+          }
+        },
+      )
     })
     .catch((err) => {
       console.error(`[ERROR] Failed to fetch ${api.swaggerYamlUrl}`, err)
