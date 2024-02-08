@@ -73,6 +73,16 @@ We are API nerds. You too? Let’s chat on Discord: <https://discord.gg/8HeZcRGP
 ## Contributors
 
 <!-- readme: collaborators,contributors -start -->
+<table>
+<tr>
+    <td align="center">
+        <a href="https://github.com/hanspagel">
+            <img src="https://avatars.githubusercontent.com/u/1577992?v=4" width="100;" alt="hanspagel"/>
+            <br />
+            <sub><b>hanspagel</b></sub>
+        </a>
+    </td></tr>
+</table>
 <!-- readme: collaborators,contributors -end -->
 
 Contributions are welcome! Read [`CONTRIBUTING`](https://github.com/scalar/openapi-parser/blob/main/CONTRIBUTING).
