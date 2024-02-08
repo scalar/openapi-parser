@@ -6,15 +6,14 @@
 [![GitHub License](https://img.shields.io/github/license/scalar/openapi-parser)](https://github.com/scalar/openapi-parser/blob/main/LICENSE)
 [![Discord](https://img.shields.io/discord/1135330207960678410?style=flat&color=5865F2)](https://discord.gg/8HeZcRGPFS)
 
-Modern OpenAPI parser written in TypeScript, with support for Swagger 2.0, OpenAPI 3.0 and OpenAPI 3.1
+Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAPI 3.0 and Swagger 2.0.
 
 ## Goals
 
-- [x] TypeScript FTW
-- [x] No Node.js polyfills required
-- [x] Well tested
-- [x] Small bundlesize
-- [x] Better errors
+- [x] Written in TypeScript
+- [x] Runs in Node.js and in the browser (without any polyfills or configuration)
+- [x] Tested with thousands of real world examples
+- [x] Amazing error output
 - [ ] Support for OpenAPI 4.0 👀
 
 ## Installation
