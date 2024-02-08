@@ -36,13 +36,13 @@ jobs:
       - name: Check types
         run: pnpm turbo types:check
       - name: Cache example files
-        id: cache-example-files
+        id: cache-real-world-examples
         uses: actions/cache@v4
         with:
           path: packages/openapi-parser/tests/files
-          key: openapi-parser-tests-example-files
-      - name: 'Prepare test environment (fetch example files)'
-        if: steps.cache-example-files.outputs.cache-hit != 'true'
+          key: real-world-examples
+      - if: steps.cache-real-world-examples != 'true'
+        name: 'Prepare test environment (fetch example files)'
         run: pnpm test:prepare
       - name: Run tests
         run: pnpm turbo test
