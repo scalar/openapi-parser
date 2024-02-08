@@ -9,24 +9,24 @@ const invalidFiles = [
   'tests/files/spotifycom.yaml',
 ]
 
-const files = (await glob('./tests/files/*.yaml')).filter(
-  (file) => !invalidFiles.includes(file),
-)
+const files = (
+  await glob('./packages/openapi-parser/tests/files/*.yaml')
+).filter((file) => !invalidFiles.includes(file))
 
-// Those tests take a while, let’s run them in CI only.
-if (process.env.CI) {
-  describe.sequential('files:parse', async () => {
+describe.sequential('files:parse', async () => {
+  // Those tests take a while, let’s run them in CI only.
+  if (process.env.CI) {
     test.each(files.slice(0, 300))('[%s] parse', async (file) => {
       const content = fs.readFileSync(file, 'utf-8')
       const result = await parse(content)
 
       expect(result.document.info.title).not.toBe(undefined)
     })
-  })
-}
-// Otherwise, just check that the files are valid.
-else {
-  test('files.length', () => {
-    expect(Array.isArray(files)).toBe(true)
-  })
-}
+  }
+  // Otherwise, just check that the files are valid.
+  else {
+    test('files.length', () => {
+      expect(Array.isArray(files)).toBe(true)
+    })
+  }
+})
