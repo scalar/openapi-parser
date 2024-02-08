@@ -15,16 +15,14 @@ const files = (
   await glob('./packages/openapi-parser/tests/files/*.yaml')
 ).filter((file) => !invalidFiles.includes(file))
 
-console.log('files', files)
-
 /**
  * This test suite parses a large number of real-world OpenAPI files
  */
 describe.sequential('files:parse', async () => {
   // Those tests take a while, let’s run them in CI only.
-  if (process.env.CI) {
+  if (!process.env.CI) {
     // TODO: We’re currently only testing a few of the files for performance reasons.
-    test.each(files.slice(0, 10))('[%s] parse', async (file) => {
+    test.each(files.slice(0, 500))('[%s] parse', async (file) => {
       const content = fs.readFileSync(file, 'utf-8')
       const result = await parse(content)
 
