@@ -1,6 +1,7 @@
-import fs from 'node:fs'
 import { glob } from 'glob'
+import fs from 'node:fs'
 import { describe, expect, test } from 'vitest'
+
 import { parse } from '../src'
 
 const invalidFiles = [

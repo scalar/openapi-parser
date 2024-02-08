@@ -1,34 +1,40 @@
 // import { codeFrameColumns } from '@babel/code-frame';
 // import chalk from 'chalk';
-
-import { getMetaFromPath, getDecoratedDataPath } from '../json';
+import { getDecoratedDataPath, getMetaFromPath } from '../json'
 
 export default class BaseValidationError {
   // eslint-disable-next-line default-param-last
-  constructor(options = { isIdentifierLocation: false }, { colorize, data, schema, jsonAst, jsonRaw }) {
-    this.options = options;
-    this.colorize = !!(!!colorize || colorize === undefined);
-    this.data = data;
-    this.schema = schema;
-    this.jsonAst = jsonAst;
-    this.jsonRaw = jsonRaw;
+  constructor(
+    options = { isIdentifierLocation: false },
+    { colorize, data, schema, jsonAst, jsonRaw },
+  ) {
+    this.options = options
+    this.colorize = !!(!!colorize || colorize === undefined)
+    this.data = data
+    this.schema = schema
+    this.jsonAst = jsonAst
+    this.jsonRaw = jsonRaw
   }
 
   getChalk() {
-    return this.colorize ? chalk : new chalk.Instance({ level: 0 });
+    return this.colorize ? chalk : new chalk.Instance({ level: 0 })
   }
 
   getLocation(dataPath = this.instancePath) {
-    const { isIdentifierLocation, isSkipEndLocation } = this.options;
-    const { loc } = getMetaFromPath(this.jsonAst, dataPath, isIdentifierLocation);
+    const { isIdentifierLocation, isSkipEndLocation } = this.options
+    const { loc } = getMetaFromPath(
+      this.jsonAst,
+      dataPath,
+      isIdentifierLocation,
+    )
     return {
       start: loc.start,
       end: isSkipEndLocation ? undefined : loc.end,
-    };
+    }
   }
 
   getDecoratedPath(dataPath = this.instancePath) {
-    return getDecoratedDataPath(this.jsonAst, dataPath);
+    return getDecoratedDataPath(this.jsonAst, dataPath)
   }
 
   getCodeFrame(message, dataPath = this.instancePath) {
@@ -47,21 +53,27 @@ export default class BaseValidationError {
        */
       highlightCode: false,
       message,
-    });
+    })
   }
 
   /**
    * @return {string}
    */
   get instancePath() {
-    return typeof this.options.instancePath !== 'undefined' ? this.options.instancePath : this.options.dataPath;
+    return typeof this.options.instancePath !== 'undefined'
+      ? this.options.instancePath
+      : this.options.dataPath
   }
 
   print() {
-    throw new Error(`Implement the 'print' method inside ${this.constructor.name}!`);
+    throw new Error(
+      `Implement the 'print' method inside ${this.constructor.name}!`,
+    )
   }
 
   getError() {
-    throw new Error(`Implement the 'getError' method inside ${this.constructor.name}!`);
+    throw new Error(
+      `Implement the 'getError' method inside ${this.constructor.name}!`,
+    )
   }
 }

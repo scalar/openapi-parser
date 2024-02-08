@@ -2,14 +2,15 @@ import Ajv04 from 'ajv-draft-04'
 import addFormats from 'ajv-formats'
 import Ajv2020 from 'ajv/dist/2020'
 import { JSON_SCHEMA, load } from 'js-yaml'
+
 import type {
   AjvOptions,
   Specification,
-  ValidateResult,
   ValidateOptions,
+  ValidateResult,
 } from '../types'
-import { checkRefs, replaceRefs } from './resolve'
 import betterAjvErrors from '../utils/betterAjvErrors'
+import { checkRefs, replaceRefs } from './resolve'
 
 const supportedVersions = new Set(['2.0', '3.0', '3.1'])
 

@@ -1,15 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0" />
     <title>Scalar OpenAPI Parser</title>
     <style>
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
 
-      body, html {
+      body,
+      html {
         height: 100%;
       }
 
@@ -63,42 +68,56 @@
         margin: 0;
       }
     </style>
-</head>
-<body>
-  <div class="preview">
-    <div class="preview-left">
-      <textarea rows="30" cols="50" id="input" spellcheck="false">{
+  </head>
+  <body>
+    <div class="preview">
+      <div class="preview-left">
+        <textarea
+          rows="30"
+          cols="50"
+          id="input"
+          spellcheck="false">
+{
   "openapi": "3.1.0",
   "info": {
     "title": "Hello World",
     "version": "1.0.0"
   },
   "paths": {}
-}</textarea>
+}</textarea
+        >
+      </div>
+      <div class="preview-right">
+        <pre id="output"></pre>
+      </div>
     </div>
-    <div class="preview-right">
-      <pre id="output"></pre>
-    </div>
-  </div>
 
-  <script type="module">
-    import { parse } from './src/index.ts';
+    <script type="module">
+      import { parse } from './src/index.ts'
 
-    // Initial parse
-    const input = document.getElementById('input').value;
-    const output = await parse(input)
-    document.getElementById('output').innerHTML = JSON.stringify(output, null, 2);
+      // Initial parse
+      const input = document.getElementById('input').value
+      const output = await parse(input)
+      document.getElementById('output').innerHTML = JSON.stringify(
+        output,
+        null,
+        2,
+      )
 
-    // Update output on input
-    document.getElementById('input').addEventListener('input', async (e) => {
-      const input = e.target.value;
-      try {
-        const output = await parse(input)
-        document.getElementById('output').innerHTML = JSON.stringify(output, null, 2);
-      } catch (error) {
-        document.getElementById('output').innerHTML = error.message;
-      }
-    })
-  </script>
-</body>
+      // Update output on input
+      document.getElementById('input').addEventListener('input', async (e) => {
+        const input = e.target.value
+        try {
+          const output = await parse(input)
+          document.getElementById('output').innerHTML = JSON.stringify(
+            output,
+            null,
+            2,
+          )
+        } catch (error) {
+          document.getElementById('output').innerHTML = error.message
+        }
+      })
+    </script>
+  </body>
 </html>

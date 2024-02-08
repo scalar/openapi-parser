@@ -256,14 +256,14 @@ export declare namespace OpenAPIV3_1 {
 
 export declare namespace OpenAPIV3 {
   interface Document<T extends {} = EmptyObject> {
-    openapi: string
-    info: InfoObject
-    servers?: ServerObject[]
-    paths: PathsObject<T>
-    components?: ComponentsObject
-    security?: SecurityRequirementObject[]
-    tags?: TagObject[]
-    externalDocs?: ExternalDocumentationObject
+    'openapi': string
+    'info': InfoObject
+    'servers'?: ServerObject[]
+    'paths': PathsObject<T>
+    'components'?: ComponentsObject
+    'security'?: SecurityRequirementObject[]
+    'tags'?: TagObject[]
+    'externalDocs'?: ExternalDocumentationObject
     'x-express-openapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)
@@ -589,21 +589,21 @@ export declare namespace OpenAPIV3 {
 
 export declare namespace OpenAPIV2 {
   interface Document<T extends {} = EmptyObject> {
-    basePath?: string
-    consumes?: MimeTypes
-    definitions?: DefinitionsObject
-    externalDocs?: ExternalDocumentationObject
-    host?: string
-    info: InfoObject
-    parameters?: ParametersDefinitionsObject
-    paths: PathsObject<T>
-    produces?: MimeTypes
-    responses?: ResponsesDefinitionsObject
-    schemes?: string[]
-    security?: SecurityRequirementObject[]
-    securityDefinitions?: SecurityDefinitionsObject
-    swagger: string
-    tags?: TagObject[]
+    'basePath'?: string
+    'consumes'?: MimeTypes
+    'definitions'?: DefinitionsObject
+    'externalDocs'?: ExternalDocumentationObject
+    'host'?: string
+    'info': InfoObject
+    'parameters'?: ParametersDefinitionsObject
+    'paths': PathsObject<T>
+    'produces'?: MimeTypes
+    'responses'?: ResponsesDefinitionsObject
+    'schemes'?: string[]
+    'security'?: SecurityRequirementObject[]
+    'securityDefinitions'?: SecurityDefinitionsObject
+    'swagger': string
+    'tags'?: TagObject[]
     'x-express-openapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)

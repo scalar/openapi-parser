@@ -1,5 +1,5 @@
 import { Validator } from '../lib'
-import type { ParseResult, OpenAPI } from '../types'
+import type { OpenAPI, ParseResult } from '../types'
 
 /**
  * Validates an OpenAPI schema and resolves all references.

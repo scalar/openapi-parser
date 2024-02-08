@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 import {
+  concatAll,
   getChildren,
   getErrors,
   getSiblings,
   isAnyOfError,
   isEnumError,
   isRequiredError,
-  concatAll,
   notUndefined,
-} from './utils';
+} from './utils'
 import {
   AdditionalPropValidationError,
   DefaultValidationError,
@@ -16,30 +16,34 @@ import {
   PatternValidationError,
   RequiredValidationError,
   UnevaluatedPropValidationError,
-} from './validation-errors';
+} from './validation-errors'
 
 // eslint-disable-next-line unicorn/no-unsafe-regex
-const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g;
+const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g
 
 // Make a tree of errors from ajv errors array
 export function makeTree(ajvErrors = []) {
-  const root = { children: {} };
-  ajvErrors.forEach(ajvError => {
-    const instancePath = typeof ajvError.instancePath !== 'undefined' ? ajvError.instancePath : ajvError.dataPath;
+  const root = { children: {} }
+  ajvErrors.forEach((ajvError) => {
+    const instancePath =
+      typeof ajvError.instancePath !== 'undefined'
+        ? ajvError.instancePath
+        : ajvError.dataPath
 
     // `dataPath === ''` is root
-    const paths = instancePath === '' ? [''] : instancePath.match(JSON_POINTERS_REGEX);
+    const paths =
+      instancePath === '' ? [''] : instancePath.match(JSON_POINTERS_REGEX)
     if (paths) {
       paths.reduce((obj, path, i) => {
-        obj.children[path] = obj.children[path] || { children: {}, errors: [] };
+        obj.children[path] = obj.children[path] || { children: {}, errors: [] }
         if (i === paths.length - 1) {
-          obj.children[path].errors.push(ajvError);
+          obj.children[path].errors.push(ajvError)
         }
-        return obj.children[path];
-      }, root);
+        return obj.children[path]
+      }, root)
     }
-  });
-  return root;
+  })
+  return root
 }
 
 export function filterRedundantErrors(root, parent, key) {
@@ -47,12 +51,12 @@ export function filterRedundantErrors(root, parent, key) {
    * If there is a `required` error then we can just skip everythig else.
    * And, also `required` should have more priority than `anyOf`. @see #8
    */
-  getErrors(root).forEach(error => {
+  getErrors(root).forEach((error) => {
     if (isRequiredError(error)) {
-      root.errors = [error];
-      root.children = {};
+      root.errors = [error]
+      root.children = {}
     }
-  });
+  })
 
   /**
    * If there is an `anyOf` error that means we have more meaningful errors
@@ -63,7 +67,7 @@ export function filterRedundantErrors(root, parent, key) {
    */
   if (getErrors(root).some(isAnyOfError)) {
     if (Object.keys(root.children).length > 0) {
-      delete root.errors;
+      delete root.errors
     }
   }
 
@@ -82,50 +86,54 @@ export function filterRedundantErrors(root, parent, key) {
         .filter(notUndefined)
         .some(getErrors)
     ) {
-      delete parent.children[key];
+      delete parent.children[key]
     }
   }
 
-  Object.entries(root.children).forEach(([k, child]) => filterRedundantErrors(child, root, k));
+  Object.entries(root.children).forEach(([k, child]) =>
+    filterRedundantErrors(child, root, k),
+  )
 }
 
 export function createErrorInstances(root, options) {
-  const errors = getErrors(root);
+  const errors = getErrors(root)
   if (errors.length && errors.every(isEnumError)) {
-    const uniqueValues = new Set(concatAll([])(errors.map(e => e.params.allowedValues)));
-    const allowedValues = [...uniqueValues];
-    const error = errors[0];
+    const uniqueValues = new Set(
+      concatAll([])(errors.map((e) => e.params.allowedValues)),
+    )
+    const allowedValues = [...uniqueValues]
+    const error = errors[0]
     return [
       new EnumValidationError(
         {
           ...error,
           params: { allowedValues },
         },
-        options
+        options,
       ),
-    ];
+    ]
   }
 
   return concatAll(
     errors.reduce((ret, error) => {
       switch (error.keyword) {
         case 'additionalProperties':
-          return ret.concat(new AdditionalPropValidationError(error, options));
+          return ret.concat(new AdditionalPropValidationError(error, options))
         case 'pattern':
-          return ret.concat(new PatternValidationError(error, options));
+          return ret.concat(new PatternValidationError(error, options))
         case 'required':
-          return ret.concat(new RequiredValidationError(error, options));
+          return ret.concat(new RequiredValidationError(error, options))
         case 'unevaluatedProperties':
-          return ret.concat(new UnevaluatedPropValidationError(error, options));
+          return ret.concat(new UnevaluatedPropValidationError(error, options))
         default:
-          return ret.concat(new DefaultValidationError(error, options));
+          return ret.concat(new DefaultValidationError(error, options))
       }
-    }, [])
-  )(getChildren(root).map(child => createErrorInstances(child, options)));
+    }, []),
+  )(getChildren(root).map((child) => createErrorInstances(child, options)))
 }
 
 export default function prettify(ajvErrors, options) {
-  const tree = makeTree(ajvErrors || []);
-  filterRedundantErrors(tree);
-  return createErrorInstances(tree, options);
+  const tree = makeTree(ajvErrors || [])
+  filterRedundantErrors(tree)
+  return createErrorInstances(tree, options)
 }
