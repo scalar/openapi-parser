@@ -27,22 +27,29 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      # - name: Turborepo cache
-      #   uses: dtinth/setup-github-actions-caching-for-turbo@v1
+      - name: Turborepo cache
+        uses: dtinth/setup-github-actions-caching-for-turbo@v1
       - name: Check code style
         run: pnpm format:check
       - name: Build
-        run: pnpm build
+        run: pnpm turbo build
       - name: Check types
-        run: pnpm types:check
+        run: pnpm turbo types:check
       - name: Cache example files
         id: cache-example-files
         uses: actions/cache@v4
         with:
           path: tests/files
           key: ${{ runner.os }}-example-files
-      - name: Fetch example files
+      - name: 'Prepare test environment (fetch example files)'
         if: steps.cache-example-files.outputs.cache-hit != 'true'
-        run: pnpm fetch:files
+        run: pnpm test:prepare
       - name: Run tests
-        run: pnpm test
+        run: pnpm turbo test
+      # TODO: Make repository public first
+      # - name: Send bundle stats and build information to RelativeCI
+      #   uses: relative-ci/agent-action@v2
+      #   with:
+      #     key: ${{ secrets.RELATIVE_CI_KEY }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     webpackStatsFile: ./packages/api-reference/dist/webpack-stats.json
