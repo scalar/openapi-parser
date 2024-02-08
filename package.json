@@ -9,10 +9,12 @@
     "github-slugger": "^2.0.0",
     "vite-node": "^1.2.2",
     "@vitest/coverage-v8": "^1.2.2",
-    "vitest": "^1.2.2"
+    "vitest": "^1.2.2",
+    "turbo": "^1.10.15"
   },
   "private": true,
   "scripts": {
+    "dev": "pnpm --filter @scalar/openapi-parser dev",
     "build": "pnpm -r build",
     "bump": "CI=true pnpm run test && pnpm changeset version",
     "format": "pnpm prettier --write .",

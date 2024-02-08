@@ -31,7 +31,6 @@
   },
   "scripts": {
     "dev": "vite dev",
-    "lint": "pnpm dlx @biomejs/biome lint .",
     "types:check": "tsc --noEmit --skipLibCheck",
     "build": "pnpm types:check && vite build",
     "test": "vitest"
