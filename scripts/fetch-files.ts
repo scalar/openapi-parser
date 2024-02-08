@@ -1,5 +1,5 @@
-import fs from 'node:fs'
 import GithubSlugger from 'github-slugger'
+import fs from 'node:fs'
 
 const slugger = new GithubSlugger()
 
