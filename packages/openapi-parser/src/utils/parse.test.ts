@@ -83,7 +83,7 @@ paths: {}
     expect(result.document.info.title).toBe('Hello World')
   })
 
-  it('returns the version', async () => {
+  it('returns version 3.1', async () => {
     const result = await parse(`{
       "openapi": "3.1.0",
       "info": {
@@ -95,5 +95,47 @@ paths: {}
 
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.1')
+  })
+
+  it('returns version 3.0', async () => {
+    const result = await parse(`{
+      "openapi": "3.0.0",
+      "info": {
+          "title": "Hello World",
+          "version": "1.0.0"
+      },
+      "paths": {}
+    }`)
+
+    expect(result.valid).toBe(true)
+    expect(result.version).toBe('3.0')
+  })
+
+  it('returns version 2.0', async () => {
+    const result = await parse(`{
+      "swagger": "2.0",
+      "info": {
+          "title": "Hello World",
+          "version": "1.0.0"
+      },
+      "paths": {}
+    }`)
+
+    expect(result.valid).toBe(true)
+    expect(result.version).toBe('2.0')
+  })
+
+  it('doesn’t return version 4.0', async () => {
+    const result = await parse(`{
+      "openapi": "4.0",
+      "info": {
+          "title": "Hello World",
+          "version": "1.0.0"
+      },
+      "paths": {}
+    }`)
+
+    expect(result.valid).toBe(false)
+    expect(result.version).toBe(undefined)
   })
 })
