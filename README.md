@@ -14,7 +14,7 @@ Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAP
 
 - [x] Written in TypeScript
 - [x] Runs in Node.js and in the browser (without any polyfills or configuration)
-- [x] Tested with thousands of real world examples
+- [x] Tested with hundreds of real world examples
 - [x] Amazing error output
 - [ ] Support for OpenAPI 4.0 👀
 
