@@ -39,8 +39,8 @@ jobs:
         id: cache-example-files
         uses: actions/cache@v4
         with:
-          path: tests/files
-          key: ${{ runner.os }}-example-files
+          path: packages/openapi-parser/tests/files
+          key: openapi-parser-tests-files
       - name: 'Prepare test environment (fetch example files)'
         if: steps.cache-example-files.outputs.cache-hit != 'true'
         run: pnpm test:prepare
