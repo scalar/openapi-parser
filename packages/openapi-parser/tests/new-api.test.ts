@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { validate } from '../src'
+import { openapi } from '../src'
 
 const specification = {
   openapi: '3.1.0',
@@ -11,8 +11,8 @@ const specification = {
   paths: {},
 }
 
-describe('new-api', () => {
-  it('validates', async () => {
+describe('OpenApi', () => {
+  it('validate', async () => {
     const result = await openapi().load(specification).validate()
 
     expect(result).toMatchObject({
@@ -26,19 +26,10 @@ describe('new-api', () => {
 
     expect(result).toBe(JSON.stringify(specification, null, 2))
   })
-})
 
-function openapi() {
-  return {
-    load: (specification: string | Record<string, any>) => ({
-      validate: async () => {
-        return {
-          ...(await validate(specification)),
-        }
-      },
-      toJson: () => {
-        return JSON.stringify(specification, null, 2)
-      },
-    }),
-  }
-}
+  it('resolve', async () => {
+    const result = await openapi().load(specification).resolve()
+
+    expect(result.document.info.title).toBe('Hello World')
+  })
+})

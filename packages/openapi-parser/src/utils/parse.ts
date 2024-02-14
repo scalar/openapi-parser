@@ -19,6 +19,8 @@ export async function parse(
     }
   }
 
+  const document = validator.resolveRefs() as OpenAPI.Document
+
   return {
     valid: true,
     version: validator.version,
