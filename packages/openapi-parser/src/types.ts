@@ -1,5 +1,6 @@
 export type ValidateResult = {
   valid: boolean
+  version?: string
   errors?: ErrorObject[]
 }
 
