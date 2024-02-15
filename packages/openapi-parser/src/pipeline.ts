@@ -18,7 +18,7 @@ function loadAction(specification: string | Record<string, any>) {
 async function validateAction(specification: string | Record<string, any>) {
   return {
     ...(await validate(specification)),
-    resolve: resolveAction,
+    resolve: () => resolveAction(specification),
   }
 }
 

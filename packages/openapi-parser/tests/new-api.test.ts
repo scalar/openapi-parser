@@ -32,4 +32,12 @@ describe('OpenApi', () => {
 
     expect(result.schema.info.title).toBe('Hello World')
   })
+
+  it('validate + resolve', async () => {
+    const validation = await openapi().load(specification).validate()
+    const result = await validation.resolve()
+
+    expect(result.valid).toBe(true)
+    expect(result.schema.info.title).toBe('Hello World')
+  })
 })
