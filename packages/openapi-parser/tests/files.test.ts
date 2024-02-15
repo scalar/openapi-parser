@@ -26,7 +26,7 @@ describe.sequential('files:parse', async () => {
       const content = fs.readFileSync(file, 'utf-8')
       const result = await parse(content)
 
-      expect(result.document.info.title).not.toBe(undefined)
+      expect(result.schema.info.title).not.toBe(undefined)
     })
   }
   // Otherwise, just check that the files are valid.

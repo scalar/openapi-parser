@@ -14,7 +14,7 @@ describe('parse', async () => {
     }`)
 
     expect(result.valid).toBe(true)
-    expect(result.document.info.title).toBe('Hello World')
+    expect(result.schema.info.title).toBe('Hello World')
   })
 
   it('parses an OpenAPI 3.0.0 file', async () => {
@@ -28,7 +28,7 @@ describe('parse', async () => {
     }`)
 
     expect(result.valid).toBe(true)
-    expect(result.document.info.title).toBe('Hello World')
+    expect(result.schema.info.title).toBe('Hello World')
   })
 
   it('parses an Swagger 2.0 file', async () => {
@@ -42,7 +42,7 @@ describe('parse', async () => {
     }`)
 
     expect(result.valid).toBe(true)
-    expect(result.document.info.title).toBe('Hello World')
+    expect(result.schema.info.title).toBe('Hello World')
   })
 
   it('doesn’t work with OpenAPI 4.0.0', async () => {
@@ -80,7 +80,7 @@ info:
 paths: {}
 `)
 
-    expect(result.document.info.title).toBe('Hello World')
+    expect(result.schema.info.title).toBe('Hello World')
   })
 
   it('returns version 3.1', async () => {

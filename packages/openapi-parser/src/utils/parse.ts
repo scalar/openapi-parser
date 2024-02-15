@@ -10,6 +10,11 @@ export async function parse(
   const validator = new Validator()
 
   const result = await validator.validate(value)
+  // const specification = { ...(validator.specification as OpenAPI.Document) }
+  // get validator.specification but detach from original object
+  const specification = JSON.parse(
+    JSON.stringify(validator.specification),
+  ) as OpenAPI.Document
 
   if (!result.valid) {
     return {
@@ -19,11 +24,13 @@ export async function parse(
     }
   }
 
-  const document = validator.resolveRefs() as OpenAPI.Document
+  // const schema = {} as OpenAPI.Document
+  const schema = validator.resolveRefs() as OpenAPI.Document
 
   return {
     valid: true,
     version: validator.version,
-    document,
+    specification,
+    schema,
   }
 }

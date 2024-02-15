@@ -116,7 +116,7 @@ export class Validator {
 
   protected externalRefs: Record<string, Specification>
 
-  protected specification: Specification
+  public specification: Specification
 
   public version: string
 

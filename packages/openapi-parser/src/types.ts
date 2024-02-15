@@ -22,7 +22,9 @@ export type ValidateOptions = {
 export type ParseResult = {
   valid: boolean
   version: string | undefined
-  document?: OpenAPI.Document
+  // TODO: Contains references
+  specification?: OpenAPI.Document
+  schema?: OpenAPI.Document
   errors?: ErrorObject[]
 }
 
