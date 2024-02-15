@@ -1,5 +1,7 @@
 export type ValidateResult = {
   valid: boolean
+  // TODO: Contains references
+  specification?: OpenAPI.Document
   version?: string
   errors?: ErrorObject[]
 }

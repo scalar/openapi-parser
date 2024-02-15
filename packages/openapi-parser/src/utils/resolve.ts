@@ -4,18 +4,19 @@ import type { OpenAPI, ParseResult } from '../types'
 /**
  * Validates an OpenAPI schema and resolves all references.
  */
-export async function parse(
+export async function resolve(
   value: string | Record<string, any>,
 ): Promise<ParseResult> {
   const validator = new Validator()
 
   const result = await validator.validate(value)
-  // const specification = { ...(validator.specification as OpenAPI.Document) }
-  // get validator.specification but detach from original object
+
+  // Detach the specification from the validator
   const specification = JSON.parse(
-    JSON.stringify(validator.specification),
+    JSON.stringify(validator.specification ?? null),
   ) as OpenAPI.Document
 
+  // Error handling
   if (!result.valid) {
     return {
       valid: false,
@@ -24,7 +25,6 @@ export async function parse(
     }
   }
 
-  // const schema = {} as OpenAPI.Document
   const schema = validator.resolveRefs() as OpenAPI.Document
 
   return {

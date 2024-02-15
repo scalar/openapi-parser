@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest'
 
-import { parse } from '../src'
+import { resolve } from '../src'
 
 it('resolves a simple reference', async () => {
   const openapi = {
@@ -42,7 +42,7 @@ it('resolves a simple reference', async () => {
     },
   }
 
-  const result = await parse(openapi)
+  const result = await resolve(openapi)
 
   expect(result.errors).toBe(undefined)
   expect(result.valid).toBe(true)
@@ -69,6 +69,4 @@ it('resolves a simple reference', async () => {
       },
     },
   })
-
-  console.log(result)
 })

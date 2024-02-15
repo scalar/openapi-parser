@@ -1,4 +1,4 @@
-import { parse } from './utils/parse'
+import { resolve } from './utils/resolve'
 import { validate } from './utils/validate'
 
 export function openapi() {
@@ -24,7 +24,7 @@ async function validateAction(specification: string | Record<string, any>) {
 
 async function resolveAction(specification: string | Record<string, any>) {
   return {
-    ...(await parse(specification)),
+    ...(await resolve(specification)),
   }
 }
 

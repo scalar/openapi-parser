@@ -13,6 +13,7 @@ export async function validate(
 
   return {
     ...result,
+    specification: validator.specification,
     version: validator.version,
   }
 }

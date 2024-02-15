@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { parse } from './'
+import { resolve } from './resolve'
 
-describe('parse', async () => {
-  it('parses an OpenAPI 3.1.0 file', async () => {
-    const result = await parse(`{
+describe('resolve', async () => {
+  it('resolves an OpenAPI 3.1.0 file', async () => {
+    const result = await resolve(`{
       "openapi": "3.1.0",
       "info": {
           "title": "Hello World",
@@ -17,8 +17,8 @@ describe('parse', async () => {
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('parses an OpenAPI 3.0.0 file', async () => {
-    const result = await parse(`{
+  it('resolves an OpenAPI 3.0.0 file', async () => {
+    const result = await resolve(`{
       "openapi": "3.0.0",
       "info": {
           "title": "Hello World",
@@ -31,8 +31,8 @@ describe('parse', async () => {
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('parses an Swagger 2.0 file', async () => {
-    const result = await parse(`{
+  it('resolves an Swagger 2.0 file', async () => {
+    const result = await resolve(`{
       "swagger": "2.0",
       "info": {
           "title": "Hello World",
@@ -46,7 +46,7 @@ describe('parse', async () => {
   })
 
   it('doesn’t work with OpenAPI 4.0.0', async () => {
-    const result = await parse(`{
+    const result = await resolve(`{
       "openapi": "4.0.0",
       "info": {
           "title": "Hello World",
@@ -63,7 +63,7 @@ describe('parse', async () => {
   })
 
   it('returns errors for an invalid specification', async () => {
-    const result = await parse('pineapples')
+    const result = await resolve('pineapples')
 
     expect(result.valid).toBe(false)
     expect(result.errors).toHaveLength(1)
@@ -73,7 +73,7 @@ describe('parse', async () => {
   })
 
   it('works with YAML', async () => {
-    const result = await parse(`openapi: 3.1.0
+    const result = await resolve(`openapi: 3.1.0
 info:
   title: Hello World
   version: 1.0.0
@@ -84,7 +84,7 @@ paths: {}
   })
 
   it('returns version 3.1', async () => {
-    const result = await parse(`{
+    const result = await resolve(`{
       "openapi": "3.1.0",
       "info": {
           "title": "Hello World",
@@ -98,7 +98,7 @@ paths: {}
   })
 
   it('returns version 3.0', async () => {
-    const result = await parse(`{
+    const result = await resolve(`{
       "openapi": "3.0.0",
       "info": {
           "title": "Hello World",
@@ -112,7 +112,7 @@ paths: {}
   })
 
   it('returns version 2.0', async () => {
-    const result = await parse(`{
+    const result = await resolve(`{
       "swagger": "2.0",
       "info": {
           "title": "Hello World",
@@ -126,7 +126,7 @@ paths: {}
   })
 
   it('doesn’t return version 4.0', async () => {
-    const result = await parse(`{
+    const result = await resolve(`{
       "openapi": "4.0",
       "info": {
           "title": "Hello World",
