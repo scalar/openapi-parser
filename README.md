@@ -49,7 +49,7 @@ if (!result.valid) {
 }
 ```
 
-### Compile
+### Resolve references
 
 ```ts
 import { resolve } from '@scalar/openapi-parser'
