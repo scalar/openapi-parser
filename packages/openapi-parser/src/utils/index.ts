@@ -1,3 +1,5 @@
+export * from './isFilesystem'
+export * from './loadFiles'
 export * from './normalize'
 export * from './resolve'
 export * from './toJson'

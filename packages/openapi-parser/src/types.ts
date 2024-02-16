@@ -40,6 +40,16 @@ export type Specification = {
   $id?: string
 }
 
+export type FilesystemEntry = {
+  dir: string
+  entrypoint: boolean
+  references: string[]
+  filename: string
+  content: string
+}
+
+export type Filesystem = FilesystemEntry[]
+
 /**
  * These types are copied from 'openapi-types', but the `ReferenceObject` type is removed.
  * After an OpenAPI schema is parsed, all references are resolved and replaced with the actual object.

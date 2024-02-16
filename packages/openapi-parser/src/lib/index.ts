@@ -5,10 +5,12 @@ import { JSON_SCHEMA, load } from 'js-yaml'
 
 import type {
   AjvOptions,
+  Filesystem,
   Specification,
   ValidateOptions,
   ValidateResult,
 } from '../types'
+import { isFilesystem } from '../utils/isFilesystem'
 import { checkRefs, replaceRefs } from './resolve'
 import { transformErrors } from './transformErrors'
 
@@ -126,8 +128,11 @@ export class Validator {
 
   static supportedVersions = supportedVersions
 
-  resolveRefs(opts: { specification?: Specification } = {}) {
-    return replaceRefs(this.specification || opts.specification)
+  resolveRefs(
+    filesystem?: Filesystem,
+    opts: { specification?: Specification } = {},
+  ) {
+    return replaceRefs(this.specification || opts.specification, filesystem)
   }
 
   async addSpecRef(data: string | object, uri: string) {
@@ -149,12 +154,17 @@ export class Validator {
   }
 
   async validate(
-    data: string | object,
+    data: string | Record<string, any> | Filesystem,
     options?: ValidateOptions,
   ): Promise<ValidateResult> {
-    try {
-      const specification = await getSpecFromData(data)
+    const value = isFilesystem(data)
+      ? (data as Filesystem).find((value) => value.entrypoint).content
+      : data
 
+    try {
+      const specification = await getSpecFromData(value)
+
+      // TODO: How does this work with a filesystem?
       this.specification = specification
 
       if (specification === undefined || specification === null) {
@@ -192,7 +202,10 @@ export class Validator {
 
       // Check if the references are valid as those can’t be validated bu JSON schema
       if (schemaResult) {
-        return checkRefs(specification)
+        return checkRefs(
+          specification,
+          isFilesystem(data) ? (data as Filesystem) : undefined,
+        )
       }
 
       const result: ValidateResult = {
@@ -215,11 +228,10 @@ export class Validator {
 
       return result
     } catch (error) {
-      throw error
-      // return {
-      //   valid: false,
-      //   errors: transformErrors(this.specification, error.message ?? error),
-      // }
+      return {
+        valid: false,
+        errors: transformErrors(this.specification, error.message ?? error),
+      }
     }
   }
 

@@ -1,4 +1,8 @@
-import { Specification } from '../types'
+// TODO: Not browser compatible
+import path from 'node:path'
+import YAML from 'yaml'
+
+import type { Filesystem, Specification } from '../types'
 
 function escapeJsonPointer(str: string) {
   return str.replace(/~/g, '~0').replace(/\//g, '~1')
@@ -19,7 +23,11 @@ const pointerWords = new Set([
   '$schema',
 ])
 
-function resolveUri(uri: string, anchors: Record<string, any>) {
+function resolveUri(
+  uri: string,
+  anchors: Record<string, any>,
+  filesystem?: Filesystem,
+) {
   const [prefix, path] = uri.split('#', 2)
 
   const hashPresent = !!path
@@ -39,7 +47,11 @@ function resolveUri(uri: string, anchors: Record<string, any>) {
   }
 
   if (!anchors[prefix]) {
-    throw err
+    if (filesystem) {
+      return resolveFromFilesystem(uri, filesystem)
+    } else {
+      throw err
+    }
   }
 
   if (!hashPresent) {
@@ -64,13 +76,38 @@ function resolveUri(uri: string, anchors: Record<string, any>) {
   }
 }
 
-export function replaceRefs(tree: Specification) {
-  return resolve(tree, true)
+export function resolveFromFilesystem(uri: string, filesystem: Filesystem) {
+  // TODO: We should check all references recursively
+  const referencedFile = filesystem.find((file) => file.filename === uri)
+
+  // return referencedFile?.content
+  if (!referencedFile) {
+    // TODO: We need the source file name here.
+    const sourceFile = 'schemas/upload.yaml'
+    const sourcePath = path.dirname(sourceFile)
+    const referencedFile = uri
+    const transformedUri = path.join(sourcePath, referencedFile)
+
+    console.log(transformedUri)
+
+    // console.log(
+    //   'referencedFile not found: ',
+    //   uri,
+    //   filesystem.map((f) => f.filename),
+    // )
+    return undefined
+  }
+
+  return replaceRefs(YAML.parse(referencedFile.content), filesystem)
 }
 
-export function checkRefs(tree: Specification) {
+export function replaceRefs(tree: Specification, filesystem?: Filesystem) {
+  return resolve(tree, true, filesystem)
+}
+
+export function checkRefs(tree: Specification, filesystem?: Filesystem) {
   try {
-    resolve(tree, false)
+    resolve(tree, false, filesystem)
 
     return {
       valid: true,
@@ -83,7 +120,11 @@ export function checkRefs(tree: Specification) {
   }
 }
 
-function resolve(tree: Specification, replace: boolean) {
+function resolve(
+  tree: Specification,
+  replace: boolean,
+  filesystem?: Filesystem,
+) {
   let treeObj = tree
 
   if (!isObject(treeObj)) {
@@ -185,7 +226,7 @@ function resolve(tree: Specification, replace: boolean) {
     const decodedRef = decodeURIComponent(ref)
     const fullRef = decodedRef[0] !== '#' ? decodedRef : `${id}${decodedRef}`
 
-    applyRef(path, resolveUri(fullRef, anchors))
+    applyRef(path, resolveUri(fullRef, anchors, filesystem))
   }
 
   for (const item of pointers.$dynamicRef) {
