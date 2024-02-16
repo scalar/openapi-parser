@@ -27,11 +27,11 @@ export function loadFiles(file: string, basePath?: string) {
     : path.relative(basePath, file)
 
   // Normalize content
-  const normalized = normalize(content)
+  const specification = normalize(content)
 
   // Find all references
   const references: string[] = []
-  traverse(normalized, (value: any) => {
+  traverse(specification, (value: any) => {
     if (
       value.$ref &&
       typeof value.$ref === 'string' &&
@@ -49,7 +49,7 @@ export function loadFiles(file: string, basePath?: string) {
     entrypoint: !basePath,
     references,
     filename,
-    content,
+    specification,
   })
 
   // Load all references

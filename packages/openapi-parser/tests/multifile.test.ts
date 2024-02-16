@@ -36,10 +36,12 @@ describe('multifile', async () => {
 
     const result = await resolve(filesystem)
 
-    console.log(result.schema.components.schemas)
-
     expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.0')
+    // @ts-ignore
+    expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(
+      'Coordinates',
+    )
   })
 })

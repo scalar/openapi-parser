@@ -45,7 +45,7 @@ export type FilesystemEntry = {
   entrypoint: boolean
   references: string[]
   filename: string
-  content: string
+  specification: Record<string, any>
 }
 
 export type Filesystem = FilesystemEntry[]

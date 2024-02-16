@@ -15,7 +15,7 @@ export const yamlOptions = {
 
 export const ERRORS = {
   EMPTY_OR_INVALID: 'Cannot find JSON, YAML or filename in data',
-  URI_MUST_BE_STRING: 'uri parameter or $id attribute must be a string',
+  // URI_MUST_BE_STRING: 'uri parameter or $id attribute must be a string',
   OPENAPI_VERSION_NOT_SUPPORTED:
     'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
 }

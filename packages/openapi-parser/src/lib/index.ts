@@ -1,12 +1,10 @@
 import addFormats from 'ajv-formats'
-import { load } from 'js-yaml'
 
 import {
   ERRORS,
   inlinedRefs,
   jsonSchemaVersions,
   supportedVersions,
-  yamlOptions,
 } from '../configuration'
 import type {
   AjvOptions,
@@ -16,45 +14,44 @@ import type {
   ValidateResult,
 } from '../types'
 import { details as getOpenApiVersion } from '../utils'
-import { isFilesystem } from '../utils/isFilesystem'
 import { checkRefs, replaceRefs } from './resolve'
 import { transformErrors } from './transformErrors'
 
-async function getSpecFromData(
-  data: string | object,
-): Promise<Specification | undefined> {
-  if (typeof data === 'object') {
-    return data
-  }
+// async function getSpecFromData(
+//   data: string | object,
+// ): Promise<Specification | undefined> {
+//   if (typeof data === 'object') {
+//     return data
+//   }
 
-  if (typeof data === 'string') {
-    if (data.match(/\n/)) {
-      try {
-        // YAML
-        return load(data, yamlOptions)
-      } catch {
-        return undefined
-      }
-    }
+//   if (typeof data === 'string') {
+//     if (data.match(/\n/)) {
+//       try {
+//         // YAML
+//         return load(data, yamlOptions)
+//       } catch {
+//         return undefined
+//       }
+//     }
 
-    try {
-      // Browser
-      if (typeof window !== 'undefined') {
-        return undefined
-      }
+//     try {
+//       // Browser
+//       if (typeof window !== 'undefined') {
+//         return undefined
+//       }
 
-      // Node.js
-      const { readFile } = await import('fs/promises')
-      const fileData = await readFile(data, 'utf-8')
+//       // Node.js
+//       const { readFile } = await import('fs/promises')
+//       const fileData = await readFile(data, 'utf-8')
 
-      return load(fileData, yamlOptions)
-    } catch {
-      return undefined
-    }
-  }
+//       return load(fileData, yamlOptions)
+//     } catch {
+//       return undefined
+//     }
+//   }
 
-  return undefined
-}
+//   return undefined
+// }
 
 export class Validator {
   protected ajvOptions: AjvOptions
@@ -93,41 +90,38 @@ export class Validator {
 
   static supportedVersions = supportedVersions
 
-  resolveRefs(
-    filesystem?: Filesystem,
-    opts: { specification?: Specification } = {},
-  ) {
-    return replaceRefs(this.specification || opts.specification, filesystem)
+  resolveRefs(filesystem?: Filesystem) {
+    return replaceRefs(
+      filesystem.find((file) => file.entrypoint),
+      filesystem,
+    )
   }
 
-  async addSpecRef(data: string | object, uri: string) {
-    const spec = await getSpecFromData(data)
+  // async addSpecRef(data: string | object, uri: string) {
+  //   const spec = await getSpecFromData(data)
 
-    if (spec === undefined) {
-      throw new Error(ERRORS.EMPTY_OR_INVALID)
-    }
+  //   if (spec === undefined) {
+  //     throw new Error(ERRORS.EMPTY_OR_INVALID)
+  //   }
 
-    const newUri = uri || spec.$id
+  //   const newUri = uri || spec.$id
 
-    if (typeof newUri !== 'string') {
-      throw new Error(ERRORS.URI_MUST_BE_STRING)
-    }
+  //   if (typeof newUri !== 'string') {
+  //     throw new Error(ERRORS.URI_MUST_BE_STRING)
+  //   }
 
-    spec.$id = newUri
+  //   spec.$id = newUri
 
-    this.externalRefs[newUri] = spec
-  }
+  //   this.externalRefs[newUri] = spec
+  // }
 
   async validate(
-    data: string | Record<string, any> | Filesystem,
+    filesystem: Filesystem,
     options?: ValidateOptions,
   ): Promise<ValidateResult> {
-    const value = isFilesystem(data)
-      ? (data as Filesystem).find((value) => value.entrypoint).content
-      : data
-
     try {
-      const specification = await getSpecFromData(value)
+      const entrypoint = filesystem.find((file) => file.entrypoint)
+      const specification = entrypoint?.specification
 
       // TODO: How does this work with a filesystem?
       this.specification = specification
@@ -167,10 +161,7 @@ export class Validator {
 
       // Check if the references are valid as those can’t be validated bu JSON schema
       if (schemaResult) {
-        return checkRefs(
-          specification,
-          isFilesystem(data) ? (data as Filesystem) : undefined,
-        )
+        return checkRefs(entrypoint, filesystem)
       }
 
       const result: ValidateResult = {

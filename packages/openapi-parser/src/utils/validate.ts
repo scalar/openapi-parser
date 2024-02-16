@@ -5,6 +5,7 @@ import type {
   ValidateOptions,
   ValidateResult,
 } from '../types'
+import { makeFilesystem } from './makeFilesystem'
 
 /**
  * Validates an OpenAPI schema.
@@ -14,8 +15,8 @@ export async function validate(
   options?: ValidateOptions,
 ): Promise<ValidateResult> {
   const validator = new Validator()
-
-  const result = await validator.validate(value, options)
+  const filesystem = makeFilesystem(value)
+  const result = await validator.validate(filesystem, options)
 
   return {
     ...result,

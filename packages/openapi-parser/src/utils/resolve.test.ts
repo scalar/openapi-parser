@@ -68,7 +68,7 @@ describe('resolve', async () => {
     expect(result.valid).toBe(false)
     expect(result.errors).toHaveLength(1)
     expect(result.errors[0].error).toBe(
-      'Cannot find JSON, YAML or filename in data',
+      'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
     )
   })
 

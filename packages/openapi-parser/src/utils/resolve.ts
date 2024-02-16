@@ -1,6 +1,6 @@
 import { Validator } from '../lib'
 import type { Filesystem, OpenAPI, ParseResult } from '../types'
-import { isFilesystem } from './isFilesystem'
+import { makeFilesystem } from './makeFilesystem'
 
 /**
  * Validates an OpenAPI schema and resolves all references.
@@ -9,10 +9,12 @@ export async function resolve(
   value: string | Record<string, any> | Filesystem,
 ): Promise<ParseResult> {
   const validator = new Validator()
+  const filesystem = makeFilesystem(value)
 
-  const result = await validator.validate(value)
+  const result = await validator.validate(filesystem)
 
   // Detach the specification from the validator
+  // TODO: What if a filesystem with multiple files is passed?
   const specification = JSON.parse(
     JSON.stringify(validator.specification ?? null),
   ) as OpenAPI.Document
@@ -26,9 +28,7 @@ export async function resolve(
     }
   }
 
-  const schema = validator.resolveRefs(
-    isFilesystem(value) ? (value as Filesystem) : undefined,
-  ) as OpenAPI.Document
+  const schema = validator.resolveRefs(filesystem) as OpenAPI.Document
 
   return {
     valid: true,
