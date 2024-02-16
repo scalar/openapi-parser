@@ -1,8 +1,13 @@
-import Ajv04 from 'ajv-draft-04'
 import addFormats from 'ajv-formats'
-import Ajv2020 from 'ajv/dist/2020'
-import { JSON_SCHEMA, load } from 'js-yaml'
+import { load } from 'js-yaml'
 
+import {
+  ERRORS,
+  inlinedRefs,
+  jsonSchemaVersions,
+  supportedVersions,
+  yamlOptions,
+} from '../configuration'
 import type {
   AjvOptions,
   Filesystem,
@@ -10,50 +15,10 @@ import type {
   ValidateOptions,
   ValidateResult,
 } from '../types'
+import { details as getOpenApiVersion } from '../utils'
 import { isFilesystem } from '../utils/isFilesystem'
 import { checkRefs, replaceRefs } from './resolve'
 import { transformErrors } from './transformErrors'
-
-const supportedVersions = new Set(['2.0', '3.0', '3.1'])
-
-const jsonSchemaVersions = {
-  'http://json-schema.org/draft-04/schema#': Ajv04,
-  'https://json-schema.org/draft/2020-12/schema': Ajv2020,
-}
-
-const yamlOptions = {
-  schema: JSON_SCHEMA,
-}
-
-const ERRORS = {
-  EMPTY_OR_INVALID: 'Cannot find JSON, YAML or filename in data',
-  URI_MUST_BE_STRING: 'uri parameter or $id attribute must be a string',
-  OPENAPI_VERSION_NOT_SUPPORTED:
-    'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
-}
-
-const inlinedRefs = 'x-inlined-refs'
-
-function getOpenApiVersion(specification: Specification) {
-  for (const version of supportedVersions) {
-    const specificationType = version === '2.0' ? 'swagger' : 'openapi'
-    const value = specification[specificationType]
-
-    if (typeof value === 'string' && value.startsWith(version)) {
-      return {
-        version,
-        specificationType,
-        specificationVersion: value,
-      }
-    }
-  }
-
-  return {
-    version: undefined,
-    specificationType: undefined,
-    specificationVersion: undefined,
-  }
-}
 
 async function getSpecFromData(
   data: string | object,

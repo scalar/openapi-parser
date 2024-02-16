@@ -28,6 +28,37 @@ describe('pipeline', () => {
     expect(result.openapi).toBe('3.1.0')
   })
 
+  it('details', async () => {
+    const result = openapi()
+      .load({
+        openapi: '3.0.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      })
+      .details()
+
+    expect(result.version).toBe('3.0')
+  })
+
+  it('upgrade + details', async () => {
+    const result = openapi()
+      .load({
+        openapi: '3.0.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      })
+      .upgrade()
+      .details()
+
+    expect(result.version).toBe('3.1')
+  })
+
   it('filter', async () => {
     const specification = {
       openapi: '3.1.0',

@@ -1,4 +1,5 @@
 import {
+  details,
   filter,
   normalize,
   resolve,
@@ -19,6 +20,7 @@ function loadAction(specification: string | Record<string, any>) {
 
   return {
     get: () => getAction(normalizedSpecification),
+    details: () => detailsAction(normalizedSpecification),
     filter: (callback: (Specification: Record<string, any>) => boolean) =>
       filterAction(normalizedSpecification, callback),
     upgrade: () => upgradeAction(normalizedSpecification),
@@ -34,6 +36,7 @@ function upgradeAction(specification: Record<string, any>) {
 
   return {
     get: () => getAction(upgradedSpecification),
+    details: () => detailsAction(upgradedSpecification),
     filter: (callback: (Specification: Record<string, any>) => boolean) =>
       filterAction(upgradedSpecification, callback),
     validate: () => validateAction(upgradedSpecification),
@@ -49,6 +52,7 @@ async function validateAction(specification: Record<string, any>) {
     filter: (callback: (Specification: Record<string, any>) => boolean) =>
       filterAction(specification, callback),
     get: () => getAction(specification),
+    details: () => detailsAction(specification),
     resolve: () => resolveAction(specification),
     toJson: () => toJsonAction(specification),
     toYaml: () => toYamlAction(specification),
@@ -73,6 +77,7 @@ function filterAction(
 
   return {
     get: () => getAction(filteredSpecification),
+    details: () => detailsAction(filteredSpecification),
     filter: () => filterAction(filteredSpecification, callback),
     upgrade: () => upgradeAction(filteredSpecification),
     validate: () => validateAction(filteredSpecification),
@@ -84,6 +89,10 @@ function filterAction(
 
 function getAction(specification: Record<string, any>) {
   return specification
+}
+
+function detailsAction(specification: Record<string, any>) {
+  return details(specification)
 }
 
 function toJsonAction(specification: Record<string, any>) {
