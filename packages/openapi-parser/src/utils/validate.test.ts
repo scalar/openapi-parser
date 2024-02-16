@@ -34,7 +34,7 @@ describe('validate', async () => {
     expect(Array.isArray(result.errors)).toBe(true)
     expect(result.errors.length).toBe(1)
     expect(result.errors[0]).toMatchObject({
-      error: " must have required property 'info'",
+      error: "must have required property 'info'",
       path: '',
       start: {
         column: 1,

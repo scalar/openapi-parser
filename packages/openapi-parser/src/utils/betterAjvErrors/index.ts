@@ -2,7 +2,31 @@ import { parse } from '@humanwhocodes/momoa'
 
 import prettify from './helpers'
 
-export default function betterAjvErrors(schema, data, errors, options = {}) {
+type BetterAjvErrorsOptions = {
+  colorize?: boolean
+  format?: 'cli' | 'js'
+  indent?: number
+  json?: string
+}
+
+// TODO: Check if this is the correct type
+type AjvError = {
+  keyword: string
+  dataPath: string
+  schemaPath: string
+  params: any
+  message: string
+  schema: any
+  parentSchema: any
+  data: any
+}
+
+export function betterAjvErrors(
+  schema: any,
+  data: any,
+  errors: AjvError[],
+  options: BetterAjvErrorsOptions = {},
+) {
   const {
     colorize = true,
     format = 'cli',

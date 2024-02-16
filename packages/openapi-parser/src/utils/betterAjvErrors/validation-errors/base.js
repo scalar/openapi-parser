@@ -22,11 +22,13 @@ export default class BaseValidationError {
 
   getLocation(dataPath = this.instancePath) {
     const { isIdentifierLocation, isSkipEndLocation } = this.options
+
     const { loc } = getMetaFromPath(
       this.jsonAst,
       dataPath,
       isIdentifierLocation,
     )
+
     return {
       start: loc.start,
       end: isSkipEndLocation ? undefined : loc.end,

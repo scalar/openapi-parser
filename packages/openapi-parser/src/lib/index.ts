@@ -9,8 +9,8 @@ import type {
   ValidateOptions,
   ValidateResult,
 } from '../types'
-import betterAjvErrors from '../utils/betterAjvErrors'
 import { checkRefs, replaceRefs } from './resolve'
+import { transformErrors } from './transformErrors'
 
 const supportedVersions = new Set(['2.0', '3.0', '3.1'])
 
@@ -31,20 +31,6 @@ const ERRORS = {
 }
 
 const inlinedRefs = 'x-inlined-refs'
-
-function makeErrorArray(message: string) {
-  return [
-    {
-      start: {
-        line: 1,
-        column: 1,
-        offset: 0,
-      },
-      error: message,
-      path: '',
-    },
-  ]
-}
 
 function getOpenApiVersion(specification: Specification) {
   for (const version of supportedVersions) {
@@ -174,7 +160,7 @@ export class Validator {
       if (specification === undefined || specification === null) {
         return {
           valid: false,
-          errors: makeErrorArray(ERRORS.EMPTY_OR_INVALID),
+          errors: transformErrors(null, ERRORS.EMPTY_OR_INVALID),
         }
       }
 
@@ -192,7 +178,10 @@ export class Validator {
       if (!version) {
         return {
           valid: false,
-          errors: makeErrorArray(ERRORS.OPENAPI_VERSION_NOT_SUPPORTED),
+          errors: transformErrors(
+            specification,
+            ERRORS.OPENAPI_VERSION_NOT_SUPPORTED,
+          ),
         }
       }
 
@@ -214,26 +203,23 @@ export class Validator {
         let errors = []
 
         if (typeof validateSchema.errors === 'string') {
-          errors = makeErrorArray(validateSchema.errors)
+          errors = transformErrors(specification, validateSchema.errors)
         } else {
           errors = validateSchema.errors
         }
 
         if (errors.length > 0) {
-          result.errors = betterAjvErrors(schemaResult, {}, errors, {
-            format: options?.format ?? 'js',
-            indent: options?.indent ?? 2,
-            colorize: false,
-          })
+          result.errors = transformErrors(specification, errors)
         }
       }
 
       return result
     } catch (error) {
-      return {
-        valid: false,
-        errors: makeErrorArray(error.message ?? error),
-      }
+      throw error
+      // return {
+      //   valid: false,
+      //   errors: transformErrors(this.specification, error.message ?? error),
+      // }
     }
   }
 
