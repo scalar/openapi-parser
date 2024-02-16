@@ -28,6 +28,46 @@ describe('pipeline', () => {
     expect(result.openapi).toBe('3.1.0')
   })
 
+  it('filter', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {
+        '/': {
+          get: {
+            'x-internal': true,
+            'responses': {
+              200: {
+                description: 'OK',
+              },
+            },
+          },
+        },
+        '/foobar': {
+          get: {
+            responses: {
+              200: {
+                description: 'OK',
+              },
+            },
+          },
+        },
+      },
+    }
+
+    const result = openapi()
+      .load(specification)
+      .filter((schema) => !schema?.['x-internal'])
+      .get()
+
+    expect(result.openapi).toBe('3.1.0')
+    expect(result.paths['/'].get).toBeUndefined()
+    expect(result.paths['/foobar'].get).not.toBeUndefined()
+  })
+
   it('validate', async () => {
     const result = await openapi().load(specification).validate()
 
