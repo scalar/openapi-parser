@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { openapi } from '../src'
+import { openapi } from '.'
 
 const specification = {
   openapi: '3.1.0',
@@ -11,7 +11,23 @@ const specification = {
   paths: {},
 }
 
-describe('OpenApi', () => {
+describe('pipeline', () => {
+  it('upgrade', async () => {
+    const result = openapi()
+      .load({
+        openapi: '3.0.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      })
+      .upgrade()
+      .get()
+
+    expect(result.openapi).toBe('3.1.0')
+  })
+
   it('validate', async () => {
     const result = await openapi().load(specification).validate()
 

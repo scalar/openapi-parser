@@ -1,2 +1,6 @@
+export * from './normalize'
 export * from './resolve'
+export * from './toJson'
+export * from './toYaml'
+export * from './upgrade'
 export * from './validate'

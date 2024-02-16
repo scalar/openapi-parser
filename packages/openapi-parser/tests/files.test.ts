@@ -2,7 +2,7 @@ import { glob } from 'glob'
 import fs from 'node:fs'
 import { describe, expect, test } from 'vitest'
 
-import { parse } from '../src'
+import { resolve } from '../src/utils/resolve'
 
 const invalidFiles = [
   'packages/openapi-parser/tests/files/statsocialcom.yaml',
@@ -24,7 +24,7 @@ describe.sequential('files:parse', async () => {
     // TODO: We’re currently only testing a few of the files for performance reasons.
     test.each(files.slice(0, 500))('[%s] parse', async (file) => {
       const content = fs.readFileSync(file, 'utf-8')
-      const result = await parse(content)
+      const result = await resolve(content)
 
       expect(result.schema.info.title).not.toBe(undefined)
     })

@@ -1,5 +1,4 @@
-import { resolve } from './utils/resolve'
-import { validate } from './utils/validate'
+import { normalize, resolve, toJson, toYaml, upgrade, validate } from './utils'
 
 export function openapi() {
   return {
@@ -8,26 +7,56 @@ export function openapi() {
 }
 
 function loadAction(specification: string | Record<string, any>) {
+  const normalizedSpecification = normalize(specification)
+
   return {
-    validate: () => validateAction(specification),
-    resolve: () => resolveAction(specification),
-    toJson: () => toJsonAction(specification),
+    get: () => get(normalizedSpecification),
+    upgrade: () => upgradeAction(normalizedSpecification),
+    validate: () => validateAction(normalizedSpecification),
+    resolve: () => resolveAction(normalizedSpecification),
+    toJson: () => toJsonAction(normalizedSpecification),
+    toYaml: () => toYamlAction(normalizedSpecification),
   }
 }
 
-async function validateAction(specification: string | Record<string, any>) {
+function upgradeAction(specification: Record<string, any>) {
+  const upgradedSpecification = upgrade(specification)
+
+  return {
+    get: () => get(upgradedSpecification),
+    validate: () => validateAction(upgradedSpecification),
+    resolve: () => resolveAction(upgradedSpecification),
+    toJson: () => toJsonAction(upgradedSpecification),
+    toYaml: () => toYamlAction(upgradedSpecification),
+  }
+}
+
+async function validateAction(specification: Record<string, any>) {
   return {
     ...(await validate(specification)),
+    get: () => get(specification),
     resolve: () => resolveAction(specification),
+    toJson: () => toJsonAction(specification),
+    toYaml: () => toYamlAction(specification),
   }
 }
 
-async function resolveAction(specification: string | Record<string, any>) {
+async function resolveAction(specification: Record<string, any>) {
   return {
     ...(await resolve(specification)),
+    toJson: () => toJsonAction(specification),
+    toYaml: () => toYamlAction(specification),
   }
 }
 
-function toJsonAction(specification: string | Record<string, any>) {
-  return JSON.stringify(specification, null, 2)
+function get(specification: Record<string, any>) {
+  return specification
+}
+
+function toJsonAction(specification: Record<string, any>) {
+  return toJson(specification)
+}
+
+function toYamlAction(specification: Record<string, any>) {
+  return toYaml(specification)
 }
