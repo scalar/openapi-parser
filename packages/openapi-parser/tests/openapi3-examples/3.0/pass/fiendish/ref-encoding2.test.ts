@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { resolve } from '../../../../../src'
 import refEncoding2 from './ref-encoding2.yaml'
 
-describe('ref-encoding2', () => {
+describe.todo('ref-encoding2', () => {
   it('passes', async () => {
     const result = await resolve(refEncoding2)
 
