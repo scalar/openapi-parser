@@ -14,8 +14,8 @@ export async function resolve(
 
   // Detach the specification from the validator
   // TODO: What if a filesystem with multiple files is passed?
-  const specification = JSON.parse(
-    JSON.stringify(validator.specification ?? null),
+  const specification = structuredClone(
+    validator.specification,
   ) as OpenAPI.Document
 
   // Error handling
@@ -27,7 +27,7 @@ export async function resolve(
     }
   }
 
-  const schema = validator.resolveRefs(filesystem) as OpenAPI.Document
+  const schema = validator.resolveReferences(filesystem) as OpenAPI.Document
 
   return {
     valid: true,

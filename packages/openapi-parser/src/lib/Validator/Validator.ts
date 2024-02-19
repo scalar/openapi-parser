@@ -7,14 +7,10 @@ import {
   jsonSchemaVersions,
   supportedVersions,
 } from '../../configuration'
-import type {
-  Filesystem,
-  Specification,
-  ValidateOptions,
-  ValidateResult,
-} from '../../types'
+import type { Filesystem, Specification, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
-import { checkReferences, replaceRefs } from './resolve'
+import { checkReferences } from './checkReferences'
+import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
 
 export class Validator {
@@ -40,35 +36,14 @@ export class Validator {
 
   public specification: Specification
 
-  resolveRefs(filesystem?: Filesystem) {
-    return replaceRefs(
-      filesystem.find((file) => file.entrypoint),
-      filesystem,
-    )
+  resolveReferences(filesystem?: Filesystem) {
+    return resolveReferences(filesystem, true)
   }
 
-  // async addSpecRef(data: string | object, uri: string) {
-  //   const spec = await getSpecFromData(data)
-
-  //   if (spec === undefined) {
-  //     throw new Error(ERRORS.EMPTY_OR_INVALID)
-  //   }
-
-  //   const newUri = uri || spec.$id
-
-  //   if (typeof newUri !== 'string') {
-  //     throw new Error(ERRORS.URI_MUST_BE_STRING)
-  //   }
-
-  //   spec.$id = newUri
-
-  //   this.externalRefs[newUri] = spec
-  // }
-
-  async validate(
-    filesystem: Filesystem,
-    options?: ValidateOptions,
-  ): Promise<ValidateResult> {
+  /**
+   * Checks whether a specification is valid and all references can be resolved.
+   */
+  async validate(filesystem: Filesystem): Promise<ValidateResult> {
     const entrypoint = filesystem.find((file) => file.entrypoint)
     const specification = entrypoint?.specification
 
@@ -80,7 +55,7 @@ export class Validator {
       if (specification === undefined || specification === null) {
         return {
           valid: false,
-          errors: transformErrors(specification, ERRORS.EMPTY_OR_INVALID),
+          errors: transformErrors(entrypoint, ERRORS.EMPTY_OR_INVALID),
         }
       }
 
@@ -102,7 +77,7 @@ export class Validator {
         return {
           valid: false,
           errors: transformErrors(
-            specification,
+            entrypoint,
             ERRORS.OPENAPI_VERSION_NOT_SUPPORTED,
           ),
         }
@@ -112,34 +87,30 @@ export class Validator {
       const validateSchema = await this.getAjvValidator(version)
       const schemaResult = validateSchema(specification)
 
-      // Check if the references are valid, as invalid references can’t be validated bu JSON schema
+      // Check if the references are valid
       if (schemaResult) {
         return checkReferences(filesystem)
       }
 
-      const result: ValidateResult = {
-        valid: schemaResult,
-      }
-
+      // Error handling
       if (validateSchema.errors) {
-        let errors = []
-
-        if (typeof validateSchema.errors === 'string') {
-          errors = transformErrors(specification, validateSchema.errors)
-        } else {
-          errors = validateSchema.errors
-        }
-
-        if (errors.length > 0) {
-          result.errors = transformErrors(specification, errors)
+        if (validateSchema.errors.length > 0) {
+          return {
+            valid: false,
+            errors: transformErrors(entrypoint, validateSchema.errors),
+          }
         }
       }
 
-      return result
-    } catch (error) {
+      // Whoops … no errors? Actually, that should never happen.
       return {
         valid: false,
-        errors: transformErrors(specification, error.message ?? error),
+      }
+    } catch (error) {
+      // Something went horribly wrong!
+      return {
+        valid: false,
+        errors: transformErrors(entrypoint, error.message ?? error),
       }
     }
   }
@@ -153,22 +124,28 @@ export class Validator {
       return this.ajvValidators[version]
     }
 
-    // Load Schema
+    // Load OpenAPI Schema
     const schema = await import(`../../../schemas/v${version}/schema.json`)
+
+    // Load JSON Schema
     const AjvClass = jsonSchemaVersions[schema.$schema]
+
+    // Get the correct Ajv validator
     const ajv = new AjvClass({
-      // AJV is a bit too strict in its strict validation of OpenAPI schemas.
+      // Ajv is a bit too strict in its strict validation of OpenAPI schemas.
       // Switch strict mode off.
       strict: false,
     })
 
+    // Register formats
+    // https://ajv.js.org/packages/ajv-formats.html#formats
     addFormats(ajv)
 
     // OpenAPI 3.1 uses media-range format
-    ajv.addFormat('media-range', true)
+    if (version === '3.1') {
+      ajv.addFormat('media-range', true)
+    }
 
-    this.ajvValidators[version] = ajv.compile(schema)
-
-    return this.ajvValidators[version]
+    return (this.ajvValidators[version] = ajv.compile(schema))
   }
 }

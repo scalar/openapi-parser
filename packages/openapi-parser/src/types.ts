@@ -16,8 +16,6 @@ export type ErrorObject = {
   path: string
 }
 
-export type ValidateOptions = {}
-
 export type ParseResult = {
   valid: boolean
   version: string | undefined
@@ -45,6 +43,10 @@ export type FilesystemEntry = {
   specification: Record<string, any>
 }
 
+/**
+ * Not literally a filesystem, but a list of files with their content.
+ * This is an abstraction layer to handle multiple files in the browser (without access to the hard disk).
+ */
 export type Filesystem = FilesystemEntry[]
 
 /**
