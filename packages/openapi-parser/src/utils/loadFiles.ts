@@ -35,7 +35,7 @@ export function loadFiles(file: string, basePath?: string) {
       typeof value.$ref === 'string' &&
       !value.$ref.startsWith('#')
     ) {
-      references.push(value.$ref)
+      references.push(value.$ref.split('#')[0])
     }
 
     return value

@@ -5,10 +5,10 @@ import { relativePath } from './utils'
 
 const EXAMPLE_FILE = relativePath(
   import.meta.url,
-  './tests/multifile/api/openapi.yaml',
+  './tests/filesystem/api/openapi.yaml',
 )
 
-describe('multifile', async () => {
+describe('filesystem', async () => {
   it('loads all files', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
@@ -16,6 +16,8 @@ describe('multifile', async () => {
     expect(filesystem[0].entrypoint).toBe(true)
     expect(filesystem[0].filename).toBe('openapi.yaml')
     expect(filesystem[0].references.length).toBe(2)
+    expect(filesystem[0].references[0]).toBe('schemas/problem.yaml')
+    expect(filesystem[0].references[1]).toBe('schemas/upload.yaml')
 
     expect(filesystem[1].entrypoint).toBe(false)
     expect(filesystem[1].filename).toBe('schemas/problem.yaml')
@@ -31,7 +33,7 @@ describe('multifile', async () => {
     expect(result.version).toBe('3.0')
   })
 
-  it('resolves filesytem', async () => {
+  it.only('resolves filesytem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     const result = await resolve(filesystem)
@@ -40,6 +42,8 @@ describe('multifile', async () => {
 
     expect(result.errors).toBe(undefined)
     expect(result.version).toBe('3.0')
+    // TODO: Resolve the *path* from the given file
+    // console.log('RESULT', result.schema.components.schemas.Upload)
     // @ts-ignore
     expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(
       'Coordinates',

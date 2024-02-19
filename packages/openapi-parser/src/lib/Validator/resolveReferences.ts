@@ -17,6 +17,7 @@ export function resolveReferences(
   filesystem: Filesystem,
   replaceReferences: boolean = true,
   entrypoint?: FilesystemEntry,
+  pointer?: string,
 ) {
   entrypoint = entrypoint ?? filesystem.find((file) => file.entrypoint)
 
@@ -120,7 +121,6 @@ export function resolveReferences(
     const { ref, id, path } = item
     const decodedRef = decodeURIComponent(ref)
     const fullRef = decodedRef[0] !== '#' ? decodedRef : `${id}${decodedRef}`
-
     applyRef(path, resolveUri(entrypoint, fullRef, anchors, filesystem))
   }
 

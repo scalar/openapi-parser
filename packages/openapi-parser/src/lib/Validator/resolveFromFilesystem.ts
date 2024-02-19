@@ -12,7 +12,9 @@ export function resolveFromFilesystem(
   // TODO: We should check all references recursively
   const sourceFile = file.filename
   const sourcePath = path.dirname(sourceFile)
-  const transformedUri = path.join(sourcePath, uri)
+  const reference = path.join(sourcePath, uri)
+  const transformedUri = reference.split('#')[0]
+  const pointer = reference.split('#')[1]
 
   const referencedFile = filesystem.find(
     (file) => file.filename === transformedUri,
@@ -23,5 +25,5 @@ export function resolveFromFilesystem(
     return undefined
   }
 
-  return resolveReferences(filesystem, true, referencedFile)
+  return resolveReferences(filesystem, true, referencedFile, pointer)
 }

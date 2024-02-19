@@ -26,4 +26,4 @@ components:
     Generic_Problem:
       $ref: schemas/problem.yaml
     Upload:
-      $ref: schemas/upload.yaml
+      $ref: schemas/upload.yaml#/components/schemas/Upload
