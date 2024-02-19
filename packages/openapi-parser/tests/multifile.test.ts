@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 import { loadFiles, resolve, validate } from '../src'
-import { testDirectory } from './utils'
+import { relativePath } from './utils'
 
-const EXAMPLE_FILE = testDirectory('./multifile/api/openapi.yaml')
+const EXAMPLE_FILE = relativePath(
+  import.meta.url,
+  './tests/multifile/api/openapi.yaml',
+)
 
 describe('multifile', async () => {
   it('loads all files', async () => {
@@ -33,8 +36,9 @@ describe('multifile', async () => {
 
     const result = await resolve(filesystem)
 
-    expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
+
+    expect(result.errors).toBe(undefined)
     expect(result.version).toBe('3.0')
     // @ts-ignore
     expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(

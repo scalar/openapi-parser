@@ -13,11 +13,7 @@ export function resolveUri(
 
   const hashPresent = !!path
 
-  const err = new Error(
-    `Can't resolve ${uri}${
-      prefix ? ', only internal refs are supported.' : ''
-    }`,
-  )
+  const err = new Error(`Can't resolve ${uri}`)
 
   if (hashPresent && path[0] !== '/') {
     if (anchors[uri]) {
@@ -27,12 +23,15 @@ export function resolveUri(
     throw err
   }
 
+  // File reference
   if (!anchors[prefix]) {
-    if (filesystem) {
-      return resolveFromFilesystem(file, uri, filesystem)
-    } else {
+    const resolvedReference = resolveFromFilesystem(file, uri, filesystem)
+
+    if (resolvedReference === undefined) {
       throw err
     }
+
+    return resolvedReference
   }
 
   if (!hashPresent) {

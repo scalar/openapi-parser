@@ -1,1 +1,1 @@
-export * from './testDirectory'
+export * from './relativePath'

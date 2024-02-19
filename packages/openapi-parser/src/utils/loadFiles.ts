@@ -55,7 +55,12 @@ export function loadFiles(file: string, basePath?: string) {
     const refFile = path.resolve(dir, reference)
 
     // Recursion FTW
-    files.push(...loadFiles(refFile, basePath || dir))
+    try {
+      files.push(...loadFiles(refFile, basePath || dir))
+    } catch {
+      // TODO: Should this throw an error? 🤔
+      // If something goes wrong here, just don’t add it to the list.
+    }
   }
 
   return files

@@ -1,10 +1,5 @@
 import { Validator } from '../lib'
-import type {
-  Filesystem,
-  OpenAPI,
-  ValidateOptions,
-  ValidateResult,
-} from '../types'
+import type { Filesystem, OpenAPI, ValidateResult } from '../types'
 import { makeFilesystem } from './makeFilesystem'
 
 /**
@@ -12,11 +7,10 @@ import { makeFilesystem } from './makeFilesystem'
  */
 export async function validate(
   value: string | Record<string, any> | Filesystem,
-  options?: ValidateOptions,
 ): Promise<ValidateResult> {
   const validator = new Validator()
   const filesystem = makeFilesystem(value)
-  const result = await validator.validate(filesystem, options)
+  const result = await validator.validate(filesystem)
 
   return {
     ...result,
