@@ -4,7 +4,7 @@ import { supportedVersions } from '../configuration'
  * Get versions of the OpenAPI specification.
  */
 export function details(specification: Record<string, any>) {
-  for (const version of supportedVersions) {
+  for (const version of new Set(supportedVersions)) {
     const specificationType = version === '2.0' ? 'swagger' : 'openapi'
     const value = specification[specificationType]
 

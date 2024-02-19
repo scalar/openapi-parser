@@ -10,7 +10,6 @@ export async function resolve(
 ): Promise<ParseResult> {
   const validator = new Validator()
   const filesystem = makeFilesystem(value)
-
   const result = await validator.validate(filesystem)
 
   // Detach the specification from the validator

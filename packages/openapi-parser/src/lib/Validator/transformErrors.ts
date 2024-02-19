@@ -1,4 +1,4 @@
-import { betterAjvErrors } from '../utils/betterAjvErrors'
+import { betterAjvErrors } from '../../utils/betterAjvErrors'
 
 /**
  * Transforms ajv errors, finds the positions in the schema and returns an enriched format.

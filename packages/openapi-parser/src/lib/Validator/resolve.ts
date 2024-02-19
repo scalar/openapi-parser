@@ -1,7 +1,7 @@
 // TODO: Not browser compatible
 import path from 'node:path'
 
-import type { Filesystem, FilesystemEntry, Specification } from '../types'
+import type { Filesystem, FilesystemEntry, Specification } from '../../types'
 
 function escapeJsonPointer(str: string) {
   return str.replace(/~/g, '~0').replace(/\//g, '~1')
@@ -102,9 +102,13 @@ export function replaceRefs(tree: FilesystemEntry, filesystem?: Filesystem) {
   return resolve(tree, true, filesystem)
 }
 
-export function checkRefs(file: FilesystemEntry, filesystem?: Filesystem) {
+export function checkReferences(filesystem: Filesystem) {
   try {
-    resolve(file, false, filesystem)
+    resolve(
+      filesystem.find((file) => file.entrypoint === true),
+      false,
+      filesystem,
+    )
 
     return {
       valid: true,

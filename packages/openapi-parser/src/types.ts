@@ -16,10 +16,7 @@ export type ErrorObject = {
   path: string
 }
 
-export type ValidateOptions = {
-  format?: 'js' | 'cli'
-  indent?: number
-}
+export type ValidateOptions = {}
 
 export type ParseResult = {
   valid: boolean
