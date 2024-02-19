@@ -10,8 +10,6 @@ import { traverse } from './traverse'
 export function loadFiles(file: string, basePath?: string) {
   const files: any[] = []
 
-  file = path.resolve(file)
-
   // Check if file exists
   if (!fs.existsSync(file)) {
     throw new Error(`File not found: ${file}`)

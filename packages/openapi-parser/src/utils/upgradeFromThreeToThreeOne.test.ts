@@ -125,7 +125,7 @@ describe('exclusiveMinimum and exclusiveMaximum', () => {
 })
 
 describe('use examples not example', () => {
-  it('make example an array', async () => {
+  it('migrates example to examples', async () => {
     const result = upgradeFromThreeToThreeOne({
       openapi: '3.0.0',
       info: {
@@ -158,7 +158,9 @@ describe('use examples not example', () => {
         .schema,
     ).toEqual({
       type: 'integer',
-      examples: [1],
+      examples: {
+        default: 1,
+      },
     })
   })
 })

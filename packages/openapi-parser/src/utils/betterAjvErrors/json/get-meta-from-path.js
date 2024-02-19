@@ -27,7 +27,7 @@ export default function getMetaFromPath(
       default:
         // Unexpected type
         // eslint-disable-next-line no-console
-        console.log(obj)
+        // console.log(obj)
 
         // Anyway, if there’s location, let’s just use it.
         if (obj.loc) {

@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
 import { loadFiles, resolve, validate } from '../src'
+import { testDirectory } from './utils'
+
+const EXAMPLE_FILE = testDirectory('./multifile/api/openapi.yaml')
 
 describe('multifile', async () => {
   it('loads all files', async () => {
-    const filesystem = loadFiles(
-      './packages/openapi-parser/tests/multifile/api/openapi.yaml',
-    )
+    const filesystem = loadFiles(EXAMPLE_FILE)
 
     expect(filesystem.length).toBe(4)
     expect(filesystem[0].entrypoint).toBe(true)
@@ -18,9 +19,7 @@ describe('multifile', async () => {
   })
 
   it('validates filesytem', async () => {
-    const filesystem = loadFiles(
-      './packages/openapi-parser/tests/multifile/api/openapi.yaml',
-    )
+    const filesystem = loadFiles(EXAMPLE_FILE)
 
     const result = await validate(filesystem)
 
@@ -30,9 +29,7 @@ describe('multifile', async () => {
   })
 
   it('resolves filesytem', async () => {
-    const filesystem = loadFiles(
-      './packages/openapi-parser/tests/multifile/api/openapi.yaml',
-    )
+    const filesystem = loadFiles(EXAMPLE_FILE)
 
     const result = await resolve(filesystem)
 

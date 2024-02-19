@@ -34,8 +34,8 @@ export default function getDecoratedDataPath(jsonAst, dataPath) {
         return obj.elements[pointer]
       }
       default:
-        // eslint-disable-next-line no-console
-        console.log(obj)
+      // eslint-disable-next-line no-console
+      // console.log(obj)
     }
   }, jsonAst.body)
   return decoratedPath

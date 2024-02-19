@@ -46,7 +46,9 @@ export function upgradeFromThreeToThreeOne(specification: Record<string, any>) {
   // Use examples not example
   specification = traverse(specification, (schema) => {
     if (schema.example !== undefined) {
-      schema.examples = [schema.example]
+      schema.examples = {
+        default: schema.example,
+      }
       delete schema.example
     }
 

@@ -36,6 +36,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@modyfi/vite-plugin-yaml": "^1.1.0",
     "@types/js-yaml": "^4.0.9",
     "vite-plugin-dts": "^3.7.3"
   },
