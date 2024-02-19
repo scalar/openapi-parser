@@ -39,7 +39,13 @@ export function resolveUri(
     return anchors[prefix]
   }
 
-  const paths = path.split('/').slice(1)
+  const paths = path
+    // replace + with space
+    .split('+')
+    .join(' ')
+    // remove first part of the path
+    .split('/')
+    .slice(1)
 
   try {
     const result = paths.reduce(

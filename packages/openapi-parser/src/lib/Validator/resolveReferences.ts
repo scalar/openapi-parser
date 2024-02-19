@@ -128,7 +128,7 @@ export function resolveReferences(
     const { ref, path } = item
 
     if (!dynamicAnchors[ref]) {
-      throw new Error(`Can't resolve $dynamicAnchor : '${ref}'`)
+      throw new Error(`Can't resolve $dynamicAnchor: '${ref}'`)
     }
 
     applyRef(path, dynamicAnchors[ref])

@@ -9,7 +9,7 @@ paths:
         default:
           description: OK
           schema:
-            $ref: '#/components/schemas/container/properties/with%20space'
+            $ref: '#/definitions/container/properties/with%20space'
 definitions:
   container:
     type: object
