@@ -52,6 +52,7 @@ components:
       example: 'Hello World!'`
 
     const result = checkReferences(makeFilesystem(specification))
+
     expect(result.valid).toBe(false)
     expect(result.errors).not.toBeUndefined()
     expect(result.errors.length).toBe(1)

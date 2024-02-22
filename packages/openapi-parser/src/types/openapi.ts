@@ -231,11 +231,11 @@ export declare namespace ResolvedOpenAPIV3 {
     'security'?: SecurityRequirementObject[]
     'tags'?: TagObject[]
     'externalDocs'?: ExternalDocumentationObject
-    'x-express-Resolvedopenapi-additional-middleware'?: (
+    'x-express-openapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)
     )[]
-    'x-express-Resolvedopenapi-validation-strict'?: boolean
+    'x-express-openapi-validation-strict'?: boolean
   }
   interface InfoObject {
     title: string
@@ -571,11 +571,13 @@ export declare namespace ResolvedOpenAPIV2 {
     'securityDefinitions'?: SecurityDefinitionsObject
     'swagger': string
     'tags'?: TagObject[]
-    'x-express-Resolvedopenapi-additional-middleware'?: (
+    'x-express-openapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)
     )[]
-    'x-express-Resolvedopenapi-validation-strict'?: boolean
+    'x-express-openapi-validation-strict'?: boolean
+    // We add this so TypeScript doesn’t complain about missing properties
+    'components': undefined
   }
   interface TagObject {
     name: string

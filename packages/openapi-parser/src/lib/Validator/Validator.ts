@@ -7,7 +7,7 @@ import {
   jsonSchemaVersions,
   supportedVersions,
 } from '../../configuration'
-import type { Filesystem, Specification, ValidateResult } from '../../types'
+import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
 import { checkReferences } from './checkReferences'
 import { resolveReferences } from './resolveReferences'
@@ -21,12 +21,12 @@ export class Validator {
   // Object with function *or* object { errors: string }
   protected ajvValidators: Record<
     string,
-    ((specification: Specification) => boolean) & {
+    ((specification: AnyObject) => boolean) & {
       errors: string
     }
   > = {}
 
-  protected externalRefs: Record<string, Specification> = {}
+  protected externalRefs: Record<string, AnyObject> = {}
 
   protected errors: string
 
@@ -34,7 +34,7 @@ export class Validator {
 
   protected specificationType: string
 
-  public specification: Specification
+  public specification: AnyObject
 
   resolveReferences(filesystem?: Filesystem) {
     return resolveReferences(filesystem, true)
@@ -51,7 +51,7 @@ export class Validator {
     this.specification = specification
 
     try {
-      // Specification is empty or invalid
+      // AnyObject is empty or invalid
       if (specification === undefined || specification === null) {
         return {
           valid: false,
@@ -72,7 +72,7 @@ export class Validator {
       this.specificationVersion = specificationVersion
       this.specificationType = specificationType
 
-      // Specification is not supported
+      // AnyObject is not supported
       if (!version) {
         return {
           valid: false,

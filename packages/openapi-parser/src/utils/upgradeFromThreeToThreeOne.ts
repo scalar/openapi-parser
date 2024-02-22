@@ -59,7 +59,7 @@ export function upgradeFromThreeToThreeOne(specification: AnyObject) {
   // Multipart file uploads with a binary file
   specification = traverse(specification, (schema) => {
     if (schema.type === 'object' && schema.properties !== undefined) {
-      for (const [key, value] of Object.entries(schema.properties)) {
+      for (const [_, value] of Object.entries(schema.properties)) {
         if (
           value !== undefined &&
           value.type === 'string' &&

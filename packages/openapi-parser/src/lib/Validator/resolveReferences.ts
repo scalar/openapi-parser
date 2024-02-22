@@ -1,4 +1,9 @@
-import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
+import type {
+  AnyObject,
+  Filesystem,
+  FilesystemEntry,
+  ResolvedOpenAPI,
+} from '../../types'
 import { escapeJsonPointer } from './escapeJsonPointer'
 import { isObject } from './isObject'
 import { resolveUri } from './resolveUri'
@@ -134,5 +139,5 @@ export function resolveReferences(
     applyRef(path, dynamicAnchors[ref])
   }
 
-  return specification
+  return specification as ResolvedOpenAPI.Document
 }

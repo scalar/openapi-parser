@@ -33,9 +33,7 @@ export async function resolve(
     }
   }
 
-  const schema = validator.resolveReferences(
-    filesystem,
-  ) as ResolvedOpenAPI.Document
+  const schema = validator.resolveReferences(filesystem)
 
   return {
     valid: true,

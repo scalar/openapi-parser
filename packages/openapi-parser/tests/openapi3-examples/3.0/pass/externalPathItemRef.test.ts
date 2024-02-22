@@ -11,7 +11,6 @@ const EXAMPLE_FILE = relativePath(
 describe('externalPathItemRef', () => {
   it('passes', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
-    console.log('FILEZZ', filesystem)
     const result = await resolve(filesystem)
 
     console.log('result', result)
