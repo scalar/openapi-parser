@@ -1,7 +1,7 @@
 import { spec } from 'node:test/reporters'
 import YAML from 'yaml'
 
-import { Filesystem } from '../types'
+import { AnyObject, Filesystem } from '../types'
 import { isFilesystem } from './isFilesystem'
 
 /**
@@ -9,8 +9,8 @@ import { isFilesystem } from './isFilesystem'
  * Don’t touch the object if it’s a `Filesystem` (multiple files).
  */
 export function normalize(
-  specification: string | Record<string, any> | Filesystem,
-): Record<string, any> | Filesystem {
+  specification: string | AnyObject | Filesystem,
+): AnyObject | Filesystem {
   if (isFilesystem(specification)) {
     return specification as Filesystem
   }

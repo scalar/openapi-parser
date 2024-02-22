@@ -1,4 +1,4 @@
-import type { Filesystem, FilesystemEntry, Specification } from '../../types'
+import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
 import { escapeJsonPointer } from './escapeJsonPointer'
 import { isObject } from './isObject'
 import { resolveUri } from './resolveUri'
@@ -34,7 +34,7 @@ export function resolveReferences(
   const pointers: {
     [key: string]: {
       ref: string
-      obj: Specification | string
+      obj: AnyObject | string
       prop: string
       path: string
       id: string
@@ -44,7 +44,7 @@ export function resolveReferences(
     pointers[word] = []
   }
 
-  function applyRef(path: string, target: Specification) {
+  function applyRef(path: string, target: AnyObject) {
     let root = specification
     const paths = path.split('/').slice(1)
     const prop = paths.pop()
@@ -60,7 +60,7 @@ export function resolveReferences(
     }
   }
 
-  function parse(obj: Specification, path: string, id: string) {
+  function parse(obj: AnyObject, path: string, id: string) {
     if (!isObject(obj)) {
       return
     }

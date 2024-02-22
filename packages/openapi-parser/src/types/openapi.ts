@@ -1,75 +1,26 @@
-export type ValidateResult = {
-  valid: boolean
-  // TODO: Contains references
-  specification?: OpenAPI.Document
-  version?: string
-  errors?: ErrorObject[]
-}
-
-export type ErrorObject = {
-  start: {
-    line: number
-    column: number
-    offset: number
-  }
-  error: string
-  path: string
-}
-
-export type ParseResult = {
-  valid: boolean
-  version: string | undefined
-  // TODO: Contains references
-  specification?: OpenAPI.Document
-  schema?: OpenAPI.Document
-  errors?: ErrorObject[]
-}
-
 export type EmptyObject = Record<string, never>
-
-export type AjvOptions = {
-  strict?: boolean | 'log'
-}
-
-export type Specification = {
-  $id?: string
-}
-
-export type FilesystemEntry = {
-  dir: string
-  entrypoint: boolean
-  references: string[]
-  filename: string
-  specification: Record<string, any>
-}
-
-/**
- * Not literally a filesystem, but a list of files with their content.
- * This is an abstraction layer to handle multiple files in the browser (without access to the hard disk).
- */
-export type Filesystem = FilesystemEntry[]
 
 /**
  * These types are copied from 'openapi-types', but the `ReferenceObject` type is removed.
- * After an OpenAPI schema is parsed, all references are resolved and replaced with the actual object.
+ * After an ResolvedOpenAPI schema is parsed, all references are resolved and replaced with the actual object.
  */
-export declare namespace OpenAPI {
+export declare namespace ResolvedOpenAPI {
   type Document<T extends {} = EmptyObject> =
-    | OpenAPIV2.Document<T>
-    | OpenAPIV3.Document<T>
-    | OpenAPIV3_1.Document<T>
+    | ResolvedOpenAPIV2.Document<T>
+    | ResolvedOpenAPIV3.Document<T>
+    | ResolvedOpenAPIV3_1.Document<T>
   type Operation<T extends {} = EmptyObject> =
-    | OpenAPIV2.OperationObject<T>
-    | OpenAPIV3.OperationObject<T>
-    | OpenAPIV3_1.OperationObject<T>
+    | ResolvedOpenAPIV2.OperationObject<T>
+    | ResolvedOpenAPIV3.OperationObject<T>
+    | ResolvedOpenAPIV3_1.OperationObject<T>
   type Parameter =
-    | OpenAPIV3_1.ParameterObject
-    | OpenAPIV3.ParameterObject
-    | OpenAPIV2.Parameter
+    | ResolvedOpenAPIV3_1.ParameterObject
+    | ResolvedOpenAPIV3.ParameterObject
+    | ResolvedOpenAPIV2.Parameter
   type Parameters =
-    | OpenAPIV3_1.ParameterObject[]
-    | OpenAPIV3.ParameterObject[]
-    | OpenAPIV2.Parameter[]
+    | ResolvedOpenAPIV3_1.ParameterObject[]
+    | ResolvedOpenAPIV3.ParameterObject[]
+    | ResolvedOpenAPIV2.Parameter[]
   interface Request {
     body?: any
     headers?: object
@@ -78,7 +29,7 @@ export declare namespace OpenAPI {
   }
 }
 
-export declare namespace OpenAPIV3_1 {
+export declare namespace ResolvedOpenAPIV3_1 {
   type Modify<T, R> = Omit<T, keyof R> & R
   type PathsWebhooksComponents<T extends {} = EmptyObject> = {
     paths: PathsObject<T>
@@ -86,7 +37,7 @@ export declare namespace OpenAPIV3_1 {
     components: ComponentsObject
   }
   export type Document<T extends {} = EmptyObject> = Modify<
-    Omit<OpenAPIV3.Document<T>, 'paths' | 'components'>,
+    Omit<ResolvedOpenAPIV3.Document<T>, 'paths' | 'components'>,
     {
       info: InfoObject
       jsonSchemaDialect?: string
@@ -101,21 +52,21 @@ export declare namespace OpenAPIV3_1 {
     )
   >
   export type InfoObject = Modify<
-    OpenAPIV3.InfoObject,
+    ResolvedOpenAPIV3.InfoObject,
     {
       summary?: string
       license?: LicenseObject
     }
   >
-  export type ContactObject = OpenAPIV3.ContactObject
+  export type ContactObject = ResolvedOpenAPIV3.ContactObject
   export type LicenseObject = Modify<
-    OpenAPIV3.LicenseObject,
+    ResolvedOpenAPIV3.LicenseObject,
     {
       identifier?: string
     }
   >
   export type ServerObject = Modify<
-    OpenAPIV3.ServerObject,
+    ResolvedOpenAPIV3.ServerObject,
     {
       url: string
       description?: string
@@ -123,7 +74,7 @@ export declare namespace OpenAPIV3_1 {
     }
   >
   export type ServerVariableObject = Modify<
-    OpenAPIV3.ServerVariableObject,
+    ResolvedOpenAPIV3.ServerVariableObject,
     {
       enum?: [string, ...string[]]
     }
@@ -132,9 +83,9 @@ export declare namespace OpenAPIV3_1 {
     T extends {} = EmptyObject,
     P extends {} = EmptyObject,
   > = Record<string, (PathItemObject<T> & P) | undefined>
-  export type HttpMethods = OpenAPIV3.HttpMethods
+  export type HttpMethods = ResolvedOpenAPIV3.HttpMethods
   export type PathItemObject<T extends {} = EmptyObject> = Modify<
-    OpenAPIV3.PathItemObject<T>,
+    ResolvedOpenAPIV3.PathItemObject<T>,
     {
       servers?: ServerObject[]
       parameters?: ParameterObject[]
@@ -143,7 +94,7 @@ export declare namespace OpenAPIV3_1 {
     [method in HttpMethods]?: OperationObject<T>
   }
   export type OperationObject<T extends {} = EmptyObject> = Modify<
-    OpenAPIV3.OperationObject<T>,
+    ResolvedOpenAPIV3.OperationObject<T>,
     {
       parameters?: ParameterObject[]
       requestBody?: RequestBodyObject
@@ -154,14 +105,14 @@ export declare namespace OpenAPIV3_1 {
   > &
     T
   export type ExternalDocumentationObject =
-    OpenAPIV3.ExternalDocumentationObject
-  export type ParameterObject = OpenAPIV3.ParameterObject
-  export type HeaderObject = OpenAPIV3.HeaderObject
-  export type ParameterBaseObject = OpenAPIV3.ParameterBaseObject
+    ResolvedOpenAPIV3.ExternalDocumentationObject
+  export type ParameterObject = ResolvedOpenAPIV3.ParameterObject
+  export type HeaderObject = ResolvedOpenAPIV3.HeaderObject
+  export type ParameterBaseObject = ResolvedOpenAPIV3.ParameterBaseObject
   export type NonArraySchemaObjectType =
-    | OpenAPIV3.NonArraySchemaObjectType
+    | ResolvedOpenAPIV3.NonArraySchemaObjectType
     | 'null'
-  export type ArraySchemaObjectType = OpenAPIV3.ArraySchemaObjectType
+  export type ArraySchemaObjectType = ResolvedOpenAPIV3.ArraySchemaObjectType
   /**
    * There is no way to tell typescript to require items when type is either 'array' or array containing 'array' type
    * 'items' will be always visible as optional
@@ -183,9 +134,9 @@ export declare namespace OpenAPIV3_1 {
     items?: SchemaObject
   }
   export type BaseSchemaObject = Modify<
-    Omit<OpenAPIV3.BaseSchemaObject, 'nullable'>,
+    Omit<ResolvedOpenAPIV3.BaseSchemaObject, 'nullable'>,
     {
-      examples?: OpenAPIV3.BaseSchemaObject['example'][]
+      examples?: ResolvedOpenAPIV3.BaseSchemaObject['example'][]
       exclusiveMinimum?: boolean | number
       exclusiveMaximum?: boolean | number
       contentMediaType?: string
@@ -204,19 +155,19 @@ export declare namespace OpenAPIV3_1 {
       const?: any
     }
   >
-  export type DiscriminatorObject = OpenAPIV3.DiscriminatorObject
-  export type XMLObject = OpenAPIV3.XMLObject
-  export type ExampleObject = OpenAPIV3.ExampleObject
+  export type DiscriminatorObject = ResolvedOpenAPIV3.DiscriminatorObject
+  export type XMLObject = ResolvedOpenAPIV3.XMLObject
+  export type ExampleObject = ResolvedOpenAPIV3.ExampleObject
   export type MediaTypeObject = Modify<
-    OpenAPIV3.MediaTypeObject,
+    ResolvedOpenAPIV3.MediaTypeObject,
     {
       schema?: SchemaObject
       examples?: Record<string, ExampleObject>
     }
   >
-  export type EncodingObject = OpenAPIV3.EncodingObject
+  export type EncodingObject = ResolvedOpenAPIV3.EncodingObject
   export type RequestBodyObject = Modify<
-    OpenAPIV3.RequestBodyObject,
+    ResolvedOpenAPIV3.RequestBodyObject,
     {
       content: {
         [media: string]: MediaTypeObject
@@ -225,7 +176,7 @@ export declare namespace OpenAPIV3_1 {
   >
   export type ResponsesObject = Record<string, ResponseObject>
   export type ResponseObject = Modify<
-    OpenAPIV3.ResponseObject,
+    ResolvedOpenAPIV3.ResponseObject,
     {
       headers?: {
         [header: string]: HeaderObject
@@ -239,15 +190,16 @@ export declare namespace OpenAPIV3_1 {
     }
   >
   export type LinkObject = Modify<
-    OpenAPIV3.LinkObject,
+    ResolvedOpenAPIV3.LinkObject,
     {
       server?: ServerObject
     }
   >
   export type CallbackObject = Record<string, PathItemObject>
-  export type SecurityRequirementObject = OpenAPIV3.SecurityRequirementObject
+  export type SecurityRequirementObject =
+    ResolvedOpenAPIV3.SecurityRequirementObject
   export type ComponentsObject = Modify<
-    OpenAPIV3.ComponentsObject,
+    ResolvedOpenAPIV3.ComponentsObject,
     {
       schemas?: Record<string, SchemaObject>
       responses?: Record<string, ResponseObject>
@@ -261,17 +213,17 @@ export declare namespace OpenAPIV3_1 {
       pathItems?: Record<string, PathItemObject>
     }
   >
-  export type SecuritySchemeObject = OpenAPIV3.SecuritySchemeObject
-  export type HttpSecurityScheme = OpenAPIV3.HttpSecurityScheme
-  export type ApiKeySecurityScheme = OpenAPIV3.ApiKeySecurityScheme
-  export type OAuth2SecurityScheme = OpenAPIV3.OAuth2SecurityScheme
-  export type OpenIdSecurityScheme = OpenAPIV3.OpenIdSecurityScheme
-  export type TagObject = OpenAPIV3.TagObject
+  export type SecuritySchemeObject = ResolvedOpenAPIV3.SecuritySchemeObject
+  export type HttpSecurityScheme = ResolvedOpenAPIV3.HttpSecurityScheme
+  export type ApiKeySecurityScheme = ResolvedOpenAPIV3.ApiKeySecurityScheme
+  export type OAuth2SecurityScheme = ResolvedOpenAPIV3.OAuth2SecurityScheme
+  export type OpenIdSecurityScheme = ResolvedOpenAPIV3.OpenIdSecurityScheme
+  export type TagObject = ResolvedOpenAPIV3.TagObject
 }
 
-export declare namespace OpenAPIV3 {
+export declare namespace ResolvedOpenAPIV3 {
   interface Document<T extends {} = EmptyObject> {
-    'openapi': string
+    'Resolvedopenapi': string
     'info': InfoObject
     'servers'?: ServerObject[]
     'paths': PathsObject<T>
@@ -279,11 +231,11 @@ export declare namespace OpenAPIV3 {
     'security'?: SecurityRequirementObject[]
     'tags'?: TagObject[]
     'externalDocs'?: ExternalDocumentationObject
-    'x-express-openapi-additional-middleware'?: (
+    'x-express-Resolvedopenapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)
     )[]
-    'x-express-openapi-validation-strict'?: boolean
+    'x-express-Resolvedopenapi-validation-strict'?: boolean
   }
   interface InfoObject {
     title: string
@@ -602,7 +554,7 @@ export declare namespace OpenAPIV3 {
   }
 }
 
-export declare namespace OpenAPIV2 {
+export declare namespace ResolvedOpenAPIV2 {
   interface Document<T extends {} = EmptyObject> {
     'basePath'?: string
     'consumes'?: MimeTypes
@@ -619,11 +571,11 @@ export declare namespace OpenAPIV2 {
     'securityDefinitions'?: SecurityDefinitionsObject
     'swagger': string
     'tags'?: TagObject[]
-    'x-express-openapi-additional-middleware'?: (
+    'x-express-Resolvedopenapi-additional-middleware'?: (
       | ((request: any, response: any, next: any) => Promise<void>)
       | ((request: any, response: any, next: any) => void)
     )[]
-    'x-express-openapi-validation-strict'?: boolean
+    'x-express-Resolvedopenapi-validation-strict'?: boolean
   }
   interface TagObject {
     name: string

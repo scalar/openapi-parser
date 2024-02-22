@@ -1,13 +1,19 @@
 import { Validator } from '../lib'
-import type { Filesystem, OpenAPI, ParseResult } from '../types'
+import type {
+  AnyObject,
+  Filesystem,
+  OpenAPI,
+  ResolveResult,
+  ResolvedOpenAPI,
+} from '../types'
 import { makeFilesystem } from './makeFilesystem'
 
 /**
  * Validates an OpenAPI schema and resolves all references.
  */
 export async function resolve(
-  value: string | Record<string, any> | Filesystem,
-): Promise<ParseResult> {
+  value: string | AnyObject | Filesystem,
+): Promise<ResolveResult> {
   const validator = new Validator()
   const filesystem = makeFilesystem(value)
   const result = await validator.validate(filesystem)
@@ -27,7 +33,9 @@ export async function resolve(
     }
   }
 
-  const schema = validator.resolveReferences(filesystem) as OpenAPI.Document
+  const schema = validator.resolveReferences(
+    filesystem,
+  ) as ResolvedOpenAPI.Document
 
   return {
     valid: true,

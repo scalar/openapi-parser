@@ -89,7 +89,7 @@ importers:
     devDependencies:
       '@modyfi/vite-plugin-yaml':
         specifier: ^1.1.0
-        version: 1.1.0(vite@5.1.1)
+        version: 1.1.0(vite@5.1.4)
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
@@ -773,7 +773,7 @@ packages:
     resolution: {integrity: sha512-9b8mPpKrfeGRuhFH5iO1iwCLeIIsV6+H1sRfxbkoGXIyQE2BTsPd9zqSqQJ+pv5sJ/hT5M1zvOFL02MnEezFug==}
     dev: true
 
-  /@modyfi/vite-plugin-yaml@1.1.0(vite@5.1.1):
+  /@modyfi/vite-plugin-yaml@1.1.0(vite@5.1.4):
     resolution: {integrity: sha512-L26xfzkSo1yamODCAtk/ipVlL6OEw2bcJ92zunyHu8zxi7+meV0zefA9xscRMDCsMY8xL3C3wi3DhMiPxcbxbw==}
     peerDependencies:
       vite: ^3.2.7 || ^4.0.5 || ^5.0.5
@@ -781,7 +781,7 @@ packages:
       '@rollup/pluginutils': 5.1.0
       js-yaml: 4.1.0
       tosource: 2.0.0-alpha.3
-      vite: 5.1.1(@types/node@20.11.17)
+      vite: 5.1.4(@types/node@20.11.19)
     transitivePeerDependencies:
       - rollup
     dev: true

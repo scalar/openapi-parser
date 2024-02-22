@@ -1,2 +1,3 @@
-export const toJson = (value: Record<string, any>) =>
-  JSON.stringify(value, null, 2)
+import { AnyObject } from '../types'
+
+export const toJson = (value: AnyObject) => JSON.stringify(value, null, 2)

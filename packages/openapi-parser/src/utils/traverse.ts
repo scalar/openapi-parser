@@ -1,11 +1,13 @@
+import { AnyObject } from '../types'
+
 /**
  * Recursively traverses the specification and applies the transform function to each node.
  */
 export function traverse(
-  specification: Record<string, any>,
-  transform: (specification: Record<string, any>) => Record<string, any>,
+  specification: AnyObject,
+  transform: (specification: AnyObject) => AnyObject,
 ) {
-  const result: Record<string, any> = {}
+  const result: AnyObject = {}
 
   for (const [key, value] of Object.entries(specification)) {
     if (Array.isArray(value)) {

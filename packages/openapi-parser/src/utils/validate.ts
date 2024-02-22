@@ -1,12 +1,12 @@
 import { Validator } from '../lib'
-import type { Filesystem, OpenAPI, ValidateResult } from '../types'
+import type { AnyObject, Filesystem, OpenAPI, ValidateResult } from '../types'
 import { makeFilesystem } from './makeFilesystem'
 
 /**
  * Validates an OpenAPI schema.
  */
 export async function validate(
-  value: string | Record<string, any> | Filesystem,
+  value: string | AnyObject | Filesystem,
 ): Promise<ValidateResult> {
   const validator = new Validator()
   const filesystem = makeFilesystem(value)

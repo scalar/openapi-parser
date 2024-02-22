@@ -1,12 +1,12 @@
 import { unescapeJsonPointer } from 'ajv/dist/compile/util'
 
-import type { Filesystem, FilesystemEntry } from '../../types'
+import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
 import { resolveFromFilesystem } from './resolveFromFilesystem'
 
 export function resolveUri(
   file: FilesystemEntry,
   uri: string,
-  anchors: Record<string, any>,
+  anchors: AnyObject,
   filesystem?: Filesystem,
 ) {
   const [prefix, path] = uri.split('#', 2)

@@ -1,3 +1,4 @@
+import { AnyObject } from '../types'
 import { traverse } from './traverse'
 
 /**
@@ -5,7 +6,7 @@ import { traverse } from './traverse'
  *
  * https://www.openapis.org/blog/2021/02/16/migrating-from-openapi-3-0-to-3-1-0
  */
-export function upgradeFromThreeToThreeOne(specification: Record<string, any>) {
+export function upgradeFromThreeToThreeOne(specification: AnyObject) {
   // Version
   if (specification.openapi?.startsWith('3.0')) {
     specification.openapi = '3.1.0'

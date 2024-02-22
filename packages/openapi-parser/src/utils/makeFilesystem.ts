@@ -1,9 +1,9 @@
-import type { Filesystem } from '../types'
+import type { AnyObject, Filesystem } from '../types'
 import { isFilesystem } from './isFilesystem'
 import { normalize } from './normalize'
 
 export function makeFilesystem(
-  value: string | Record<string, any> | Filesystem,
+  value: string | AnyObject | Filesystem,
 ): Filesystem {
   // Keep as is
   if (isFilesystem(value)) {
