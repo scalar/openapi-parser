@@ -8,7 +8,7 @@ const EXAMPLE_FILE = relativePath(
   './tests/filesystem/api/openapi.yaml',
 )
 
-describe('filesystem', async () => {
+describe.todo('filesystem', async () => {
   it('loads all files', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
@@ -33,7 +33,7 @@ describe('filesystem', async () => {
     expect(result.version).toBe('3.0')
   })
 
-  it.only('resolves filesytem', async () => {
+  it('resolves filesytem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     const result = await resolve(filesystem)

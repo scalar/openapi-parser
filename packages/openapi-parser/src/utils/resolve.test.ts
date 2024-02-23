@@ -187,6 +187,7 @@ it('resolves a simple reference', async () => {
 
   // Original
   expect(
+    // @ts-ignore
     result.specification.paths['/test'].get.responses['200'].content[
       'application/json'
     ].schema,
@@ -196,6 +197,7 @@ it('resolves a simple reference', async () => {
 
   // Resolved references
   expect(
+    // @ts-ignore
     result.schema.paths['/test'].get.responses['200'].content[
       'application/json'
     ].schema,

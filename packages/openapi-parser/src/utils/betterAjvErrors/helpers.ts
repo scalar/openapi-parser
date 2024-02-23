@@ -134,6 +134,7 @@ export function createErrorInstances(root, options) {
 
 export default function prettify(ajvErrors, options) {
   const tree = makeTree(ajvErrors || [])
+  // @ts-ignore
   filterRedundantErrors(tree)
   return createErrorInstances(tree, options)
 }

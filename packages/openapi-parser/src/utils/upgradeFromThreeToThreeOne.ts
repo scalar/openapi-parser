@@ -62,10 +62,14 @@ export function upgradeFromThreeToThreeOne(specification: AnyObject) {
       for (const [_, value] of Object.entries(schema.properties)) {
         if (
           value !== undefined &&
+          // @ts-ignore
           value.type === 'string' &&
+          // @ts-ignore
           value.format === 'binary'
         ) {
+          // @ts-ignore
           value.contentEncoding = 'application/octet-stream'
+          // @ts-ignore
           delete value.format
         }
       }

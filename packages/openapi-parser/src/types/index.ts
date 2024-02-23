@@ -1,15 +1,15 @@
-import { OpenAPI } from 'openapi-types'
+import type { OpenAPI } from 'openapi-types'
 
-import { ResolvedOpenAPI } from './openapi'
+import type { ResolvedOpenAPI } from './openapi'
 
-export {
+export type {
   ResolvedOpenAPI,
   ResolvedOpenAPIV2,
   ResolvedOpenAPIV3,
   ResolvedOpenAPIV3_1,
 } from './openapi'
 
-export { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types'
+export type { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types'
 
 export type AnyObject = Record<string, any>
 

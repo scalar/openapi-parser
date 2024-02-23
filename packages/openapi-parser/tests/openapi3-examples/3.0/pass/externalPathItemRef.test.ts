@@ -13,8 +13,6 @@ describe('externalPathItemRef', () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
     const result = await resolve(filesystem)
 
-    console.log('result', result)
-
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.0')
   })
