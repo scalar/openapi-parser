@@ -18,7 +18,7 @@ function getTypeName(obj) {
 export default function getDecoratedDataPath(jsonAst, dataPath) {
   let decoratedPath = ''
   getPointers(dataPath).reduce((obj, pointer) => {
-    switch (obj.type) {
+    switch (obj?.type) {
       case 'Object': {
         decoratedPath += `/${pointer}`
         const filtered = obj.members.filter(
@@ -34,8 +34,8 @@ export default function getDecoratedDataPath(jsonAst, dataPath) {
         return obj.elements[pointer]
       }
       default:
-        // eslint-disable-next-line no-console
-        console.log(obj)
+      // eslint-disable-next-line no-console
+      // console.log(obj)
     }
   }, jsonAst.body)
   return decoratedPath

@@ -11,7 +11,8 @@
     "outDir": "dist",
     "sourceMap": false,
     "lib": ["ESNext", "DOM"],
-    "target": "ESNext"
+    "target": "ESNext",
+    "types": ["@modyfi/vite-plugin-yaml/modules"]
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": ["src/**/*", "tests/**/*", "**/*.json", "**/*.yaml"]
 }

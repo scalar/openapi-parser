@@ -8,7 +8,7 @@ export default function getMetaFromPath(
   const pointers = getPointers(dataPath)
   const lastPointerIndex = pointers.length - 1
   return pointers.reduce((obj, pointer, idx) => {
-    switch (obj.type) {
+    switch (obj?.type) {
       case 'Object': {
         const filtered = obj.members.filter(
           (child) => child.name.value === pointer,
@@ -25,8 +25,14 @@ export default function getMetaFromPath(
       case 'Array':
         return obj.elements[pointer]
       default:
+        // Unexpected type
         // eslint-disable-next-line no-console
-        console.log(obj)
+        // console.log(obj)
+
+        // Anyway, if there’s location, let’s just use it.
+        if (obj.loc) {
+          return obj
+        }
     }
   }, jsonAst.body)
 }

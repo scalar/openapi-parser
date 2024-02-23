@@ -93,11 +93,11 @@
     </div>
 
     <script type="module">
-      import { parse } from './src/index.ts'
+      import { openapi } from './src/index.ts'
 
       // Initial parse
       const input = document.getElementById('input').value
-      const output = await parse(input)
+      const output = await openapi().load(input).upgrade().resolve()
       document.getElementById('output').innerHTML = JSON.stringify(
         output,
         null,
@@ -108,7 +108,8 @@
       document.getElementById('input').addEventListener('input', async (e) => {
         const input = e.target.value
         try {
-          const output = await parse(input)
+          const output = await openapi().load(input).upgrade().resolve()
+
           document.getElementById('output').innerHTML = JSON.stringify(
             output,
             null,

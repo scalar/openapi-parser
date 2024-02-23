@@ -26,23 +26,6 @@ npm add @scalar/openapi-parser
 
 ## Usage
 
-### Parse
-
-```ts
-import { parse } from '@scalar/openapi-parser'
-
-const file = `{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Hello World",
-    "version": "1.0.0"
-  },
-  "paths": {}
-}`
-
-const result = await parse(file)
-```
-
 ### Validate
 
 ```ts
@@ -64,6 +47,23 @@ console.log(result.valid)
 if (!result.valid) {
   console.log(result.errors)
 }
+```
+
+### Resolve references
+
+```ts
+import { resolve } from '@scalar/openapi-parser'
+
+const file = `{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}`
+
+const result = await resolve(file)
 ```
 
 ## Community

@@ -1,8 +1,9 @@
+import ViteYaml from '@modyfi/vite-plugin-yaml'
 import dts from 'vite-plugin-dts'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [ViteYaml(), dts({ rollupTypes: true })],
   build: {
     lib: {
       entry: ['src/index.ts'],
