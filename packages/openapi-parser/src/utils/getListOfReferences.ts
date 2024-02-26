@@ -9,6 +9,12 @@ import { traverse } from './traverse'
 export function getListOfReferences(specification: AnyObject) {
   const references: string[] = []
 
+  // Make sure we’re dealing with an object
+  if (!specification || typeof specification !== 'object') {
+    return references
+  }
+
+  // Traverse the specification and collect all references
   traverse(specification, (value: any) => {
     if (
       value.$ref &&

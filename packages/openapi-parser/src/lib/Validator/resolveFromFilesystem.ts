@@ -28,14 +28,7 @@ export function resolveFromFilesystem(
 
   // TODO: Needs to be cleaned up
   // If there is no pointer, prefix it with a #
-  const formattedUri = pointer ? '#' + pointer : ''
+  const formattedUri = pointer ? '#' + pointer : undefined
 
-  return resolveUri(
-    referencedFile,
-    formattedUri,
-    {
-      '': referencedFile.specification,
-    },
-    filesystem,
-  )
+  return resolveReferences(filesystem, true, referencedFile, formattedUri)
 }
