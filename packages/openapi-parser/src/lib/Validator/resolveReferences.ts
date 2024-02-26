@@ -24,7 +24,7 @@ export function resolveReferences(
   entrypoint?: FilesystemEntry,
   pointer?: string,
 ) {
-  entrypoint = entrypoint ?? filesystem.find((file) => file.entrypoint)
+  entrypoint = entrypoint ?? filesystem.find((file) => file.isEntrypoint)
 
   let { specification } = entrypoint
 

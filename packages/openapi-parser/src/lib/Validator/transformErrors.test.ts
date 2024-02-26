@@ -6,7 +6,7 @@ import { transformErrors } from './transformErrors'
 describe('transformErrors', () => {
   it('transforms a string to a proper error object', () => {
     const result = transformErrors(
-      makeFilesystem('').find((entrypoint) => entrypoint.entrypoint),
+      makeFilesystem('').find((entrypoint) => entrypoint.isEntrypoint),
       'example error message',
     )
 

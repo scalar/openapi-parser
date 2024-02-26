@@ -1,5 +1,6 @@
 import { unescapeJsonPointer } from 'ajv/dist/compile/util'
 
+import { ERRORS } from '../../configuration'
 import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
 import { resolveFromFilesystem } from './resolveFromFilesystem'
 
@@ -9,18 +10,29 @@ export function resolveUri(
   anchors: AnyObject,
   filesystem?: Filesystem,
 ) {
+  /**
+   * Examples:
+   *
+   * - #/components/schemas/Upload
+   * - ./components/coordinates.yaml
+   * - schemas/upload.yaml#/components/schemas/Upload
+   */
   const [prefix, path] = uri.split('#', 2)
+  const hasHash = !!path
 
-  const hashPresent = !!path
+  // TODO: What are anchors?
+  // console.log(anchors)
 
-  const err = new Error(`Can't resolve ${uri}`)
+  // Default error message
+  const defaultError = new Error(ERRORS.INVALID_REFERENCE.replace('%s', uri))
 
-  if (hashPresent && path[0] !== '/') {
+  // Local reference
+  if (hasHash && path[0] !== '/') {
     if (anchors[uri]) {
       return anchors[uri]
     }
 
-    throw err
+    throw defaultError
   }
 
   // File reference
@@ -28,16 +40,20 @@ export function resolveUri(
     const resolvedReference = resolveFromFilesystem(file, uri, filesystem)
 
     if (resolvedReference === undefined) {
-      throw err
+      throw defaultError
     }
 
     return resolvedReference
   }
 
-  if (!hashPresent) {
+  // ???
+  if (!hasHash) {
     return anchors[prefix]
   }
 
+  // Creates an array with the individual keys of the path
+  // Example:
+  // components/schemas/Generic_Problem -> ['components', 'schemas', 'Generic_Problem']
   const paths = path
     // replace + with space
     .split('+')
@@ -47,17 +63,20 @@ export function resolveUri(
     .slice(1)
 
   try {
-    const result = paths.reduce(
-      (o, n) => o[unescapeJsonPointer(n)],
-      anchors[prefix],
-    )
+    // This loops accesses the nested properties of the anchors object to find the reference.
+    // Example: ['components', 'schemas', 'Generic_Problem']
+    const result = paths.reduce((specification, key) => {
+      return specification[unescapeJsonPointer(key)]
+    }, anchors[prefix])
 
+    // Could not find the reference
     if (result === undefined) {
       throw ''
     }
 
+    // Found the reference
     return result
   } catch {
-    throw err
+    throw defaultError
   }
 }
