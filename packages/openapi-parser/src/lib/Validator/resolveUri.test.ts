@@ -153,7 +153,7 @@ describe('resolveUri', async () => {
     ).toEqual('string')
   })
 
-  it.todo('resolves file references with pointers', async () => {
+  it('resolves file references with pointers', async () => {
     const baseFile = {
       openapi: '3.0.3',
       info: {
@@ -213,8 +213,10 @@ describe('resolveUri', async () => {
     expect(
       result.schema?.paths?.['/upload']?.post?.responses?.[401]?.content[
         'application/problem+json'
-      ]?.schema?.type,
-    ).toEqual('string')
+      ]?.schema,
+    ).toMatchObject({
+      type: 'string',
+    })
   })
 
   // TODO: References in referenced files

@@ -4,6 +4,11 @@ import { ERRORS } from '../../configuration'
 import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
 import { resolveFromFilesystem } from './resolveFromFilesystem'
 
+/**
+ * Resolves all kinds of references in the specification.
+ *
+ * TODO: Get rid of the anchors parameter.
+ */
 export function resolveUri(
   file: FilesystemEntry,
   uri: string,

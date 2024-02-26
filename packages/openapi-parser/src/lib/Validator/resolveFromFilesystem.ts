@@ -3,8 +3,7 @@ import path from 'node:path'
 
 import type { Filesystem, FilesystemEntry } from '../../types'
 import { resolveReferences } from './resolveReferences'
-
-// import { resolveUri } from './resolveUri'
+import { resolveUri } from './resolveUri'
 
 export function resolveFromFilesystem(
   file: FilesystemEntry,
@@ -27,12 +26,16 @@ export function resolveFromFilesystem(
     return undefined
   }
 
-  // console.log(
-  //   '[resolveFromFilesystem]',
-  //   referencedFile,
-  //   '#' + pointer,
-  //   // resolveUri(referencedFile, '#' + pointer, {}, filesystem),
-  // )
+  // TODO: Needs to be cleaned up
+  // If there is no pointer, prefix it with a #
+  const formattedUri = pointer ? '#' + pointer : ''
 
-  return resolveReferences(filesystem, true, referencedFile, pointer)
+  return resolveUri(
+    referencedFile,
+    formattedUri,
+    {
+      '': referencedFile.specification,
+    },
+    filesystem,
+  )
 }
