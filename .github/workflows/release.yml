@@ -51,6 +51,8 @@ jobs:
           commit: 'chore: version packages'
           # The command to use to build and publish packages
           publish: 'pnpm -r publish --access public'
+          # Create Github releases after `publish`
+          createGithubReleases: true
         env:
           # https://github.com/settings/tokens/new
           # Expiration: No expiration
