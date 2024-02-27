@@ -74,6 +74,26 @@ const file = `{
 const result = await resolve(file)
 ```
 
+## Upgrade your OpenAPI specification
+
+There’s an `upgrade` command to upgrade all your OpenAPI specifications to the latest OpenAPI version.
+
+> ⚠️ Currently, only an upgrade from OpenAPI 3.0 to OpenAPI 3.1 is supported. Swagger 2.0 is not supported (yet).
+
+```ts
+const specification = openapi()
+  .load({
+    openapi: '3.0.0',
+    info: {
+      title: 'Hello World',
+      version: '1.0.0',
+    },
+    paths: {},
+  })
+  .upgrade()
+  .get()
+```
+
 ## Community
 
 We are API nerds. You too? Let’s chat on Discord: <https://discord.gg/8HeZcRGPFS>
