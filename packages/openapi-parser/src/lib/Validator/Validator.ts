@@ -44,7 +44,7 @@ export class Validator {
    * Checks whether a specification is valid and all references can be resolved.
    */
   async validate(filesystem: Filesystem): Promise<ValidateResult> {
-    const entrypoint = filesystem.find((file) => file.entrypoint)
+    const entrypoint = filesystem.find((file) => file.isEntrypoint)
     const specification = entrypoint?.specification
 
     // TODO: How does this work with a filesystem?

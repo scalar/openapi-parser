@@ -7,7 +7,10 @@ describe.todo('server_enum_unknown', () => {
   it('passes', async () => {
     const result = await resolve(server_enum_unknown)
 
-    expect(result.valid).toBe(true)
-    expect(result.version).toBe('3.0')
+    expect(result.valid).toBe(false)
+    expect(result.errors?.length).toBe(1)
+    expect(result.errors?.[0]?.error).toBe(
+      'should be equal to one of the allowed values',
+    )
   })
 })

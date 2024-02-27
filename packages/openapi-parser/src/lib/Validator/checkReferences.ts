@@ -3,7 +3,7 @@ import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
 
 export function checkReferences(filesystem: Filesystem) {
-  const entrypoint = filesystem.find((file) => file.entrypoint === true)
+  const entrypoint = filesystem.find((file) => file.isEntrypoint === true)
 
   try {
     resolveReferences(filesystem, false)

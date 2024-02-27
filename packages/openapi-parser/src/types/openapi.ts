@@ -649,6 +649,8 @@ export declare namespace ResolvedOpenAPIV2 {
     schema?: Schema
     headers?: HeadersObject
     examples?: ExampleObject
+    // We add this so TypeScript doesn’t complain about missing properties
+    content: undefined
   }
   interface HeadersObject {
     [index: string]: HeaderObject

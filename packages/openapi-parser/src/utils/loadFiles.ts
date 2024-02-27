@@ -1,13 +1,15 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
+import { getListOfReferences } from './getListOfReferences'
 import { normalize } from './normalize'
-import { traverse } from './traverse'
 
 /**
  * Load a given file from the filesystem, and all its references. (Node-only)
  */
 export function loadFiles(file: string, basePath?: string) {
+  const isEntrypoint = !basePath
+
   const files: any[] = []
 
   // Check if file exists
@@ -20,7 +22,7 @@ export function loadFiles(file: string, basePath?: string) {
 
   // Get file directory and filename
   const dir = path.dirname(file)
-  const filename = !basePath
+  const filename = isEntrypoint
     ? path.basename(file)
     : path.relative(basePath, file)
 
@@ -28,24 +30,13 @@ export function loadFiles(file: string, basePath?: string) {
   const specification = normalize(content)
 
   // Find all references
-  const references: string[] = []
-  traverse(specification, (value: any) => {
-    if (
-      value.$ref &&
-      typeof value.$ref === 'string' &&
-      !value.$ref.startsWith('#')
-    ) {
-      references.push(value.$ref.split('#')[0])
-    }
-
-    return value
-  })
+  const references = getListOfReferences(specification)
 
   // Add file
   files.push({
     dir,
-    entrypoint: !basePath,
-    references,
+    isEntrypoint,
+    references: getListOfReferences(specification),
     filename,
     specification,
   })
@@ -58,8 +49,8 @@ export function loadFiles(file: string, basePath?: string) {
     try {
       files.push(...loadFiles(refFile, basePath || dir))
     } catch {
-      // TODO: Should this throw an error? 🤔
       // If something goes wrong here, just don’t add it to the list.
+      // TODO: Or should this throw an error? 🤔
     }
   }
 

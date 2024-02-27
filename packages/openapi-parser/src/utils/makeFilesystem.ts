@@ -1,4 +1,5 @@
 import type { AnyObject, Filesystem } from '../types'
+import { getListOfReferences } from './getListOfReferences'
 import { isFilesystem } from './isFilesystem'
 import { normalize } from './normalize'
 
@@ -16,13 +17,11 @@ export function makeFilesystem(
   // Create fake filesystem
   return [
     {
-      entrypoint: true,
+      isEntrypoint: true,
       specification,
       filename: 'openapi.json',
       dir: './',
-      references: [
-        // TODO: Fill
-      ],
+      references: getListOfReferences(specification),
     },
   ]
 }

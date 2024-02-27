@@ -53,7 +53,7 @@ export type Filesystem = FilesystemEntry[]
  */
 export type FilesystemEntry = {
   dir: string
-  entrypoint: boolean
+  isEntrypoint: boolean
   references: string[]
   filename: string
   specification: AnyObject

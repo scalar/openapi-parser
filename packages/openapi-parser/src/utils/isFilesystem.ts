@@ -6,6 +6,6 @@ export function isFilesystem(value: any) {
     typeof value !== undefined &&
     Array.isArray(value) &&
     value.length > 0 &&
-    value.some((file) => file.entrypoint === true)
+    value.some((file) => file.isEntrypoint === true)
   )
 }

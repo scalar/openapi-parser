@@ -22,20 +22,25 @@ export function resolveReferences(
   filesystem: Filesystem,
   replaceReferences: boolean = true,
   entrypoint?: FilesystemEntry,
-  pointer?: string,
+  uri?: string,
 ) {
-  entrypoint = entrypoint ?? filesystem.find((file) => file.entrypoint)
+  // Use or find the file entrypoint
+  entrypoint = entrypoint ?? filesystem.find((file) => file.isEntrypoint)
 
+  // Get the content from the filesystem entry
   let { specification } = entrypoint
 
+  // If the specification is not an object, return undefined
   if (!isObject(specification)) {
     return undefined
   }
 
+  // Clone the specification to avoid modifying the original
   if (replaceReferences === false) {
     specification = structuredClone(specification)
   }
 
+  // Find all references
   const pointers: {
     [key: string]: {
       ref: string
@@ -49,7 +54,8 @@ export function resolveReferences(
     pointers[word] = []
   }
 
-  function applyRef(path: string, target: AnyObject) {
+  // Apply the reference to the target
+  function applyReference(path: string, target: AnyObject) {
     let root = specification
     const paths = path.split('/').slice(1)
     const prop = paths.pop()
@@ -65,6 +71,7 @@ export function resolveReferences(
     }
   }
 
+  // Parse the object and find all references
   function parse(obj: AnyObject, path: string, id: string) {
     if (!isObject(obj)) {
       return
@@ -74,7 +81,13 @@ export function resolveReferences(
 
     for (const prop in obj) {
       if (pointerWords.has(prop)) {
-        pointers[prop].push({ ref: obj[prop], obj, prop, path, id: objId })
+        pointers[prop].push({
+          ref: obj[prop],
+          obj,
+          prop,
+          path,
+          id: objId,
+        })
         delete obj[prop]
       }
 
@@ -82,7 +95,7 @@ export function resolveReferences(
     }
   }
 
-  // Find all refs
+  // Find all references
   parse(specification, '#', '')
 
   // Resolve them all
@@ -126,7 +139,8 @@ export function resolveReferences(
     const { ref, id, path } = item
     const decodedRef = decodeURIComponent(ref)
     const fullRef = decodedRef[0] !== '#' ? decodedRef : `${id}${decodedRef}`
-    applyRef(path, resolveUri(entrypoint, fullRef, anchors, filesystem))
+
+    applyReference(path, resolveUri(entrypoint, fullRef, anchors, filesystem))
   }
 
   for (const item of pointers.$dynamicRef) {
@@ -136,7 +150,17 @@ export function resolveReferences(
       throw new Error(`Can't resolve $dynamicAnchor: '${ref}'`)
     }
 
-    applyRef(path, dynamicAnchors[ref])
+    applyReference(path, dynamicAnchors[ref])
+  }
+
+  // When a uri was passed, return only part of the specification
+  // TODO: This can create maximum call stack size exceeded errors
+  if (uri) {
+    const paths = uri.split('/').slice(1)
+
+    for (const p of paths) {
+      specification = specification[unescapeJsonPointer(p)]
+    }
   }
 
   return specification as ResolvedOpenAPI.Document
