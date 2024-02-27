@@ -18,21 +18,23 @@ const files = (
 /**
  * This test suite parses a large number of real-world OpenAPI files
  */
-describe.sequential('files:parse', async () => {
-  // // Those tests take a while, let’s run them in CI only.
-  // if (process.env.CI) {
-  //   // TODO: We’re currently only testing a few of the files for performance reasons.
-  //   test.each(files.slice(0, 500))('[%s] parse', async (file) => {
-  //     const content = fs.readFileSync(file, 'utf-8')
-  //     const result = await resolve(content)
-
-  //     expect(result.schema.info.title).not.toBe(undefined)
-  //   })
-  // }
-  // // Otherwise, just check that the files are valid.
-  // else {
+describe('files:parse', async () => {
   test('files.length', () => {
     expect(Array.isArray(files)).toBe(true)
+    expect(files.length).toBeGreaterThan(0)
+
+    if (files.length === 0) {
+      console.error(
+        'No real-world examples found, try to run `pnpm test:prepare` first.',
+      )
+    }
   })
-  // }
+
+  // TODO: We’re currently only testing a few of the files for performance reasons.
+  test.each(files.slice(0, 100))('[%s] parse', async (file) => {
+    const content = fs.readFileSync(file, 'utf-8')
+    const result = await resolve(content)
+
+    expect(result.schema.info.title).not.toBe(undefined)
+  })
 })
