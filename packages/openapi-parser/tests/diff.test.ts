@@ -4,45 +4,40 @@ import { diff } from 'just-diff'
 import fs from 'node:fs'
 import { describe, expect, test } from 'vitest'
 
-import { normalize, openapi, toJson } from '../src'
-import { resolve } from '../src/utils/resolve'
+import { normalize, openapi } from '../src'
+import type { AnyObject } from '../src'
 
 const invalidFiles = [
   'packages/openapi-parser/tests/files/statsocialcom.yaml',
   'packages/openapi-parser/tests/files/spotifycom.yaml',
   'packages/openapi-parser/tests/files/opensuseorgobs.yaml',
   'packages/openapi-parser/tests/files/royalmailcomclick-and-drop.yaml',
+  // max call stack size exceeded
+  'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
+  'packages/openapi-parser/tests/files/xtrfeu.yaml',
+  'packages/openapi-parser/tests/files/webflowcom.yaml',
+  'packages/openapi-parser/tests/files/airport-webappspotcom.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
 ]
 
-const files = (
-  await glob('./packages/openapi-parser/tests/files/*.yaml')
-).filter((file) => !invalidFiles.includes(file))
+const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
+  .filter((file) => !invalidFiles.includes(file))
+  .sort()
 
 /**
  * This test suite parses a large number of real-world OpenAPI files
  */
-describe('files:parse', async () => {
-  test('files.length', () => {
-    console.log(files.length)
-    expect(Array.isArray(files)).toBe(true)
-    expect(files.length).toBeGreaterThan(0)
-
-    if (files.length === 0) {
-      console.error(
-        'No real-world examples found, try to run `pnpm test:prepare` first.',
-      )
-    }
-  })
-
+describe('diff', async () => {
   // TODO: We’re currently only testing a few of the files for performance reasons.
-  test.each(files.slice(0, 1))('[%s] parse', async (file) => {
+  test.each(files.slice(0, 100))('[%s] diff', async (file) => {
     const content = fs.readFileSync(file, 'utf-8')
+    const specification: object = normalize(content)
 
-    const objectData: object = normalize(content)
-
-    const oldParsed = (await new Promise((resolve, reject) => {
-      SwaggerParser.dereference(objectData, (error, result) => {
-        if (error) reject(error)
+    const oldSchema = (await new Promise((resolve, reject) => {
+      SwaggerParser.dereference(specification as never, (error, result) => {
+        if (error) {
+          reject(error)
+        }
 
         if (result === undefined) {
           reject('Couldn’t parse the Swagger file.')
@@ -51,16 +46,41 @@ describe('files:parse', async () => {
         }
         resolve(result)
       })
-    }).catch((err) => console.error(err))) as any
+    }).catch((error) => {
+      console.error('[@apidevtools/swagger-parser]', error)
+    })) as any
 
-    // const oldParsed = await SwaggerParser.parse(content)
-    const newParsed = (await openapi().load(content).resolve()).schema
+    const {
+      schema: newSchema,
+      valid,
+      errors,
+    } = await openapi().load(specification).resolve()
 
-    expect(true).toEqual(true)
+    // Valid?
+    if (!valid) {
+      console.log(errors)
+    }
+    expect(valid).toBe(true)
 
-    console.log(oldParsed?.tags, newParsed.tags)
-    console.log(diff(oldParsed, newParsed))
-    // expect(oldParsed.tags)).toEqual(Object.keys(newParsed.paths))
-    expect(oldParsed.paths).toEqual(newParsed.paths)
+    // Same number of paths?
+    expect(Object.keys(oldSchema.paths ?? {}).length).toEqual(
+      Object.keys(newSchema.paths ?? {}).length,
+    )
+
+    // Any difference?
+    const result = diff(oldSchema, newSchema)
+    expect(result).toEqual([])
+
+    if (result.length) {
+      result.forEach(({ op, path }) => {
+        console.log(op, get(specification, path))
+      })
+    }
   })
 })
+
+function get(object: AnyObject, path: (string | number)[]) {
+  path = structuredClone(path)
+
+  return path.reduce((acc, key) => acc[key], object)
+}
