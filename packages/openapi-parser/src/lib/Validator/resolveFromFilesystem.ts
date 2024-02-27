@@ -1,9 +1,6 @@
-// TODO: Not browser compatible, but we’re only using two of the simpler methods. Just need to polyfill them.
-import path from 'node:path'
-
+import { path } from '../../polyfills'
 import type { Filesystem, FilesystemEntry } from '../../types'
 import { resolveReferences } from './resolveReferences'
-import { resolveUri } from './resolveUri'
 
 export function resolveFromFilesystem(
   file: FilesystemEntry,
