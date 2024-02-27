@@ -6,7 +6,7 @@ Install all dependencies:
 `$ pnpm install`
 
 Prepare the tests:
-`$ pnpm test:prepate`
+`$ pnpm test:prepare`
 
 Run the tests:
 `$ pnpm run dev`
