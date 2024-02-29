@@ -23,6 +23,7 @@ export function resolveUri(uri, anchors) {
   }
 
   const paths = path.split('/').slice(1)
+
   try {
     const result = paths.reduce(
       (o, n) => o[unescapeJsonPointer(n)],
