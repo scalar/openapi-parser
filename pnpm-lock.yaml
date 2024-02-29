@@ -97,6 +97,19 @@ importers:
         specifier: ^3.7.3
         version: 3.7.3(@types/node@20.11.24)(typescript@5.3.3)(vite@5.1.5)
 
+  packages/resolver:
+    dependencies:
+      '@types/node':
+        specifier: ^20.11.20
+        version: 20.11.20
+      vite:
+        specifier: ^5.1.4
+        version: 5.1.4(@types/node@20.11.20)
+    devDependencies:
+      vite-plugin-dts:
+        specifier: ^3.7.3
+        version: 3.7.3(@types/node@20.11.20)(typescript@5.3.3)(vite@5.1.4)
+
 packages:
 
   /@ampproject/remapping@2.2.1:
