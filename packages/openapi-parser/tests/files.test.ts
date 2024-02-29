@@ -21,13 +21,14 @@ const files = (
 describe('files:parse', async () => {
   test('files.length', () => {
     expect(Array.isArray(files)).toBe(true)
-    expect(files.length).toBeGreaterThan(0)
 
     if (files.length === 0) {
-      console.error(
-        'No real-world examples found, try to run `pnpm test:prepare` first.',
+      throw new Error(
+        '[ERROR] No real-world examples found, try to run `pnpm test:prepare` first.',
       )
     }
+
+    expect(files.length).toBeGreaterThan(0)
   })
 
   // TODO: We’re currently only testing a few of the files for performance reasons.
