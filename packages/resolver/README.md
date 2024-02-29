@@ -1,3 +1,0 @@
-# Scalar Resolver
-
-WIP
