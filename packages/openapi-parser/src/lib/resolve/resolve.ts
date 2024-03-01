@@ -51,6 +51,7 @@ export function resolve(tree, replace) {
         pointers[prop].push({ ref: obj[prop], obj, prop, path, id: objId })
         delete obj[prop]
       }
+
       parse(obj[prop], `${path}/${escapeJsonPointer(prop)}`, objId)
     }
   }

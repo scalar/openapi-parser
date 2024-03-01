@@ -3,7 +3,11 @@ import { describe, expect, it } from 'vitest'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 describe('unescapeJsonPointer', async () => {
-  it('should unescape a json pointer', () => {
+  it('unescapes a slash', () => {
+    expect(unescapeJsonPointer('/foo~1bar~1baz')).toBe('/foo/bar/baz')
+  })
+
+  it('unescapes multiple slashes', () => {
     expect(
       unescapeJsonPointer(
         '#/paths/~1upload/post/responses/401/content/application~1problem+json/schema',
@@ -11,5 +15,9 @@ describe('unescapeJsonPointer', async () => {
     ).toBe(
       '#/paths//upload/post/responses/401/content/application/problem+json/schema',
     )
+  })
+
+  it('unescapes a tilde', () => {
+    expect(unescapeJsonPointer('/foo~0bar~0baz')).toBe('/foo~bar~baz')
   })
 })

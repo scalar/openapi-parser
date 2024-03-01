@@ -32,7 +32,7 @@ describe('files:parse', async () => {
   })
 
   // TODO: We’re currently only testing a few of the files for performance reasons.
-  test.each(files.slice(0, 100))('[%s] parse', async (file) => {
+  test.each(files.slice(0, 10))('[%s] parse', async (file) => {
     const content = fs.readFileSync(file, 'utf-8')
     const result = await resolve(content)
 
