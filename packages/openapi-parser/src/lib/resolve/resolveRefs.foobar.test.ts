@@ -12,7 +12,7 @@ describe('resolveRefs', () => {
         '/foobar': {
           post: {
             requestBody: {
-              $ref: '#/components/requestBodies/FoobarRequestBody',
+              $ref: '#/components/requestBodies/Foobar',
             },
           },
         },
@@ -22,7 +22,7 @@ describe('resolveRefs', () => {
           CursorRequest: {
             content: {},
           },
-          FoobarRequestBody: {
+          Foobar: {
             // Does work:
             // content: {},
             // Doesn’t work:
@@ -56,7 +56,7 @@ describe('resolveRefs', () => {
 
     // Debug output
     console.log(
-      '[SPECIFICATION]',
+      '[INPUT]',
       // @ts-ignore
       specification.paths['/foobar'].post.requestBody,
     )
