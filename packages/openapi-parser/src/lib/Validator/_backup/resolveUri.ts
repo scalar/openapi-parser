@@ -1,7 +1,7 @@
 import { unescapeJsonPointer } from 'ajv/dist/compile/util'
 
-import { ERRORS } from '../../configuration'
-import type { AnyObject, Filesystem, FilesystemEntry } from '../../types'
+import { ERRORS } from '../../../configuration'
+import type { AnyObject, Filesystem, FilesystemEntry } from '../../../types'
 import { resolveFromFilesystem } from './resolveFromFilesystem'
 
 /**

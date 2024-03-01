@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { makeFilesystem } from '../../utils/makeFilesystem'
+import { makeFilesystem } from '../../../utils/makeFilesystem'
 import { checkReferences } from './checkReferences'
 
 describe('checkReferences', () => {

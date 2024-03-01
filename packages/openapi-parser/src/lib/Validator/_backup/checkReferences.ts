@@ -1,6 +1,6 @@
-import type { Filesystem } from '../../types'
+import type { Filesystem } from '../../../types'
+import { transformErrors } from '../transformErrors'
 import { resolveReferences } from './resolveReferences'
-import { transformErrors } from './transformErrors'
 
 export function checkReferences(filesystem: Filesystem) {
   const entrypoint = filesystem.find((file) => file.isEntrypoint === true)

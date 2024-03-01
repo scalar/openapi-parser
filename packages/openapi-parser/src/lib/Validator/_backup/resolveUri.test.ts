@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { getListOfReferences, loadFiles, resolve, validate } from '../../../src'
-import { relativePath } from '../../../tests/utils'
+import { getListOfReferences, loadFiles, resolve, validate } from '../../..'
+import { relativePath } from '../../../../tests/utils'
 
 const EXAMPLE_FILE = relativePath(
   import.meta.url,
-  '../../tests/resolveUri/invalid/openapi.yaml',
+  '../../../tests/resolveUri/invalid/openapi.yaml',
 )
 
 describe('resolveUri', async () => {

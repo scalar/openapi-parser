@@ -3,7 +3,7 @@ import type {
   Filesystem,
   FilesystemEntry,
   ResolvedOpenAPI,
-} from '../../types'
+} from '../../../types'
 import { escapeJsonPointer } from './escapeJsonPointer'
 import { isObject } from './isObject'
 import { resolveUri } from './resolveUri'

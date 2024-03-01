@@ -1,5 +1,5 @@
-import { path } from '../../polyfills'
-import type { Filesystem, FilesystemEntry } from '../../types'
+import { path } from '../../../polyfills'
+import type { Filesystem, FilesystemEntry } from '../../../types'
 import { resolveReferences } from './resolveReferences'
 
 export function resolveFromFilesystem(
