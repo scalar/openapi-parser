@@ -1,20 +1,23 @@
+import { ERRORS } from '../../configuration'
 import { AnyObject } from '../../types'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 export function resolveUri(uri: string, anchors: Record<string, AnyObject>) {
   const [prefix, path] = uri.split('#', 2)
   const hashPresent = !!path
-  const err = new Error(`Can’t resolve URI: ${uri}`)
+  const invalidReferenceError = new Error(
+    ERRORS.INVALID_REFERENCE.replace('%s', uri),
+  )
 
   if (hashPresent && path[0] !== '/') {
     if (anchors[uri]) {
       return anchors[uri]
     }
-    throw err
+    throw invalidReferenceError
   }
 
   if (!anchors[prefix]) {
-    throw err
+    throw invalidReferenceError
   }
 
   if (!hashPresent) {
@@ -32,6 +35,6 @@ export function resolveUri(uri: string, anchors: Record<string, AnyObject>) {
     }
     return result
   } catch (_) {
-    throw err
+    throw invalidReferenceError
   }
 }
