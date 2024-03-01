@@ -78,7 +78,7 @@ describe('resolveUri', async () => {
     expect(result.valid).toBe(false)
     expect(result.errors?.length).toEqual(1)
     expect(result.errors?.[0].error).toEqual(
-      'Can’t resolve $ref: #/foo/bar/does_not_exist',
+      'Can’t resolve URI: #/foo/bar/does_not_exist',
     )
   })
 
@@ -90,7 +90,7 @@ describe('resolveUri', async () => {
     expect(result.valid).toBe(false)
     expect(result.errors.length).toBe(1)
     expect(result.errors[0].error).toBe(
-      `Can’t resolve $ref: schemas/does-not-exist.yaml`,
+      `Can’t resolve URI: schemas/does-not-exist.yaml`,
     )
   })
 
