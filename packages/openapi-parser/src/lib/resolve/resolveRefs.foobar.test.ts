@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { resolveRefs } from './resolveRefs'
 
 describe('resolveRefs', () => {
-  it('foobar', async () => {
+  it('references inside references', async () => {
     const specification = {
       openapi: '3.1.0',
       info: {},
@@ -32,6 +32,7 @@ describe('resolveRefs', () => {
       },
     }
 
+    // Run the specification through the old parser
     const oldSchema = (await new Promise(async (resolve, reject) => {
       SwaggerParser.dereference(
         structuredClone(specification) as never,
@@ -52,6 +53,7 @@ describe('resolveRefs', () => {
       console.error('[@apidevtools/swagger-parser]', error)
     })) as any
 
+    // Run the specification through our new parser
     const newSchema = resolveRefs(specification)
 
     // Debug output
