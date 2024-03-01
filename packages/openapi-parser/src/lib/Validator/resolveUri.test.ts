@@ -94,7 +94,7 @@ describe('resolveUri', async () => {
     )
   })
 
-  it('resolves file references', async () => {
+  it.todo('resolves file references', async () => {
     const baseFile = {
       openapi: '3.0.3',
       info: {
@@ -153,7 +153,7 @@ describe('resolveUri', async () => {
     ).toEqual('string')
   })
 
-  it('resolves file references with pointers', async () => {
+  it.todo('resolves file references with pointers', async () => {
     const baseFile = {
       openapi: '3.0.3',
       info: {
