@@ -41,20 +41,47 @@ export function resolve(tree, replace) {
     }
   }
 
+  // recursively follow the reference path to the end
+  function resolvePointer(path, prop, ref, id) {
+    let currentRef = ''
+    function recursiveSearchRefs(path, prop, ref, id) {
+      let root = treeObj
+
+      const paths = ref.split('/').slice(1)
+
+      for (const p of paths) {
+        root = root[unescapeJsonPointer(p)]
+      }
+
+      if (typeof root[prop] === 'undefined') {
+        currentRef = ref
+        return
+      }
+      recursiveSearchRefs(path, prop, root[prop], id)
+    }
+    recursiveSearchRefs(path, prop, ref, id)
+
+    return currentRef
+  }
+
   function parse(obj, path, id) {
     if (!isObject(obj)) {
       return
     }
+
     const objId = obj.$id || id
     for (const prop in obj) {
       if (pointerWords.has(prop)) {
-        pointers[prop].push({ ref: obj[prop], obj, prop, path, id: objId })
+        // recursively check if the reference is a pointer to another reference
+        let resolvedRef = resolvePointer(path, prop, obj[prop], objId)
+        pointers[prop].push({ ref: resolvedRef, obj, prop, path, id: objId })
         delete obj[prop]
       }
 
       parse(obj[prop], `${path}/${escapeJsonPointer(prop)}`, objId)
     }
   }
+
   // find all refs
   parse(treeObj, '#', '')
 

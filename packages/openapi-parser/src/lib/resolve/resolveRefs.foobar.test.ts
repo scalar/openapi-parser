@@ -4,34 +4,35 @@ import { describe, expect, it } from 'vitest'
 import { resolveRefs } from './resolveRefs'
 
 describe('resolveRefs', () => {
-  it('references inside references', async () => {
-    const specification = {
-      openapi: '3.1.0',
-      info: {},
-      paths: {
-        '/foobar': {
-          post: {
-            requestBody: {
-              $ref: '#/components/requestBodies/Foobar',
-            },
+  const specification = {
+    openapi: '3.1.0',
+    info: {},
+    paths: {
+      '/foobar': {
+        post: {
+          requestBody: {
+            $ref: '#/components/requestBodies/Foobar',
           },
         },
       },
-      components: {
-        requestBodies: {
-          CursorRequest: {
-            content: {},
-          },
-          Foobar: {
-            // Does work:
-            // content: {},
-            // Doesn’t work:
-            $ref: '#/components/requestBodies/CursorRequest',
-          },
-        },
-      },
-    }
+    },
 
+    components: {
+      requestBodies: {
+        CursorRequest: {
+          content: {},
+        },
+        Foobar: {
+          // Does work:
+          // content: {},
+          // Doesn’t work:
+          $ref: '#/components/requestBodies/CursorRequest',
+        },
+      },
+    },
+  }
+
+  it('references inside references', async () => {
     // Run the specification through the old parser
     const oldSchema = (await new Promise(async (resolve, reject) => {
       SwaggerParser.dereference(
