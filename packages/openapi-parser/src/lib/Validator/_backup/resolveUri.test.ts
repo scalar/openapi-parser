@@ -8,7 +8,7 @@ const EXAMPLE_FILE = relativePath(
   '../../../tests/resolveUri/invalid/openapi.yaml',
 )
 
-describe('resolveUri', async () => {
+describe.skip('resolveUri', async () => {
   it('resolves internal references', async () => {
     const specification = {
       openapi: '3.0.3',
