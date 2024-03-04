@@ -78,6 +78,13 @@ export function resolve(tree, replace) {
         delete obj[prop]
       }
 
+      // find references inside of arrays (oneOf, anyOf, allOf)
+      if (Array.isArray(obj[prop])) {
+        for (let i = 0; i < obj[prop].length; i++) {
+          parse(obj[prop][i], `${path}/${escapeJsonPointer(prop)}/${i}`, objId)
+        }
+      }
+
       parse(obj[prop], `${path}/${escapeJsonPointer(prop)}`, objId)
     }
   }

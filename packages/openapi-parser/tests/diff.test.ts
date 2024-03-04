@@ -60,51 +60,51 @@ describe('diff', async () => {
       errors,
     } = await openapi().load(structuredClone(specification)).resolve()
 
-    console.log(
-      '[SPECIFICATION]',
-      // @ts-ignore
-      specification.paths['/api/v1/itemusages'].post.requestBody,
-    )
-    console.log(
-      '[@apidevtools/swagger-parser]',
-      oldSchema.paths['/api/v1/itemusages'].post.requestBody,
-    )
-    console.log(
-      '[@scalar/openapi-parser]',
-      newSchema.paths['/api/v1/itemusages'].post.requestBody,
-    )
-    console.log(
-      '[DIFF]',
-      diff(
-        oldSchema.paths['/api/v1/itemusages'].post.requestBody,
-        newSchema.paths['/api/v1/itemusages'].post.requestBody,
-      ),
-    )
-
-    // expect(
+    // console.log(
+    //   '[SPECIFICATION]',
+    //   // @ts-ignore
+    //   specification.paths['/api/v1/itemusages'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@apidevtools/swagger-parser]',
+    //   oldSchema.paths['/api/v1/itemusages'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@scalar/openapi-parser]',
     //   newSchema.paths['/api/v1/itemusages'].post.requestBody,
-    // ).toMatchObject(oldSchema.paths['/api/v1/itemusages'].post.requestBody)
-
-    // // Valid?
-    // if (!valid) {
-    //   console.log(errors)
-    // }
-    // expect(valid).toBe(true)
-
-    // // Same number of paths?
-    // expect(Object.keys(oldSchema.paths ?? {}).length).toEqual(
-    //   Object.keys(newSchema.paths ?? {}).length,
+    // )
+    // console.log(
+    //   '[DIFF]',
+    //   diff(
+    //     oldSchema.paths['/api/v1/itemusages'].post.requestBody,
+    //     newSchema.paths['/api/v1/itemusages'].post.requestBody,
+    //   ),
     // )
 
-    // // Any difference?
-    // const result = diff(oldSchema, newSchema)
-    // expect(result).toEqual([])
+    expect(
+      newSchema.paths['/api/v1/itemusages'].post.requestBody,
+    ).toMatchObject(oldSchema.paths['/api/v1/itemusages'].post.requestBody)
 
-    // if (result.length) {
-    //   result.forEach(({ op, path }) => {
-    //     console.log(op, get(specification, path))
-    //   })
-    // }
+    // Valid?
+    if (!valid) {
+      console.log(errors)
+    }
+    expect(valid).toBe(true)
+
+    // Same number of paths?
+    expect(Object.keys(oldSchema.paths ?? {}).length).toEqual(
+      Object.keys(newSchema.paths ?? {}).length,
+    )
+
+    // Any difference?
+    const result = diff(oldSchema, newSchema)
+    expect(result).toEqual([])
+
+    if (result.length) {
+      result.forEach(({ op, path }) => {
+        console.log(op, get(specification, path))
+      })
+    }
   })
 })
 
