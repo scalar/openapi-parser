@@ -20,4 +20,8 @@ describe('unescapeJsonPointer', async () => {
   it('unescapes a tilde', () => {
     expect(unescapeJsonPointer('/foo~0bar~0baz')).toBe('/foo~bar~baz')
   })
+
+  it('unescapes a space', () => {
+    expect(unescapeJsonPointer('foo%20bar')).toBe('foo bar')
+  })
 })
