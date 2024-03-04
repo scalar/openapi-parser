@@ -53,7 +53,7 @@ export function resolve(tree, replace) {
         root = root[unescapeJsonPointer(p)]
       }
 
-      if (typeof root[prop] === 'undefined') {
+      if (typeof root?.[prop] === 'undefined') {
         currentRef = ref
         return
       }
