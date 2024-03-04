@@ -35,7 +35,12 @@ export function resolve(tree, replace) {
       root = root[unescapeJsonPointer(p)]
     }
     if (typeof prop !== 'undefined') {
-      root[unescapeJsonPointer(prop)] = target
+      root[unescapeJsonPointer(prop)] = {
+        // Merge with original properties (might has a description or other properties)
+        ...root[unescapeJsonPointer(prop)],
+        // Add the referenced content
+        ...target,
+      }
     } else {
       treeObj = target
     }

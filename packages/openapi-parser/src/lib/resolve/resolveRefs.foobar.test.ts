@@ -57,20 +57,20 @@ describe('resolveRefs', () => {
     // Run the specification through our new parser
     const newSchema = resolveRefs(specification)
 
-    // Debug output
-    console.log(
-      '[INPUT]',
-      // @ts-ignore
-      specification.paths['/foobar'].post.requestBody,
-    )
-    console.log(
-      '[@apidevtools/swagger-parser]',
-      oldSchema.paths['/foobar'].post.requestBody,
-    )
-    console.log(
-      '[@scalar/openapi-parser]',
-      newSchema.paths['/foobar'].post.requestBody,
-    )
+    // // Debug output
+    // console.log(
+    //   '[INPUT]',
+    //   // @ts-ignore
+    //   specification.paths['/foobar'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@apidevtools/swagger-parser]',
+    //   oldSchema.paths['/foobar'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@scalar/openapi-parser]',
+    //   newSchema.paths['/foobar'].post.requestBody,
+    // )
 
     // Assertion
     expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
@@ -139,6 +139,71 @@ describe('resolveRefs', () => {
     ).toMatchObject({
       type: 'string',
       example: 'barfoo',
+    })
+  })
+
+  it('merges original properties and referenced content ', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Foobar',
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          Barfoo: {
+            type: 'string',
+            example: 'barfoo',
+          },
+        },
+        requestBodies: {
+          Foobar: {
+            content: {
+              'application/json': {
+                schema: {
+                  oneOf: [
+                    {
+                      description: 'This is a barfoo',
+                      $ref: '#/components/schemas/Barfoo',
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const schema = resolveRefs(specification)
+
+    // Debug output
+    // console.log(
+    //   '[INPUT]',
+    //   // @ts-ignore
+    //   specification.paths['/foobar'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@scalar/openapi-parser]',
+    //   schema.paths['/foobar'].post.requestBody.content['application/json']
+    //     .schema,
+    // )
+
+    // Assertion
+    expect(
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.oneOf[0],
+    ).toMatchObject({
+      type: 'string',
+      example: 'barfoo',
+      description: 'This is a barfoo',
     })
   })
 })
