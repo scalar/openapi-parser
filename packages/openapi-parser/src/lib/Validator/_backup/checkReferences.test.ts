@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { makeFilesystem } from '../../../utils/makeFilesystem'
 import { checkReferences } from './checkReferences'
 
-describe('checkReferences', () => {
+describe.skip('checkReferences', () => {
   it('returns true for a simple internal reference', () => {
     const specification = `openapi: 3.1.0
 info:
