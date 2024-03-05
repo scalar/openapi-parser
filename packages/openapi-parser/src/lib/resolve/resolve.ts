@@ -65,6 +65,13 @@ export function resolve(tree, replace) {
     function recursiveSearchRefs(path, prop, ref, id) {
       let root = treeObj
 
+      // Wait … what? Why is `ref` not a string?
+      // Example: packages/openapi-parser/tests/files/bbccouk.yaml
+      if (typeof ref !== 'string') {
+        currentRef = ref
+        return
+      }
+
       const paths = ref.split('/').slice(1)
 
       for (const p of paths) {
