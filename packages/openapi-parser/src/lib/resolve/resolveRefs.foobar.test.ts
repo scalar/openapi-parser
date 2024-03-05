@@ -142,7 +142,7 @@ describe('resolveRefs', () => {
     })
   })
 
-  it('merges original properties and referenced content ', async () => {
+  it('merges original properties and referenced content', async () => {
     const specification = {
       openapi: '3.1.0',
       info: {},
@@ -204,6 +204,93 @@ describe('resolveRefs', () => {
       type: 'string',
       example: 'barfoo',
       description: 'This is a barfoo',
+    })
+  })
+
+  it('references inside references still keep the reference to the original JS object', async () => {
+    const specification = {
+      swagger: '2.0',
+      info: {
+        title: 'Branded Fares Upsell',
+        version: '1.0.1',
+      },
+      paths: {
+        '/foobar': {
+          post: {
+            responses: {
+              '200': {
+                $ref: '#/responses/returnUpsell',
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        returnUpsell: {
+          schema: {
+            type: 'object',
+            properties: {
+              dictionaries: {
+                $ref: '#/definitions/LocationEntry',
+              },
+            },
+          },
+        },
+      },
+      definitions: {
+        Dictionaries: {
+          type: 'object',
+          properties: {
+            locations: {
+              $ref: '#/definitions/LocationEntry',
+            },
+          },
+        },
+        LocationEntry: {
+          additionalProperties: {
+            $ref: '#/definitions/LocationValue',
+          },
+        },
+        LocationValue: {
+          properties: {
+            cityCode: {
+              description: 'City code associated to the airport',
+              example: 'PAR',
+              type: 'string',
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const schema = resolveRefs(specification)
+
+    // Debug output
+    // console.log(
+    //   '[INPUT]',
+    //   // @ts-ignore
+    //   specification.paths['/foobar'].post.requestBody,
+    // )
+    // console.log(
+    //   '[@scalar/openapi-parser]',
+    //   schema.paths['/foobar'].post.requestBody.content['application/json']
+    //     .schema,
+    // )
+
+    // Assertion
+    expect(schema.swagger).toBe('2.0')
+    expect(
+      schema.paths['/foobar'].post.responses[200].schema.properties.dictionaries
+        .additionalProperties,
+    ).toMatchObject({
+      properties: {
+        cityCode: {
+          description: 'City code associated to the airport',
+          example: 'PAR',
+          type: 'string',
+        },
+      },
     })
   })
 })

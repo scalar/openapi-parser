@@ -31,16 +31,29 @@ export function resolve(tree, replace) {
     let root = treeObj
     const paths = path.split('/').slice(1)
     const prop = paths.pop()
+
     for (const p of paths) {
       root = root[unescapeJsonPointer(p)]
     }
+
     if (typeof prop !== 'undefined') {
-      root[unescapeJsonPointer(prop)] = {
-        // Add the referenced content
-        ...target,
-        // Merge with original properties (might has a description or other properties)
-        ...root[unescapeJsonPointer(prop)],
-      }
+      // 1) This would overwrite everything:
+      // root[unescapeJsonPointer(prop)] = target
+      //
+      // 2) This would lose the reference to the original `target` object:
+      // root[unescapeJsonPointer(prop)] = {
+      //   // Add the referenced content
+      //   ...target,
+      //   // Merge with original properties (might has a description or other properties)
+      //   ...root[unescapeJsonPointer(prop)],
+      // }
+      //
+      // 3) But we want to keep the reference to the original `target` object, but add the original properties:
+      Object.keys(target).forEach((key) => {
+        if (root[unescapeJsonPointer(prop)][key] === undefined) {
+          root[unescapeJsonPointer(prop)][key] = target[key]
+        }
+      })
     } else {
       treeObj = target
     }
@@ -96,6 +109,8 @@ export function resolve(tree, replace) {
 
   // find all refs
   parse(treeObj, '#', '')
+
+  // console.log('pointers', pointers)
 
   // resolve them
   const anchors = { '': treeObj }
