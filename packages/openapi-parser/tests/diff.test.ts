@@ -16,7 +16,6 @@ const invalidFiles = [
   'packages/openapi-parser/tests/files/xtrfeu.yaml',
   'packages/openapi-parser/tests/files/webflowcom.yaml',
   // TODO: those files fail for some reason
-  'packages/openapi-parser/tests/files/airbytelocalconfig.yaml',
   'packages/openapi-parser/tests/files/airport-webappspotcom.yaml',
   'packages/openapi-parser/tests/files/amadeuscomamadeus-branded-fares-upsell.yaml',
   'packages/openapi-parser/tests/files/amadeuscomamadeus-flight-availabilities-search.yaml',
@@ -33,6 +32,8 @@ const invalidFiles = [
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
   .filter((file) => !invalidFiles.includes(file))
   .sort()
+
+// const files = ['packages/openapi-parser/tests/files/airbytelocalconfig.yaml']
 
 /**
  * This test suite parses a large number of real-world OpenAPI files
@@ -76,11 +77,23 @@ describe('diff', async () => {
     // )
     // console.log(
     //   '[@apidevtools/swagger-parser]',
-    //   oldSchema,
+    //   oldSchema.paths['/v1/destination_definition_specifications/get']['post'][
+    //     'responses'
+    //   ]['200']['content']['application/json']['schema']['properties'][
+    //     'advancedAuth'
+    //   ]['properties']['oauthConfigSpecification']['properties'][
+    //     'completeOAuthOutputSpecification'
+    //   ],
     // )
     // console.log(
     //   '[@scalar/openapi-parser]',
-    //   newSchema,
+    //   newSchema.paths['/v1/destination_definition_specifications/get']['post'][
+    //     'responses'
+    //   ]['200']['content']['application/json']['schema']['properties'][
+    //     'advancedAuth'
+    //   ]['properties']['oauthConfigSpecification']['properties'][
+    //     'completeOAuthOutputSpecification'
+    //   ],
     // )
     // console.log(
     //   '[DIFF]',
