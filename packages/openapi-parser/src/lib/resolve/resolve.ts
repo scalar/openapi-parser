@@ -49,7 +49,7 @@ export function resolve(tree, replace) {
       // }
       //
       // 3) But we want to keep the reference to the original `target` object, but add the original properties:
-      Object.keys(target).forEach((key) => {
+      Object.keys(target ?? {}).forEach((key) => {
         if (root[unescapeJsonPointer(prop)][key] === undefined) {
           root[unescapeJsonPointer(prop)][key] = target[key]
         }

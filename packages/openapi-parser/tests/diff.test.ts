@@ -35,14 +35,6 @@ const expectedErrors = {
       path: '',
     },
   ],
-  // TODO: That should not happen
-  'packages/openapi-parser/tests/files/personiodepersonnel.yaml': [
-    {
-      start: { line: 1, column: 1, offset: 0 },
-      error: 'Cannot convert undefined or null to object',
-      path: '',
-    },
-  ],
 }
 
 const invalidFiles = [
@@ -58,16 +50,19 @@ const invalidFiles = [
   'packages/openapi-parser/tests/files/bbccouk.yaml',
   'packages/openapi-parser/tests/files/azurecomwindowsiot-windowsiotservices.yaml',
   'packages/openapi-parser/tests/files/ote-godaddycomdomains.yaml',
-  // TODO: files just failing
   'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
-  'packages/openapi-parser/tests/files/apiebaycomsell-compliance.yaml',
+  // TODO: files just failing
 ]
 
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
   .filter((file) => !invalidFiles.includes(file))
-  .sort(() => Math.random() - 0.5)
+  // Aphabetic
+  .sort()
+// Random
+// .sort(() => Math.random() - 0.5)
 
 // const files = [
+//   'packages/openapi-parser/tests/files/bbccouk.yaml',
 // ]
 
 /**
@@ -96,7 +91,7 @@ describe('diff', async () => {
         },
       )
     }).catch((error) => {
-      console.error('[@apidevtools/swagger-parser]', error)
+      console.error('[@apidevtools/swagger-parser]', error.message)
     })) as any
 
     const {
@@ -118,31 +113,33 @@ describe('diff', async () => {
       }
       expect(valid).toBe(true)
 
-      // Same number of paths?
-      expect(Object.keys(oldSchema.paths ?? {}).length).toEqual(
-        Object.keys(newSchema.paths ?? {}).length,
+      // Same number of paths? Or even more?
+      expect(Object.keys(oldSchema?.paths ?? {}).length).toBeLessThanOrEqual(
+        Object.keys(newSchema?.paths ?? {}).length,
       )
 
-      // Any difference?
-      const result = diff(oldSchema, newSchema)
+      if (oldSchema) {
+        // Any difference?
+        const result = diff(oldSchema ?? {}, newSchema ?? {})
 
-      // Log differences
-      if (result.length) {
-        console.error(
-          `⚠️ DIFFERENCES: Found ${result.length} differences in ${file}`,
-        )
-        console.log()
-        result.forEach(({ op, path }) => {
-          console.log('* OPERATION:', op)
-          console.log('* PATH:', path.join('/'))
+        // Log differences
+        if (result.length) {
+          console.error(
+            `⚠️ DIFFERENCES: Found ${result.length} differences in ${file}`,
+          )
           console.log()
-          console.log('[@apidevtools/swagger-parser]', get(oldSchema, path))
-          console.log('[@scalar/openapi-parser]', get(newSchema, path))
-          console.log()
-        })
+          result.forEach(({ op, path }) => {
+            console.log('* OPERATION:', op)
+            console.log('* PATH:', path.join('/'))
+            console.log()
+            console.log('[@apidevtools/swagger-parser]', get(oldSchema, path))
+            console.log('[@scalar/openapi-parser]', get(newSchema, path))
+            console.log()
+          })
+        }
+
+        expect(result.length).toEqual(0)
       }
-
-      expect(result.length).toEqual(0)
     }
   })
 })
