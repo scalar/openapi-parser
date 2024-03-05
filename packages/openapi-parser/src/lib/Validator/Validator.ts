@@ -10,7 +10,7 @@ import {
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
 import { resolveRefs } from '../resolve'
-import { checkRefs } from '../resolve/checkRefs'
+import { checkReferences } from '../resolve/checkReferences'
 import { transformErrors } from './transformErrors'
 
 export class Validator {
@@ -91,7 +91,7 @@ export class Validator {
 
       // Check if the references are valid
       if (schemaResult) {
-        return checkRefs(entrypoint.specification)
+        return checkReferences(entrypoint.specification)
       }
 
       // Error handling

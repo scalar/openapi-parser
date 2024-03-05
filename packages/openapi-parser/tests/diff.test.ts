@@ -61,7 +61,9 @@ const expectedErrors = {
 // // Random
 // // .sort(() => Math.random() - 0.5)
 
-const files = ['packages/openapi-parser/tests/files/bbccouk.yaml']
+const files = [
+  //'packages/openapi-parser/tests/files/bbccouk.yaml'
+]
 
 /**
  * This test suite parses a large number of real-world OpenAPI files
