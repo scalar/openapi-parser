@@ -1,3 +1,4 @@
+import { AnyObject } from '../../types'
 import { escapeJsonPointer } from './escapeJsonPointer'
 import { isObject } from './isObject'
 import { resolveUri } from './resolveUri'
@@ -27,7 +28,7 @@ export function resolve(tree, replace) {
     pointers[word] = []
   }
 
-  function applyRef(path, target) {
+  function applyRef(path: string, target: AnyObject) {
     let root = treeObj
     const paths = path.split('/').slice(1)
     const prop = paths.pop()
@@ -36,27 +37,29 @@ export function resolve(tree, replace) {
       root = root[unescapeJsonPointer(p)]
     }
 
-    if (typeof prop !== 'undefined') {
-      // 1) This would overwrite everything:
-      // root[unescapeJsonPointer(prop)] = target
-      //
-      // 2) This would lose the reference to the original `target` object:
-      // root[unescapeJsonPointer(prop)] = {
-      //   // Add the referenced content
-      //   ...target,
-      //   // Merge with original properties (might has a description or other properties)
-      //   ...root[unescapeJsonPointer(prop)],
-      // }
-      //
-      // 3) But we want to keep the reference to the original `target` object, but add the original properties:
-      Object.keys(target ?? {}).forEach((key) => {
-        if (root[unescapeJsonPointer(prop)][key] === undefined) {
-          root[unescapeJsonPointer(prop)][key] = target[key]
-        }
-      })
-    } else {
+    if (typeof prop === 'undefined') {
       treeObj = target
+
+      return
     }
+
+    // 1) This would overwrite everything:
+    // root[unescapeJsonPointer(prop)] = target
+    //
+    // 2) This would lose the reference to the original `target` object:
+    // root[unescapeJsonPointer(prop)] = {
+    //   // Add the referenced content
+    //   ...target,
+    //   // Merge with original properties (might has a description or other properties)
+    //   ...root[unescapeJsonPointer(prop)],
+    // }
+    //
+    // 3) But we want to keep the reference to the original `target` object, but add the original properties:
+    Object.keys(target ?? {}).forEach((key) => {
+      if (root[unescapeJsonPointer(prop)][key] === undefined) {
+        root[unescapeJsonPointer(prop)][key] = target[key]
+      }
+    })
   }
 
   // recursively follow the reference path to the end
@@ -95,7 +98,9 @@ export function resolve(tree, replace) {
     }
 
     const objId = obj.$id || id
+
     for (const prop in obj) {
+      // TODO: This code throws `RangeError: Maximum call stack size exceeded` for a lot of files
       if (pointerWords.has(prop)) {
         // recursively check if the reference is a pointer to another reference
         let resolvedRef = resolvePointer(path, prop, obj[prop], objId)
@@ -116,8 +121,6 @@ export function resolve(tree, replace) {
 
   // find all refs
   parse(treeObj, '#', '')
-
-  // console.log('pointers', pointers)
 
   // resolve them
   const anchors = { '': treeObj }
@@ -150,6 +153,7 @@ export function resolve(tree, replace) {
     dynamicAnchors[`#${ref}`] = obj
   }
 
+  console.log(pointers.$ref, pointers.$ref.length)
   for (const item of pointers.$ref) {
     const { ref, id, path } = item
     const decodedRef = decodeURIComponent(ref)
