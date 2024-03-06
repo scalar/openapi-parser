@@ -2,7 +2,7 @@ type Specification = {
   [key: string]: any
 }
 
-// Working on 3/4 test cases in foobar test file but I think it needs escapeJsonPointer, unescapeJsonPointer, and resolveUri to be used
+// Working on 3/4 test cases in basic test file but I think it needs escapeJsonPointer, unescapeJsonPointer, and resolveUri to be used
 // needs to handle definitions also, currently only handles paths and components
 export function resolve2(spec: Specification, replace): Specification {
   const resolvedSpec: Specification = { ...spec }

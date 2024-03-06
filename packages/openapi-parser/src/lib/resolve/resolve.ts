@@ -153,7 +153,6 @@ export function resolve(tree, replace) {
     dynamicAnchors[`#${ref}`] = obj
   }
 
-  console.log(pointers.$ref, pointers.$ref.length)
   for (const item of pointers.$ref) {
     const { ref, id, path } = item
     const decodedRef = decodeURIComponent(ref)

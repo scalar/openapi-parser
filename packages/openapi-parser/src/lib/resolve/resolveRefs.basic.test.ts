@@ -1,3 +1,7 @@
+/**
+ * This file has some simple tests to cover the basics of the resolveRefs function.
+ * Doesn’t cover all edge cases, doesn’t have big files, but if this works you’re almost there.
+ */
 import SwaggerParser from '@apidevtools/swagger-parser'
 import { describe, expect, it } from 'vitest'
 
