@@ -3,24 +3,19 @@ import { traverse } from '../../utils'
 import { isObject } from './isObject'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
-export const pointerWords = new Set([
-  '$ref',
-  '$id',
-  '$anchor',
-  '$dynamicRef',
-  '$dynamicAnchor',
-  '$schema',
-])
+// TODO: Add support for all pointer words
+// export const pointerWords = new Set([
+//   '$ref',
+//   '$id',
+//   '$anchor',
+//   '$dynamicRef',
+//   '$dynamicAnchor',
+//   '$schema',
+// ])
 
 /**
- * Counting the number of executions to just stop at some point.
- * TODO: We need be a better way to detect circular references or prevent infinite loops.
+ * Takes a specification and resolves all references.
  */
-// let executions = 0
-// const executionHardLimit = 1000
-
-const cache = new Map()
-
 export function resolve(
   /**
    * We need the whole specification, otherwise we can’t resolve the references.
@@ -36,16 +31,8 @@ export function resolve(
    */
   partialSpecification?: AnyObject,
 ) {
-  // executions++
-
-  // // Prevent infinite loops
-  // if (executions > executionHardLimit) {
-  //   return undefined
-  // }
-
   // Make sure we’re dealing with an object
   if (!isObject(partialSpecification ?? wholeSpecification)) {
-    console.log('NOT AN OBJECT')
     return undefined
   }
 
@@ -70,6 +57,8 @@ export function resolve(
     }
 
     // Oh, great, there’s a reference! Let’s resolve it.
+    // TODO: Maybe we shouldn’t look for the reference in the original specification (which will always have $refs),
+    // but in the modified specification (which eventually won’t have any $refs).
     const target = findReference(wholeSpecification, schema.$ref)
 
     // If we can’t find the reference, we throw an error.
@@ -82,12 +71,13 @@ export function resolve(
     // console.log('$ref:', schema.$ref)
     // console.log('target:', target)
 
+    // Get rid of the $ref property
     delete schema.$ref
 
     // Before we put the referenced content into place, we should resolve any references inside the reference.
-    // Recursion FTW!
-    // TODO: This is causing a max call stack error.
-    const resolvedTarget = resolve(wholeSpecification, true, target)
+    // Recursion FTW?
+    // TODO: Causes a max call stack exceeded error
+    const resolvedTarget = resolve(wholeSpecification, replace, target)
 
     // We want to keep the reference to the original object, but add the original properties:
     Object.keys(resolvedTarget ?? {}).forEach((key) => {
@@ -104,17 +94,12 @@ export function resolve(
 function findReference(specification: AnyObject, uri: string) {
   // Understand the URI
   const [prefix, path] = uri.split('#', 2)
-  const hasHash = !!path
+  // const hasHash = !!path
   const segments = path.split('/').map(unescapeJsonPointer).slice(1)
 
-  // console.log('findReference', {
-  //   uri,
-  //   prefix,
-  //   hasHash,
-  //   path,
-  //   segments,
-  //   specification,
-  // })
+  if (prefix) {
+    throw new Error(`External references are not supported yet: ${prefix}`)
+  }
 
   // Get the target
   return segments.reduce(

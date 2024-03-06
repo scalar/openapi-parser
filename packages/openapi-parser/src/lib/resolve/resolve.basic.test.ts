@@ -5,9 +5,9 @@
 import SwaggerParser from '@apidevtools/swagger-parser'
 import { describe, expect, it } from 'vitest'
 
-import { resolveRefs } from './resolveRefs'
+import { resolve } from './resolve'
 
-describe('resolveRefs', () => {
+describe('resolve', () => {
   it('resolves references', async () => {
     const specification = {
       openapi: '3.1.0',
@@ -53,7 +53,7 @@ describe('resolveRefs', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveRefs(specification)
+    const newSchema = resolve(specification, true)
 
     // Assertion
     expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
@@ -112,7 +112,7 @@ describe('resolveRefs', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveRefs(specification)
+    const newSchema = resolve(specification, true)
 
     // // Debug output
     // console.log('[INPUT]', JSON.stringify(specification, null, 2))
@@ -168,7 +168,7 @@ describe('resolveRefs', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveRefs(specification)
+    const schema = resolve(specification, true)
 
     // Debug output
     // console.log(
@@ -232,7 +232,7 @@ describe('resolveRefs', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveRefs(specification)
+    const schema = resolve(specification, true)
 
     // Debug output
     // console.log(
@@ -314,7 +314,7 @@ describe('resolveRefs', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveRefs(specification)
+    const schema = resolve(specification, true)
 
     // Debug output
     // console.log(
@@ -360,7 +360,9 @@ describe('resolveRefs', () => {
       },
     }
 
-    const schema = resolveRefs(specification)
+    const schema = resolve(specification, true)
+
+    console.log(JSON.stringify(schema, null, 2))
 
     // Original specification should not be mutated
     expect(specification.properties.element.$ref).toBeTypeOf('string')
