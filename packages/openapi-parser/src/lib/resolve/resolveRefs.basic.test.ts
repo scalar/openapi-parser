@@ -115,19 +115,12 @@ describe('resolveRefs', () => {
     const newSchema = resolveRefs(specification)
 
     // // Debug output
-    // console.log(
-    //   '[INPUT]',
-    //   // @ts-ignore
-    //   specification.paths['/foobar'].post.requestBody,
-    // )
+    // console.log('[INPUT]', JSON.stringify(specification, null, 2))
     // console.log(
     //   '[@apidevtools/swagger-parser]',
     //   oldSchema.paths['/foobar'].post.requestBody,
     // )
-    // console.log(
-    //   '[@scalar/openapi-parser]',
-    //   newSchema.paths['/foobar'].post.requestBody,
-    // )
+    // console.log('[@scalar/openapi-parser]', JSON.stringify(newSchema, null, 2))
 
     // Assertion
     expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
@@ -349,5 +342,35 @@ describe('resolveRefs', () => {
         },
       },
     })
+  })
+
+  it('resolves a circular reference', () => {
+    const specification = {
+      type: 'object',
+      properties: {
+        element: { $ref: '#/schemas/element' },
+      },
+      schemas: {
+        element: {
+          type: 'object',
+          properties: {
+            element: { $ref: '#/schemas/element' },
+          },
+        },
+      },
+    }
+
+    const schema = resolveRefs(specification)
+
+    // Original specification should not be mutated
+    expect(specification.properties.element.$ref).toBeTypeOf('string')
+
+    // Circular dependency should be resolved
+    expect(schema.properties.element.type).toBe('object')
+    expect(schema.properties.element.properties.element.type).toBe('object')
+    console.log(schema.properties.element.properties.element.properties.element)
+    expect(
+      schema.properties.element.properties.element.properties.element.type,
+    ).toBe('object')
   })
 })

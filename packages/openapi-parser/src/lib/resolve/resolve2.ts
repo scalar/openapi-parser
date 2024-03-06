@@ -1,3 +1,6 @@
+/**
+ * Alternative implementation to avoid max call stack errors
+ */
 type Specification = {
   [key: string]: any
 }

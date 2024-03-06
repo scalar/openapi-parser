@@ -1,7 +1,6 @@
 import { AnyObject } from '../../types'
-import { escapeJsonPointer } from './escapeJsonPointer'
+import { traverse } from '../../utils'
 import { isObject } from './isObject'
-import { resolveUri } from './resolveUri'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 export const pointerWords = new Set([
@@ -13,161 +12,113 @@ export const pointerWords = new Set([
   '$schema',
 ])
 
-export function resolve(tree, replace) {
-  let treeObj = tree
+/**
+ * Counting the number of executions to just stop at some point.
+ * TODO: We need be a better way to detect circular references or prevent infinite loops.
+ */
+// let executions = 0
+// const executionHardLimit = 1000
 
-  if (!isObject(treeObj)) {
+const cache = new Map()
+
+export function resolve(
+  /**
+   * We need the whole specification, otherwise we can’t resolve the references.
+   */
+  wholeSpecification: AnyObject,
+  /**
+   * If `true`, the original specification will be modified.
+   * If `false`, the original specification will be left untouched.
+   */
+  replace: boolean = true,
+  /**
+   * Sometimes, we only want to resolve references for a part of the specification.
+   */
+  partialSpecification?: AnyObject,
+) {
+  // executions++
+
+  // // Prevent infinite loops
+  // if (executions > executionHardLimit) {
+  //   return undefined
+  // }
+
+  // Make sure we’re dealing with an object
+  if (!isObject(partialSpecification ?? wholeSpecification)) {
+    console.log('NOT AN OBJECT')
     return undefined
   }
 
-  if (replace === false) {
-    treeObj = structuredClone(tree)
+  let modifiedSpecification: AnyObject
+
+  // Write
+  if (replace) {
+    modifiedSpecification = partialSpecification ?? wholeSpecification
+  }
+  // Read-only (detach from original object)
+  else {
+    modifiedSpecification = structuredClone(
+      partialSpecification ?? wholeSpecification,
+    )
   }
 
-  const pointers = {}
-  for (const word of pointerWords) {
-    pointers[word] = []
-  }
-
-  function applyRef(path: string, target: AnyObject) {
-    let root = treeObj
-    const paths = path.split('/').slice(1)
-    const prop = paths.pop()
-
-    for (const p of paths) {
-      root = root[unescapeJsonPointer(p)]
+  // Go through the whole wholeSpecification and resolve all references
+  return traverse(modifiedSpecification, (schema) => {
+    // Ignore parts without a reference
+    if (schema.$ref === undefined) {
+      return schema
     }
 
-    if (typeof prop === 'undefined') {
-      treeObj = target
+    // Oh, great, there’s a reference! Let’s resolve it.
+    const target = findReference(wholeSpecification, schema.$ref)
 
-      return
+    // If we can’t find the reference, we throw an error.
+    if (target === undefined) {
+      throw new Error(`Can’t resolve URI: ${schema.$ref}`)
     }
 
-    // 1) This would overwrite everything:
-    // root[unescapeJsonPointer(prop)] = target
-    //
-    // 2) This would lose the reference to the original `target` object:
-    // root[unescapeJsonPointer(prop)] = {
-    //   // Add the referenced content
-    //   ...target,
-    //   // Merge with original properties (might has a description or other properties)
-    //   ...root[unescapeJsonPointer(prop)],
-    // }
-    //
-    // 3) But we want to keep the reference to the original `target` object, but add the original properties:
-    Object.keys(target ?? {}).forEach((key) => {
-      if (root[unescapeJsonPointer(prop)][key] === undefined) {
-        root[unescapeJsonPointer(prop)][key] = target[key]
-      }
+    // console.log()
+    // console.log('schema:', schema)
+    // console.log('$ref:', schema.$ref)
+    // console.log('target:', target)
+
+    delete schema.$ref
+
+    // Before we put the referenced content into place, we should resolve any references inside the reference.
+    // Recursion FTW!
+    // TODO: This is causing a max call stack error.
+    const resolvedTarget = resolve(wholeSpecification, true, target)
+
+    // We want to keep the reference to the original object, but add the original properties:
+    Object.keys(resolvedTarget ?? {}).forEach((key) => {
+      schema[key] = resolvedTarget[key]
     })
-  }
 
-  // recursively follow the reference path to the end
-  function resolvePointer(path, prop, ref, id) {
-    let currentRef = ''
-    function recursiveSearchRefs(path, prop, ref, id) {
-      let root = treeObj
+    return schema
+  })
+}
 
-      // Wait … what? Why is `ref` not a string?
-      // Example: packages/openapi-parser/tests/files/bbccouk.yaml
-      if (typeof ref !== 'string') {
-        currentRef = ref
-        return
-      }
+/**
+ * Get the specified URI from a given specification
+ */
+function findReference(specification: AnyObject, uri: string) {
+  // Understand the URI
+  const [prefix, path] = uri.split('#', 2)
+  const hasHash = !!path
+  const segments = path.split('/').map(unescapeJsonPointer).slice(1)
 
-      const paths = ref.split('/').slice(1)
+  // console.log('findReference', {
+  //   uri,
+  //   prefix,
+  //   hasHash,
+  //   path,
+  //   segments,
+  //   specification,
+  // })
 
-      for (const p of paths) {
-        root = root[unescapeJsonPointer(p)]
-      }
-
-      if (typeof root?.[prop] === 'undefined') {
-        currentRef = ref
-        return
-      }
-      recursiveSearchRefs(path, prop, root[prop], id)
-    }
-    recursiveSearchRefs(path, prop, ref, id)
-
-    return currentRef
-  }
-
-  function parse(obj, path, id) {
-    if (!isObject(obj)) {
-      return
-    }
-
-    const objId = obj.$id || id
-
-    for (const prop in obj) {
-      // TODO: This code throws `RangeError: Maximum call stack size exceeded` for a lot of files
-      if (pointerWords.has(prop)) {
-        // recursively check if the reference is a pointer to another reference
-        let resolvedRef = resolvePointer(path, prop, obj[prop], objId)
-        pointers[prop].push({ ref: resolvedRef, obj, prop, path, id: objId })
-        delete obj[prop]
-      }
-
-      // find references inside of arrays (oneOf, anyOf, allOf)
-      if (Array.isArray(obj[prop])) {
-        for (let i = 0; i < obj[prop].length; i++) {
-          parse(obj[prop][i], `${path}/${escapeJsonPointer(prop)}/${i}`, objId)
-        }
-      }
-
-      parse(obj[prop], `${path}/${escapeJsonPointer(prop)}`, objId)
-    }
-  }
-
-  // find all refs
-  parse(treeObj, '#', '')
-
-  // resolve them
-  const anchors = { '': treeObj }
-  const dynamicAnchors = {}
-
-  for (const item of pointers.$id) {
-    const { ref, obj, path } = item
-    if (anchors[ref]) {
-      throw new Error(`$id : '${ref}' defined more than once at ${path}`)
-    }
-    anchors[ref] = obj
-  }
-
-  for (const item of pointers.$anchor) {
-    const { ref, obj, path, id } = item
-    const fullRef = `${id}#${ref}`
-    if (anchors[fullRef]) {
-      throw new Error(`$anchor : '${ref}' defined more than once at '${path}'`)
-    }
-    anchors[fullRef] = obj
-  }
-
-  for (const item of pointers.$dynamicAnchor) {
-    const { ref, obj, path } = item
-    if (dynamicAnchors[`#${ref}`]) {
-      throw new Error(
-        `$dynamicAnchor : '${ref}' defined more than once at '${path}'`,
-      )
-    }
-    dynamicAnchors[`#${ref}`] = obj
-  }
-
-  for (const item of pointers.$ref) {
-    const { ref, id, path } = item
-    const decodedRef = decodeURIComponent(ref)
-    const fullRef = decodedRef[0] !== '#' ? decodedRef : `${id}${decodedRef}`
-    applyRef(path, resolveUri(fullRef, anchors))
-  }
-
-  for (const item of pointers.$dynamicRef) {
-    const { ref, path } = item
-    if (!dynamicAnchors[ref]) {
-      throw new Error(`Can't resolve $dynamicAnchor : '${ref}'`)
-    }
-    applyRef(path, dynamicAnchors[ref])
-  }
-
-  return treeObj
+  // Get the target
+  return segments.reduce(
+    (accumulator: AnyObject, segment: string) => accumulator[segment],
+    specification,
+  )
 }
