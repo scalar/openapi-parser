@@ -8,6 +8,59 @@ import { describe, expect, it } from 'vitest'
 import { resolveRefs } from './resolveRefs'
 
 describe('resolveRefs', () => {
+  it('resolves references', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Foobar',
+            },
+          },
+        },
+      },
+
+      components: {
+        requestBodies: {
+          Foobar: {
+            content: {},
+          },
+        },
+      },
+    }
+
+    // Run the specification through the old parser
+    const oldSchema = (await new Promise(async (resolve, reject) => {
+      SwaggerParser.dereference(
+        structuredClone(specification) as never,
+        (error, result) => {
+          if (error) {
+            reject(error)
+          }
+
+          if (result === undefined) {
+            reject('Couldn’t parse the Swagger file.')
+
+            return
+          }
+          resolve(result)
+        },
+      )
+    }).catch((error) => {
+      console.error('[@apidevtools/swagger-parser]', error)
+    })) as any
+
+    // Run the specification through our new parser
+    const newSchema = resolveRefs(specification)
+
+    // Assertion
+    expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
+      oldSchema.paths['/foobar'].post.requestBody,
+    )
+  })
+
   it('resolves references inside references', async () => {
     const specification = {
       openapi: '3.1.0',

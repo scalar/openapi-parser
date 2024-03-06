@@ -15,6 +15,7 @@ export const pointerWords = new Set([
 
 export function resolve(tree, replace) {
   let treeObj = tree
+
   if (!isObject(treeObj)) {
     return undefined
   }
