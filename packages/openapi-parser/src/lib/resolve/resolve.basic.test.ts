@@ -343,8 +343,7 @@ describe('resolve', () => {
       },
     })
   })
-
-  it('resolves a circular reference', () => {
+  it.only('resolves a circular reference', async () => {
     const specification = {
       type: 'object',
       properties: {
@@ -362,7 +361,59 @@ describe('resolve', () => {
 
     const schema = resolve(specification, true)
 
-    console.log(JSON.stringify(schema, null, 2))
+    const correctSchema = {
+      type: 'object',
+      properties: {
+        element: {
+          type: 'object',
+          properties: {
+            element: {
+              type: 'object',
+              properties: {
+                element: {
+                  type: 'object',
+                },
+              },
+            },
+          },
+        },
+      },
+      schemas: {
+        element: {
+          type: 'object',
+          properties: {
+            element: {
+              type: 'object',
+              properties: {
+                element: {
+                  type: 'object',
+                  properties: {
+                    element: {
+                      type: 'object',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    }
+
+    // Circular dependency should be resolved
+    expect(correctSchema.properties.element.type).toBe('object')
+    expect(correctSchema.properties.element.properties.element.type).toBe(
+      'object',
+    )
+    console.log(
+      correctSchema.properties.element.properties.element.properties.element,
+    )
+    expect(
+      correctSchema.properties.element.properties.element.properties.element
+        .type,
+    ).toBe('object')
+
+    expect(schema).toMatchObject(correctSchema)
 
     // Original specification should not be mutated
     expect(specification.properties.element.$ref).toBeTypeOf('string')

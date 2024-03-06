@@ -67,23 +67,22 @@ export function resolve(
     }
 
     // console.log()
-    // console.log('spec', modifiedSpecification)
+    // console.log('modified spec', JSON.stringify(modifiedSpecification, null, 2))
+    // console.log('target:', target)
     // console.log('schema:', schema)
     // console.log('$ref:', schema.$ref)
-    // console.log('target:', target)
 
-    // TODO: Resolve circular references
-    if (target === modifiedSpecification) {
-      throw new Error('Circular reference detected')
-    }
+    // TODO: correctly resolve circular references
+    const isCircular = target === modifiedSpecification
 
     // Get rid of the $ref property
     delete schema.$ref
 
     // Before we put the referenced content into place, we should resolve any references inside the reference.
-    // Recursion FTW?
-    // TODO: Causes a max call stack exceeded error
-    const resolvedTarget = resolve(wholeSpecification, replace, target)
+    // Do not continue the recursion if we have a circular reference
+    const resolvedTarget = isCircular
+      ? target
+      : resolve(wholeSpecification, replace, target)
 
     // We want to keep the reference to the original object, but add the original properties:
     Object.keys(resolvedTarget ?? {}).forEach((key) => {
