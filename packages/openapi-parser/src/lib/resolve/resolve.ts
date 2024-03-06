@@ -66,12 +66,6 @@ export function resolve(
       throw new Error(`Can’t resolve URI: ${schema.$ref}`)
     }
 
-    // console.log()
-    // console.log('modified spec', JSON.stringify(modifiedSpecification, null, 2))
-    // console.log('target:', target)
-    // console.log('schema:', schema)
-    // console.log('$ref:', schema.$ref)
-
     // TODO: correctly resolve circular references
     const isCircular = target === modifiedSpecification
 
@@ -81,7 +75,7 @@ export function resolve(
     // Before we put the referenced content into place, we should resolve any references inside the reference.
     // Do not continue the recursion if we have a circular reference
     const resolvedTarget = isCircular
-      ? target
+      ? resolveCircularReference(target)
       : resolve(wholeSpecification, replace, target)
 
     // We want to keep the reference to the original object, but add the original properties:
@@ -89,8 +83,16 @@ export function resolve(
       schema[key] = resolvedTarget[key]
     })
 
+    // console.log(JSON.stringify(schema, null, 2))
+
     return schema
   })
+}
+
+function resolveCircularReference(ref) {
+  // structured clone to avoid modifying the original object
+  const targetNoRefs = deleteNestedRefs(structuredClone(ref))
+  return addNestedRefs(structuredClone(ref), targetNoRefs)
 }
 
 /**
@@ -111,4 +113,35 @@ function resolveUri(specification: AnyObject, uri: string) {
     (accumulator: AnyObject, segment: string) => accumulator[segment],
     specification,
   )
+}
+
+// iterate over a nested object recursively
+const deleteNestedRefs = (obj) => {
+  Object.keys(obj).forEach((key) => {
+    if (key === '$ref' && obj[key] !== null) {
+      delete obj[key]
+    }
+
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      deleteNestedRefs(obj[key])
+    }
+  })
+  return obj
+}
+
+const addNestedRefs = (obj, element) => {
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === 'object' && obj[key] !== null) {
+      const nested = obj[key]
+
+      Object.keys(nested).forEach((nestedKey) => {
+        if (nestedKey === '$ref' && obj[nestedKey] !== null) {
+          obj[key] = element
+        }
+      })
+
+      addNestedRefs(obj[key], element)
+    }
+  })
+  return obj
 }

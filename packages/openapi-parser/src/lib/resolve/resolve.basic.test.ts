@@ -343,7 +343,7 @@ describe('resolve', () => {
       },
     })
   })
-  it.only('resolves a circular reference', async () => {
+  it('resolves a circular reference', async () => {
     const specification = {
       type: 'object',
       properties: {
