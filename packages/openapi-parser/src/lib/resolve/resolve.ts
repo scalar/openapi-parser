@@ -59,7 +59,7 @@ export function resolve(
     // Oh, great, there’s a reference! Let’s resolve it.
     // TODO: Maybe we shouldn’t look for the reference in the original specification (which will always have $refs),
     // but in the modified specification (which eventually won’t have any $refs).
-    const target = findReference(wholeSpecification, schema.$ref)
+    const target = resolveUri(wholeSpecification, schema.$ref)
 
     // If we can’t find the reference, we throw an error.
     if (target === undefined) {
@@ -91,7 +91,7 @@ export function resolve(
 /**
  * Get the specified URI from a given specification
  */
-function findReference(specification: AnyObject, uri: string) {
+function resolveUri(specification: AnyObject, uri: string) {
   // Understand the URI
   const [prefix, path] = uri.split('#', 2)
   // const hasHash = !!path
