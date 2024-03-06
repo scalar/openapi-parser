@@ -67,9 +67,15 @@ export function resolve(
     }
 
     // console.log()
+    // console.log('spec', modifiedSpecification)
     // console.log('schema:', schema)
     // console.log('$ref:', schema.$ref)
     // console.log('target:', target)
+
+    // TODO: Resolve circular references
+    if (target === modifiedSpecification) {
+      throw new Error('Circular reference detected')
+    }
 
     // Get rid of the $ref property
     delete schema.$ref
