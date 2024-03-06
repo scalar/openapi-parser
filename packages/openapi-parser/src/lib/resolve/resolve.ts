@@ -66,7 +66,7 @@ export function resolve(
       throw new Error(`Can’t resolve URI: ${schema.$ref}`)
     }
 
-    // TODO: correctly resolve circular references
+    // If the URI resolves to the partial specification object, we have a circular reference
     const isCircular = target === modifiedSpecification
 
     // Get rid of the $ref property
@@ -83,16 +83,55 @@ export function resolve(
       schema[key] = resolvedTarget[key]
     })
 
-    // console.log(JSON.stringify(schema, null, 2))
-
     return schema
   })
 }
 
-function resolveCircularReference(ref) {
-  // structured clone to avoid modifying the original object
-  const targetNoRefs = deleteNestedRefs(structuredClone(ref))
-  return addNestedRefs(structuredClone(ref), targetNoRefs)
+/**
+ * Resolves the circular reference to an object and deletes the $ref properties
+ */
+function resolveCircularReference(circularSpec) {
+  /**
+   * Iterate over a nested object recursively and delete all $ref properties
+   */
+  const deleteNestedRefs = (obj) => {
+    Object.keys(obj).forEach((key) => {
+      if (key === '$ref' && obj[key] !== null) {
+        delete obj[key]
+      }
+
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        deleteNestedRefs(obj[key])
+      }
+    })
+    return obj
+  }
+
+  /**
+   * Iterate over a nested object recursively and replace $ref with the specified element
+   */
+  const addNestedRefs = (obj, element) => {
+    Object.keys(obj).forEach((key) => {
+      if (typeof obj[key] === 'object' && obj[key] !== null) {
+        const nested = obj[key]
+
+        Object.keys(nested).forEach((nestedKey) => {
+          if (nestedKey === '$ref' && obj[nestedKey] !== null) {
+            obj[key] = element
+          }
+        })
+
+        addNestedRefs(obj[key], element)
+      }
+    })
+    return obj
+  }
+
+  // Create the circular reference object by removing the $ref properties
+  const circularRefObj = deleteNestedRefs(structuredClone(circularSpec))
+
+  // Iterate over the circular spec and replace the $ref with the circular reference object
+  return addNestedRefs(structuredClone(circularSpec), circularRefObj)
 }
 
 /**
@@ -113,35 +152,4 @@ function resolveUri(specification: AnyObject, uri: string) {
     (accumulator: AnyObject, segment: string) => accumulator[segment],
     specification,
   )
-}
-
-// iterate over a nested object recursively
-const deleteNestedRefs = (obj) => {
-  Object.keys(obj).forEach((key) => {
-    if (key === '$ref' && obj[key] !== null) {
-      delete obj[key]
-    }
-
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      deleteNestedRefs(obj[key])
-    }
-  })
-  return obj
-}
-
-const addNestedRefs = (obj, element) => {
-  Object.keys(obj).forEach((key) => {
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      const nested = obj[key]
-
-      Object.keys(nested).forEach((nestedKey) => {
-        if (nestedKey === '$ref' && obj[nestedKey] !== null) {
-          obj[key] = element
-        }
-      })
-
-      addNestedRefs(obj[key], element)
-    }
-  })
-  return obj
 }
