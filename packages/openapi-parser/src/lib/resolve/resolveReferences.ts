@@ -1,3 +1,4 @@
+import { ERRORS } from '../../configuration'
 import { AnyObject } from '../../types'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
@@ -14,16 +15,16 @@ import { unescapeJsonPointer } from './unescapeJsonPointer'
 /**
  * Takes a specification and resolves all references.
  */
-export function resolve(input: AnyObject) {
+export function resolveReferences(input: AnyObject) {
   // Detach from input
   const specification = structuredClone(input)
 
   // Recursively resolve all references
-  resolveReferences(specification)
+  resolve(specification)
 
   // If we replace references with content, that includes a reference, we can’t deal with that right-away.
   // That’s why we need a second run.
-  resolveReferences(specification)
+  resolve(specification)
 
   // Return the resolved specification
   return specification
@@ -31,7 +32,7 @@ export function resolve(input: AnyObject) {
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.
    */
-  function resolveReferences(schema: AnyObject) {
+  function resolve(schema: AnyObject) {
     // Iterate over the whole objecct
     Object.entries(schema ?? {}).forEach(([key, value]) => {
       // Ignore parts without a reference
@@ -40,7 +41,7 @@ export function resolve(input: AnyObject) {
         const target = resolveUri(specification, schema.$ref)
 
         if (target === undefined) {
-          throw new Error(`Can’t resolve URI: ${schema.$ref}`)
+          throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
         }
 
         // Get rid of the reference
@@ -56,7 +57,7 @@ export function resolve(input: AnyObject) {
       }
 
       if (typeof value === 'object' && !isCircular(value)) {
-        resolveReferences(value)
+        resolve(value)
       }
     })
   }
@@ -80,7 +81,7 @@ function resolveUri(specification: AnyObject, uri: string): AnyObject {
   const [prefix, path] = uri.split('#', 2)
 
   if (prefix) {
-    throw new Error(`External references are not supported yet: ${uri}`)
+    throw new Error(ERRORS.EXTERNAL_REFERENCE_NOT_SUPPORTED.replace('%s', uri))
   }
 
   const segments = unescapeJsonPointer(path).split('/').slice(1)

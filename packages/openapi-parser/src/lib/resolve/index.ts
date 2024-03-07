@@ -1,1 +1,1 @@
-export * from './resolveRefs'
+export * from './resolveReferences'
