@@ -1,5 +1,4 @@
 import { AnyObject } from '../../types'
-import { isObject } from './isObject'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 // TODO: Add support for all pointer words
@@ -84,7 +83,7 @@ function resolveUri(specification: AnyObject, uri: string): AnyObject {
     throw new Error(`External references are not supported yet: ${uri}`)
   }
 
-  const segments = path.split('/').slice(1)
+  const segments = unescapeJsonPointer(path).split('/').slice(1)
 
   return segments.reduce((acc, key) => {
     return acc[key]

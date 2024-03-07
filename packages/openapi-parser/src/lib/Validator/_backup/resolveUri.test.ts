@@ -48,6 +48,7 @@ describe.skip('resolveUri', async () => {
 
     const result = await resolve(specification)
 
+    expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
     expect(
       result.schema?.paths?.['/upload']?.post?.responses?.[401]?.content[
@@ -145,6 +146,7 @@ describe.skip('resolveUri', async () => {
       },
     ])
 
+    expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
     expect(
       result.schema?.paths?.['/upload']?.post?.responses?.[401]?.content[
@@ -209,6 +211,7 @@ describe.skip('resolveUri', async () => {
       },
     ])
 
+    expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
     expect(
       result.schema?.paths?.['/upload']?.post?.responses?.[401]?.content[

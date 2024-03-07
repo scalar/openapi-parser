@@ -37,6 +37,7 @@ describe('checkReferences', () => {
     }
 
     const result = checkReferences(specification)
+    expect(result.errors).toBe(undefined)
     expect(result.valid).toBe(true)
     expect(result.errors).toBeUndefined()
   })

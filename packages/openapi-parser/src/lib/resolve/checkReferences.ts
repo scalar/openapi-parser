@@ -10,7 +10,6 @@ export function checkReferences(specification: AnyObject) {
       valid: true,
     }
   } catch (error) {
-    console.log(error)
     return {
       valid: false,
       errors: transformErrors(specification, error.message),
