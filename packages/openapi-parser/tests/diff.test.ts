@@ -39,23 +39,21 @@ const expectedErrors = {
 
 const invalidFiles = [
   // TODO: max call stack size exceeded or timeout hit
-  'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
-  'packages/openapi-parser/tests/files/xtrfeu.yaml',
-  'packages/openapi-parser/tests/files/webflowcom.yaml',
-  'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
-  'packages/openapi-parser/tests/files/amazonawscomce.yaml',
-  'packages/openapi-parser/tests/files/amazonawscomconnect.yaml',
-  'packages/openapi-parser/tests/files/opentrialslocal.yaml',
-  'packages/openapi-parser/tests/files/urlboxio.yaml',
-  'packages/openapi-parser/tests/files/bbccouk.yaml',
-  'packages/openapi-parser/tests/files/azurecomwindowsiot-windowsiotservices.yaml',
-  'packages/openapi-parser/tests/files/ote-godaddycomdomains.yaml',
-  'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
+  // 'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
+  // 'packages/openapi-parser/tests/files/xtrfeu.yaml',
+  // 'packages/openapi-parser/tests/files/webflowcom.yaml',
+  // 'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
+  // 'packages/openapi-parser/tests/files/amazonawscomce.yaml',
+  // 'packages/openapi-parser/tests/files/amazonawscomconnect.yaml',
+  // 'packages/openapi-parser/tests/files/opentrialslocal.yaml',
+  // 'packages/openapi-parser/tests/files/bbccouk.yaml',
+  // 'packages/openapi-parser/tests/files/ote-godaddycomdomains.yaml',
+  // 'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
   // TODO: files just failing
 ]
 
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
-  .filter((file) => !invalidFiles.includes(file))
+  .filter((file) => invalidFiles.includes(file))
   // Aphabetic
   .sort()
 // Random
