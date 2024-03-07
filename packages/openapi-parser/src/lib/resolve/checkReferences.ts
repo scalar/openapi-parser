@@ -4,12 +4,13 @@ import { resolve } from './resolve'
 
 export function checkReferences(specification: AnyObject) {
   try {
-    resolve(specification, false)
+    resolve(specification)
 
     return {
       valid: true,
     }
   } catch (error) {
+    console.log(error)
     return {
       valid: false,
       errors: transformErrors(specification, error.message),

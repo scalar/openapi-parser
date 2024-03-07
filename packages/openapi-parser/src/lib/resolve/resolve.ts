@@ -1,4 +1,5 @@
 import { AnyObject } from '../../types'
+import { isObject } from './isObject'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 // TODO: Add support for all pointer words
@@ -33,7 +34,7 @@ export function resolve(input: AnyObject) {
    */
   function resolveReferences(schema: AnyObject) {
     // Iterate over the whole objecct
-    Object.entries(schema).forEach(([key, value]) => {
+    Object.entries(schema ?? {}).forEach(([key, value]) => {
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
@@ -48,7 +49,9 @@ export function resolve(input: AnyObject) {
 
         if (typeof target === 'object') {
           Object.keys(target).forEach((key) => {
-            return (schema[key] = target[key])
+            if (schema[key] === undefined) {
+              schema[key] = target[key]
+            }
           })
         }
       }

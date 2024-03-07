@@ -37,8 +37,32 @@ const expectedErrors = {
   ],
 }
 
-// const invalidFiles = [
-//   // TODO: max call stack size exceeded or timeout hit
+// We can’t make a diff for files with circular references. :(
+const circularReferences = [
+  'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
+  'packages/openapi-parser/tests/files/xtrfeu.yaml',
+  'packages/openapi-parser/tests/files/webflowcom.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomce.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomconnect.yaml',
+  'packages/openapi-parser/tests/files/opentrialslocal.yaml',
+  'packages/openapi-parser/tests/files/bbccouk.yaml',
+  'packages/openapi-parser/tests/files/ote-godaddycomdomains.yaml',
+  'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
+]
+
+// Just skip some files. If it’s not empty, we’ve got some work to do. :)
+const ignoreFiles = []
+
+const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
+  .filter((file) => !ignoreFiles.includes(file))
+  // Aphabetic
+  .sort()
+// Random
+// .sort(() => Math.random() - 0.5)
+
+// Just test a few files specifically:
+// const files = [
 //   'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
 //   'packages/openapi-parser/tests/files/xtrfeu.yaml',
 //   'packages/openapi-parser/tests/files/webflowcom.yaml',
@@ -51,22 +75,12 @@ const expectedErrors = {
 //   'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
 // ]
 
-// const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
-//   .filter((file) => !invalidFiles.includes(file))
-//   // Aphabetic
-//   .sort()
-// // Random
-// // .sort(() => Math.random() - 0.5)
-
-// Just test a few files specifically:
-const files = ['packages/openapi-parser/tests/files/bbccouk.yaml']
-
 /**
  * This test suite parses a large number of real-world OpenAPI files
  */
 describe('diff', async () => {
   // TODO: We’re currently only testing a few of the files for performance reasons.
-  test.each(files.slice(0, 25))('diff: %s', async (file) => {
+  test.each(files.slice(0, 100))('diff: %s', async (file) => {
     const content = fs.readFileSync(file, 'utf-8')
     const specification = normalize(content)
 
@@ -118,10 +132,12 @@ describe('diff', async () => {
         // Any difference?
         let result: any[] = []
 
-        try {
-          result = diff(oldSchema, newSchema)
-        } catch (error) {
-          console.error('[justdiff]', error.message)
+        if (!circularReferences.includes(file)) {
+          try {
+            result = diff(oldSchema, newSchema)
+          } catch (error) {
+            console.error('[justdiff]', error.message)
+          }
         }
 
         // Log differences
