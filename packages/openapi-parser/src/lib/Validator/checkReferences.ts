@@ -1,6 +1,6 @@
 import { AnyObject } from '../../types'
-import { transformErrors } from '../Validator/transformErrors'
 import { resolveReferences } from './resolveReferences'
+import { transformErrors } from './transformErrors'
 
 // TODO: Adapat for the new function
 export function checkReferences(specification: AnyObject) {
