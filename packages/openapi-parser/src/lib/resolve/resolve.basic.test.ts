@@ -405,9 +405,6 @@ describe('resolve', () => {
     expect(correctSchema.properties.element.properties.element.type).toBe(
       'object',
     )
-    console.log(
-      correctSchema.properties.element.properties.element.properties.element,
-    )
     expect(
       correctSchema.properties.element.properties.element.properties.element
         .type,
@@ -421,9 +418,11 @@ describe('resolve', () => {
     // Circular dependency should be resolved
     expect(schema.properties.element.type).toBe('object')
     expect(schema.properties.element.properties.element.type).toBe('object')
-    console.log(schema.properties.element.properties.element.properties.element)
     expect(
       schema.properties.element.properties.element.properties.element.type,
     ).toBe('object')
+
+    // Circular references can’t be JSON.stringify’d (easily)
+    expect(() => JSON.stringify(schema, null, 2)).toThrow()
   })
 })

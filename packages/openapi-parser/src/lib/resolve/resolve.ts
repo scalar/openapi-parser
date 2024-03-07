@@ -57,8 +57,6 @@ export function resolve(
     }
 
     // Oh, great, there’s a reference! Let’s resolve it.
-    // TODO: Maybe we shouldn’t look for the reference in the original specification (which will always have $refs),
-    // but in the modified specification (which eventually won’t have any $refs).
     const target = resolveUri(wholeSpecification, schema.$ref)
 
     // If we can’t find the reference, we throw an error.
@@ -90,48 +88,49 @@ export function resolve(
 /**
  * Resolves the circular reference to an object and deletes the $ref properties
  */
-function resolveCircularReference(circularSpec) {
+function resolveCircularReference(circularSpec: AnyObject) {
   /**
    * Iterate over a nested object recursively and delete all $ref properties
    */
-  const deleteNestedRefs = (obj) => {
-    Object.keys(obj).forEach((key) => {
-      if (key === '$ref' && obj[key] !== null) {
-        delete obj[key]
+  const deleteNestedReferences = (schema: AnyObject) => {
+    Object.keys(schema).forEach((key) => {
+      if (key === '$ref' && schema[key] !== null) {
+        delete schema[key]
       }
 
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        deleteNestedRefs(obj[key])
+      if (typeof schema[key] === 'object' && schema[key] !== null) {
+        deleteNestedReferences(schema[key])
       }
     })
-    return obj
+
+    return schema
   }
 
   /**
    * Iterate over a nested object recursively and replace $ref with the specified element
    */
-  const addNestedRefs = (obj, element) => {
-    Object.keys(obj).forEach((key) => {
-      if (typeof obj[key] === 'object' && obj[key] !== null) {
-        const nested = obj[key]
+  const addNestedReferences = (schema: AnyObject, element: AnyObject) => {
+    Object.keys(schema).forEach((key) => {
+      if (typeof schema[key] === 'object' && schema[key] !== null) {
+        const nested = schema[key]
 
         Object.keys(nested).forEach((nestedKey) => {
-          if (nestedKey === '$ref' && obj[nestedKey] !== null) {
-            obj[key] = element
+          if (nestedKey === '$ref' && schema[nestedKey] !== null) {
+            schema[key] = element
           }
         })
 
-        addNestedRefs(obj[key], element)
+        addNestedReferences(schema[key], element)
       }
     })
-    return obj
+    return schema
   }
 
   // Create the circular reference object by removing the $ref properties
-  const circularRefObj = deleteNestedRefs(structuredClone(circularSpec))
+  const circularRefObj = deleteNestedReferences(structuredClone(circularSpec))
 
   // Iterate over the circular spec and replace the $ref with the circular reference object
-  return addNestedRefs(structuredClone(circularSpec), circularRefObj)
+  return addNestedReferences(structuredClone(circularSpec), circularRefObj)
 }
 
 /**
