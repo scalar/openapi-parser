@@ -15,7 +15,7 @@ Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAP
 - [x] Written in TypeScript
 - [x] Runs in Node.js and in the browser (without any polyfills or configuration)
 - [x] Tested with hundreds of real world examples
-- [x] Amazing error output
+- [ ] Amazing error output
 - [ ] Support for OpenAPI 4.0 👀
 
 ## Limitations
@@ -97,6 +97,15 @@ const specification = openapi()
 ## Community
 
 We are API nerds. You too? Let’s chat on Discord: <https://discord.gg/8HeZcRGPFS>
+
+## Thank you!
+
+Thanks a ton for all the help and inspiration:
+
+- [@philsturgeon](https://github.com/philsturgeon) to make sure we build something we won’t hate.
+- We took a lot of inspiration from [@seriousme]https://github.com/seriousme and his package [openapi-schema-validator](https://github.com/seriousme/openapi-schema-validator) early-on.
+- You could consider this package the modern successor of [@apidevtools/swagger-parser](https://github.com/APIDevTools/swagger-parser), we even test against it to make sure we’re getting the same results (where intended).
+- We stole a lot of example specification from [@mermade](https://github.com/mermade) to test against.
 
 ## Contributors
 

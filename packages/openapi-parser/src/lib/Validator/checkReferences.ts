@@ -1,20 +1,19 @@
-import type { Filesystem } from '../../types'
+import { AnyObject } from '../../types'
 import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
 
-export function checkReferences(filesystem: Filesystem) {
-  const entrypoint = filesystem.find((file) => file.isEntrypoint === true)
-
+// TODO: Adapat for the new function
+export function checkReferences(specification: AnyObject) {
   try {
-    resolveReferences(filesystem, false)
+    resolveReferences(specification)
 
     return {
       valid: true,
     }
-  } catch (err) {
+  } catch (error) {
     return {
       valid: false,
-      errors: transformErrors(entrypoint, err.message),
+      errors: transformErrors(specification, error.message),
     }
   }
 }

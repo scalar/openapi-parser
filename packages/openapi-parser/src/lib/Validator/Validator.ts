@@ -37,7 +37,9 @@ export class Validator {
   public specification: AnyObject
 
   resolveReferences(filesystem?: Filesystem) {
-    return resolveReferences(filesystem, true)
+    return resolveReferences(
+      filesystem.find((file) => file.isEntrypoint === true).specification,
+    )
   }
 
   /**
@@ -89,7 +91,7 @@ export class Validator {
 
       // Check if the references are valid
       if (schemaResult) {
-        return checkReferences(filesystem)
+        return checkReferences(entrypoint.specification)
       }
 
       // Error handling

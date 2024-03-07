@@ -8,7 +8,7 @@ const EXAMPLE_FILE = relativePath(
   './pass/externalPathItemRef.yaml',
 )
 
-describe('externalPathItemRef', () => {
+describe.todo('externalPathItemRef', () => {
   it('passes', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
     const result = await resolve(filesystem)

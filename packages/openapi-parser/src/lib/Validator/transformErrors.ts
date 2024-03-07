@@ -1,10 +1,10 @@
-import type { FilesystemEntry } from '../../types'
+import type { AnyObject } from '../../types'
 import { betterAjvErrors } from '../../utils/betterAjvErrors'
 
 /**
  * Transforms ajv errors, finds the positions in the schema and returns an enriched format.
  */
-export function transformErrors(entrypoint: FilesystemEntry, errors: any) {
+export function transformErrors(specification: AnyObject, errors: any) {
   // TODO: This should work with multiple files
 
   if (typeof errors === 'string') {
@@ -21,7 +21,7 @@ export function transformErrors(entrypoint: FilesystemEntry, errors: any) {
     ]
   }
 
-  return betterAjvErrors(entrypoint.specification, null, errors, {
+  return betterAjvErrors(specification, null, errors, {
     format: 'js',
     indent: 2,
     colorize: false,
