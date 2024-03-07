@@ -1,11 +1,11 @@
 /**
- * This file has some simple tests to cover the basics of the resolve function.
+ * This file has some simple tests to cover the basics of the resolveReferences function.
  * Doesn’t cover all edge cases, doesn’t have big files, but if this works you’re almost there.
  */
 import SwaggerParser from '@apidevtools/swagger-parser'
 import { describe, expect, it } from 'vitest'
 
-import { AnyObject } from '../../types'
+import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
 import { resolveReferences } from './resolveReferences'
 
 describe('resolveReferences', () => {
@@ -281,7 +281,9 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const schema = resolveReferences(
+      specification,
+    ) as ResolvedOpenAPIV2.Document
 
     // Assertion
     expect(schema.swagger).toBe('2.0')
@@ -314,6 +316,7 @@ describe('resolveReferences', () => {
     expect(() => JSON.stringify(result, null, 2)).toThrow()
 
     // Sky is the limit
+    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(result.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
   })
 
@@ -340,12 +343,13 @@ describe('resolveReferences', () => {
       },
     }
 
-    const result = resolveReferences(schema)
+    // Typecasting: We’re misusing the function and pass a partial specification only.
+    const result = resolveReferences(schema) as any
 
     // Circular references can’t be JSON.stringify’d (easily)
     expect(() => JSON.stringify(result, null, 2)).toThrow()
 
-    // Sky is the limit
+    // Sky is the liit
     expect(
       result.schemas.element.properties.element.properties.element.properties
         .element,
@@ -374,9 +378,12 @@ describe('resolveReferences', () => {
     expect(specification.properties.element.$ref).toBeTypeOf('string')
 
     // Circular dependency should be resolved
+    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(schema.properties.element.type).toBe('object')
+    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(schema.properties.element.properties.element.type).toBe('object')
     expect(
+      // @ts-expect-error We’re misusing the function and pass a partial specification only.
       schema.properties.element.properties.element.properties.element.type,
     ).toBe('object')
 

@@ -1,5 +1,5 @@
 import { ERRORS } from '../../configuration'
-import { AnyObject } from '../../types'
+import { AnyObject, ResolvedOpenAPI } from '../../types'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
 
 // TODO: Add support for all pointer words
@@ -27,7 +27,7 @@ export function resolveReferences(input: AnyObject) {
   resolve(specification)
 
   // Return the resolved specification
-  return specification
+  return specification as ResolvedOpenAPI.Document
 
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.

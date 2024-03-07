@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { describe, expect, it } from 'vitest'
 
 import { getListOfReferences, loadFiles, resolve, validate } from '../../..'

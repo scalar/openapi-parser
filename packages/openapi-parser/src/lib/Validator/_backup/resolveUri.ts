@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { unescapeJsonPointer } from 'ajv/dist/compile/util'
 
 import { ERRORS } from '../../../configuration'

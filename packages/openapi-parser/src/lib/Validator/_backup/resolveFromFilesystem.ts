@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { path } from '../../../polyfills'
 import type { Filesystem, FilesystemEntry } from '../../../types'
 import { resolveReferences } from './resolveReferences'
