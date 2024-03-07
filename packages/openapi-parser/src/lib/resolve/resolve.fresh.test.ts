@@ -12,7 +12,7 @@ describe('resolve', () => {
       },
     }
 
-    const result = resolveReferences(schema)
+    const result = resolve(schema)
 
     // console.log(result)
     // console.log(JSON.stringify(result, null, 2))
@@ -47,7 +47,7 @@ describe('resolve', () => {
       },
     }
 
-    const result = resolveReferences(schema)
+    const result = resolve(schema)
 
     console.log(result)
     // console.log(JSON.stringify(result, null, 2))
@@ -63,12 +63,12 @@ describe('resolve', () => {
   })
 })
 
-function resolveReferences(input: AnyObject) {
+function resolve(input: AnyObject) {
   // Detach from input
   const specification = structuredClone(input)
 
   // Recursively resolve all references
-  resolve(specification)
+  resolveReferences(specification)
 
   // Return the resolved specification
   return specification
@@ -76,7 +76,7 @@ function resolveReferences(input: AnyObject) {
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.
    */
-  function resolve(schema: AnyObject) {
+  function resolveReferences(schema: AnyObject) {
     // Iterate over the whole objecct
     Object.entries(schema).forEach(([key, value]) => {
       if (schema.$ref !== undefined) {
@@ -96,7 +96,7 @@ function resolveReferences(input: AnyObject) {
       }
 
       if (typeof value === 'object' && !isCircular(value)) {
-        resolve(value)
+        resolveReferences(value)
       }
     })
   }

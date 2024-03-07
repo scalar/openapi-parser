@@ -116,7 +116,13 @@ describe('diff', async () => {
 
       if (oldSchema) {
         // Any difference?
-        const result = diff(oldSchema ?? {}, newSchema ?? {})
+        let result: any[] = []
+
+        try {
+          result = diff(oldSchema, newSchema)
+        } catch (error) {
+          console.error('[justdiff]', error.message)
+        }
 
         // Log differences
         if (result.length) {

@@ -53,7 +53,7 @@ describe('resolve', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolve(specification, true)
+    const newSchema = resolve(specification)
 
     // Assertion
     expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
@@ -112,7 +112,7 @@ describe('resolve', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolve(specification, true)
+    const newSchema = resolve(specification)
 
     // // Debug output
     // console.log('[INPUT]', JSON.stringify(specification, null, 2))
@@ -168,7 +168,7 @@ describe('resolve', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolve(specification, true)
+    const schema = resolve(specification)
 
     // Debug output
     // console.log(
@@ -232,7 +232,7 @@ describe('resolve', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolve(specification, true)
+    const schema = resolve(specification)
 
     // Debug output
     // console.log(
@@ -314,7 +314,7 @@ describe('resolve', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolve(specification, true)
+    const schema = resolve(specification)
 
     // Debug output
     // console.log(
@@ -359,7 +359,7 @@ describe('resolve', () => {
       },
     }
 
-    const schema = resolve(specification, true)
+    const schema = resolve(specification)
 
     const correctSchema = {
       type: 'object',
