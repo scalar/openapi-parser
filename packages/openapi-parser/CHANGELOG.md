@@ -1,5 +1,11 @@
 # @scalar/openapi-parser
 
+## 0.3.1
+
+### Patch Changes
+
+- 2498fc2: fix: make new parser behave like previous one on missing info.version
+
 ## 0.3.0
 
 ### Minor Changes
