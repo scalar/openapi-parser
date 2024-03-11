@@ -52,6 +52,12 @@ export class Validator {
     // TODO: How does this work with a filesystem?
     this.specification = specification
 
+    // TODO: defaulting info.version to keep parser compatible with the previous one
+    // we should bubble this error up and not throw on it
+    if (this.specification?.info && !this.specification.info.version) {
+      this.specification.info.version = '0.0.1'
+    }
+
     try {
       // AnyObject is empty or invalid
       if (specification === undefined || specification === null) {
