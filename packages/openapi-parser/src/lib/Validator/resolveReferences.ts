@@ -41,11 +41,12 @@ export function resolveReferences(input: AnyObject) {
         const target = resolveUri(specification, schema.$ref)
 
         if (target === undefined) {
-          throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+          // throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
         }
-
-        // Get rid of the reference
-        delete schema.$ref
+        else {
+          // Get rid of the reference
+          delete schema.$ref
+        }
 
         if (typeof target === 'object') {
           Object.keys(target).forEach((key) => {
