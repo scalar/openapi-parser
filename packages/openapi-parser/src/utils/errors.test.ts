@@ -26,7 +26,7 @@ describe('errors', () => {
   })
 
   it('unevaluated property', async () => {
-    const result = await resolve({
+    const spec = {
       openapi: '3.1.0',
       info: {
         title: 'Hello World',
@@ -43,9 +43,13 @@ describe('errors', () => {
           },
         },
       },
-    })
+    }
+    const result = await resolve(spec)
 
     expect(result).toMatchObject({
+      schema: {
+        ...spec,
+      },
       errors: [
         {
           error: `Property foobar is not expected to be here`,
@@ -63,7 +67,6 @@ describe('errors', () => {
         },
       ],
       valid: false,
-      version: undefined,
     })
   })
 })
