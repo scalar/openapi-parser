@@ -32,7 +32,7 @@ export async function resolve(
   return {
     valid: result.valid,
     version: validator.version,
-    errors: result.errors ?? [],
+    errors: result.errors,
     specification,
     schema,
   }
