@@ -19,19 +19,20 @@ export async function resolve(
   ) as OpenAPI.Document
 
   // Error handling
-  if (!result.valid) {
-    return {
-      valid: false,
-      version: undefined,
-      errors: result.errors,
-    }
-  }
+  // if (!result.valid) {
+  //   return {
+  //     valid: false,
+  //     version: undefined,
+  //     errors: result.errors,
+  //   }
+  // }
 
   const schema = validator.resolveReferences(filesystem)
 
   return {
-    valid: true,
+    valid: result.valid,
     version: validator.version,
+    errors: result.errors,
     specification,
     schema,
   }

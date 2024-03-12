@@ -40,9 +40,9 @@ export function resolveReferences(input: AnyObject) {
         // Find the referenced content
         const target = resolveUri(specification, schema.$ref)
 
-        if (target === undefined) {
-          throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
-        }
+        // if (target === undefined) {
+        //   throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+        // }
 
         // Get rid of the reference
         delete schema.$ref
@@ -77,6 +77,7 @@ function isCircular(schema: AnyObject) {
  * Resolves a URI to a part of the specification
  */
 function resolveUri(specification: AnyObject, uri: string): AnyObject {
+  if (typeof uri !== 'string') return
   // Understand the URI
   const [prefix, path] = uri.split('#', 2)
 
