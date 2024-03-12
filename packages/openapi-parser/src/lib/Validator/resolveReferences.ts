@@ -32,9 +32,9 @@ export function resolveReferences(input: AnyObject) {
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.
    */
-  function resolve(schema: AnyObject) {
+  function resolve(schema: AnyObject = {}) {
     // Iterate over the whole objecct
-    Object.entries(schema ?? {}).forEach(([key, value]) => {
+    Object.values(schema).forEach(value => {
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
@@ -77,6 +77,8 @@ function isCircular(schema: AnyObject) {
  * Resolves a URI to a part of the specification
  */
 function resolveUri(specification: AnyObject, uri: string): AnyObject {
+  if (typeof uri !== 'string') return
+
   // Understand the URI
   const [prefix, path] = uri.split('#', 2)
 
