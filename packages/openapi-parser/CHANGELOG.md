@@ -1,5 +1,11 @@
 # @scalar/openapi-parser
 
+## 0.3.2
+
+### Patch Changes
+
+- 02ea440: fix: make errors easier to consume
+
 ## 0.3.1
 
 ### Patch Changes
