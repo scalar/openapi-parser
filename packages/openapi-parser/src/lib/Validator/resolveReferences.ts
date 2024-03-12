@@ -40,13 +40,12 @@ export function resolveReferences(input: AnyObject) {
         // Find the referenced content
         const target = resolveUri(specification, schema.$ref)
 
-        if (target === undefined) {
-          // throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
-        }
-        else {
-          // Get rid of the reference
-          delete schema.$ref
-        }
+        // if (target === undefined) {
+        //   throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+        // }
+
+        // Get rid of the reference
+        delete schema.$ref
 
         if (typeof target === 'object') {
           Object.keys(target).forEach((key) => {
