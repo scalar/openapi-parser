@@ -118,6 +118,20 @@ Thanks a ton for all the help and inspiration:
             <br />
             <sub><b>hanspagel</b></sub>
         </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/marclave">
+            <img src="https://avatars.githubusercontent.com/u/6176314?v=4" width="100;" alt="marclave"/>
+            <br />
+            <sub><b>marclave</b></sub>
+        </a>
+    </td>
+    <td align="center">
+        <a href="https://github.com/amritk">
+            <img src="https://avatars.githubusercontent.com/u/2039539?v=4" width="100;" alt="amritk"/>
+            <br />
+            <sub><b>amritk</b></sub>
+        </a>
     </td></tr>
 </table>
 <!-- readme: collaborators,contributors -end -->
