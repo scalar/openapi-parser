@@ -5,7 +5,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@vitest/coverage-v8": "^1.4.0",
     "github-slugger": "^2.0.0",
-    "lefthook": "^1.6.7",
+    "lefthook": "^1.6.8",
     "prettier": "^3.0.3",
     "turbo": "^1.13.1",
     "typescript": "^5.4.3",
