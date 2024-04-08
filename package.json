@@ -8,7 +8,7 @@
     "lefthook": "^1.6.7",
     "prettier": "^3.0.3",
     "turbo": "^1.13.1",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.4",
     "vite-node": "^1.4.0",
     "vitest": "^1.4.0"
   },
