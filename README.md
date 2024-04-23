@@ -101,7 +101,7 @@ We are API nerds. You too? Let’s chat on Discord: <https://discord.gg/8HeZcRGP
 Thanks a ton for all the help and inspiration:
 
 - [@philsturgeon](https://github.com/philsturgeon) to make sure we build something we won’t hate.
-- We took a lot of inspiration from [@seriousme]https://github.com/seriousme and his package [openapi-schema-validator](https://github.com/seriousme/openapi-schema-validator) early-on.
+- We took a lot of inspiration from [@seriousme](https://github.com/seriousme) and his package [openapi-schema-validator](https://github.com/seriousme/openapi-schema-validator) early-on.
 - You could consider this package the modern successor of [@apidevtools/swagger-parser](https://github.com/APIDevTools/swagger-parser), we even test against it to make sure we’re getting the same results (where intended).
 - We stole a lot of example specification from [@mermade](https://github.com/mermade) to test against.
 
