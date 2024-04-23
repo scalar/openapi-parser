@@ -41,8 +41,6 @@ jobs:
         with:
           path: packages/openapi-parser/tests/files
           key: real-world-examples
-      - name: 'Prepare test environment (fetch example files)'
-        run: pnpm test:prepare
       - name: Run tests
         run: pnpm test
       - name: Send bundle stats and build information to RelativeCI
