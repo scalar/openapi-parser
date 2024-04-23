@@ -45,10 +45,9 @@ jobs:
         run: pnpm test:prepare
       - name: Run tests
         run: pnpm test
-      # TODO: Make repository public first
-      # - name: Send bundle stats and build information to RelativeCI
-      #   uses: relative-ci/agent-action@v2
-      #   with:
-      #     key: ${{ secrets.RELATIVE_CI_KEY }}
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     webpackStatsFile: ./packages/api-reference/dist/webpack-stats.json
+      - name: Send bundle stats and build information to RelativeCI
+        uses: relative-ci/agent-action@v2
+        with:
+          key: ${{ secrets.RELATIVE_CI_KEY }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          webpackStatsFile: ./packages/openapi-parser/dist/webpack-stats.json
