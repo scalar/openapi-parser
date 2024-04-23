@@ -16,6 +16,11 @@ export function openapi() {
   }
 }
 
+/**
+ * Load an OpenAPI specification.
+ *
+ * Example: openapi().load({ openapi: '3.0.0' })
+ */
 function loadAction(specification: string | AnyObject) {
   const normalizedSpecification = normalize(specification)
 
@@ -32,6 +37,9 @@ function loadAction(specification: string | AnyObject) {
   }
 }
 
+/**
+ * Upgrade an OpenAPI specification.
+ */
 function upgradeAction(specification: AnyObject) {
   const upgradedSpecification = upgrade(specification)
 
@@ -47,6 +55,9 @@ function upgradeAction(specification: AnyObject) {
   }
 }
 
+/**
+ * Validate an OpenAPI specification.
+ */
 async function validateAction(specification: AnyObject) {
   return {
     ...(await validate(specification)),
@@ -60,6 +71,9 @@ async function validateAction(specification: AnyObject) {
   }
 }
 
+/**
+ * Resolve references in an OpenAPI specification.
+ */
 async function resolveAction(specification: AnyObject) {
   return {
     ...(await resolve(specification)),
@@ -70,6 +84,9 @@ async function resolveAction(specification: AnyObject) {
   }
 }
 
+/**
+ * Remove parts of an OpenAPI specification with the given callback.
+ */
 function filterAction(
   specification: AnyObject,
   callback: (specification: AnyObject) => boolean,

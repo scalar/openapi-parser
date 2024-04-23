@@ -60,7 +60,7 @@ if (!result.valid) {
 ```ts
 import { resolve } from '@scalar/openapi-parser'
 
-const file = `{
+const specification = `{
   "openapi": "3.1.0",
   "info": {
     "title": "Hello World",
@@ -69,7 +69,24 @@ const file = `{
   "paths": {}
 }`
 
-const result = await resolve(file)
+const result = await resolve(specification)
+```
+
+## Modify an OpenAPI specification
+
+```ts
+import { filter } from '@scalar/openapi-parser'
+
+const specification = `{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Hello World",
+    "version": "1.0.0"
+  },
+  "paths": {}
+}`
+
+const result = filter(specification, (schema) => !schema?.['x-internal'])
 ```
 
 ## Upgrade your OpenAPI specification
@@ -79,16 +96,37 @@ There’s an `upgrade` command to upgrade all your OpenAPI specifications to the
 > ⚠️ Currently, only an upgrade from OpenAPI 3.0 to OpenAPI 3.1 is supported. Swagger 2.0 is not supported (yet).
 
 ```ts
-const specification = openapi()
-  .load({
-    openapi: '3.0.0',
-    info: {
-      title: 'Hello World',
-      version: '1.0.0',
-    },
-    paths: {},
-  })
+import { upgrade } from '@scalar/openapi-parser'
+
+const result = upgrade({
+  openapi: '3.0.0',
+  info: {
+    title: 'Hello World',
+    version: '1.0.0',
+  },
+  paths: {},
+})
+
+console.log(result.openapi)
+// Output: 3.1.0
+```
+
+## Pipeline syntax
+
+```ts
+import { openapi } from '@scalar/openapi-parser'
+
+const specification = …
+
+// New pipeline …
+const result = openapi()
+  // loads the specification …
+  .load(specification)
+  // upgrades to OpenAPI 3.1 …
   .upgrade()
+  // removes all internal operations …
+  .filter((schema) => !schema?.['x-internal'])
+  // done!
   .get()
 ```
 
