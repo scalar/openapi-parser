@@ -15,11 +15,11 @@ describe('no reference', () => {
 
   bench('@apidevtools/swagger-parser', async () => {
     // Action!
-    const result = await resolveOld(specification)
+    await resolveOld(specification)
   })
 
   bench('@scalar/openapi-parser', async () => {
     // Action!
-    const { schema } = await resolveNew(specification)
+    await resolveNew(specification)
   })
 })
