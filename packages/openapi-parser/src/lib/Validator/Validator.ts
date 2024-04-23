@@ -1,5 +1,8 @@
 import addFormats from 'ajv-formats'
 
+import Swagger20 from '../../../schemas/v2.0/schema.json'
+import OpenApi30 from '../../../schemas/v3.0/schema.json'
+import OpenApi31 from '../../../schemas/v3.1/schema.json'
 import {
   ERRORS,
   type SupportedVersion,
@@ -12,6 +15,13 @@ import { details as getOpenApiVersion } from '../../utils'
 import { checkReferences } from './checkReferences'
 import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
+
+// All available schemas
+const schemas = {
+  '2.0': Swagger20,
+  '3.0': OpenApi30,
+  '3.1': OpenApi31,
+}
 
 export class Validator {
   public version: string
@@ -133,7 +143,7 @@ export class Validator {
     }
 
     // Load OpenAPI Schema
-    const schema = await import(`../../../schemas/v${version}/schema.json`)
+    const schema = schemas[version]
 
     // Load JSON Schema
     const AjvClass = jsonSchemaVersions[schema.$schema]
