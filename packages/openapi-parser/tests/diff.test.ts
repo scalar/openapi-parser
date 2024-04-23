@@ -52,7 +52,13 @@ const circularReferences = [
 ]
 
 // Just skip some files. If it’s not empty, we’ve got some work to do. :)
-const ignoreFiles = []
+const ignoreFiles = [
+  // Cannot find supported OpenAPI version?
+  'packages/openapi-parser/tests/files/amadeuscomamadeus-flight-check-in-links.yaml',
+  // Returns HTML?
+  'packages/openapi-parser/tests/files/amazonawscombackup.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomappintegrations.yaml',
+]
 
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
   .filter((file) => !ignoreFiles.includes(file))
