@@ -1,5 +1,10 @@
-import { type AnyObject, openapi } from '../../../src'
+import {
+  type AnyObject,
+  normalize,
+  openapi,
+  resolveReferences,
+} from '../../../src'
 
 export async function resolveNew(specification: AnyObject) {
-  return await openapi().load(structuredClone(specification)).resolve()
+  return resolveReferences(normalize(specification))
 }
