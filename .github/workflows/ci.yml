@@ -43,6 +43,8 @@ jobs:
           key: real-world-examples
       - name: Run tests
         run: pnpm test
+      - name: Run benchmark
+        run: pnpm bench
       - name: Send bundle stats and build information to RelativeCI
         uses: relative-ci/agent-action@v2
         with:
