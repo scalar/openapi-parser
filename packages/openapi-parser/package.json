@@ -42,6 +42,7 @@
     "glob": "^10.3.12",
     "just-diff": "^6.0.2",
     "rollup-plugin-webpack-stats": "^0.2.5",
+    "tinybench": "^2.8.0",
     "vite": "^5.2.10",
     "vite-plugin-dts": "^3.9.0"
   },

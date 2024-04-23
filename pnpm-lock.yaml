@@ -93,6 +93,9 @@ importers:
       rollup-plugin-webpack-stats:
         specifier: ^0.2.5
         version: 0.2.5(rollup@4.13.0)
+      tinybench:
+        specifier: ^2.8.0
+        version: 2.8.0
       vite-plugin-dts:
         specifier: ^3.9.0
         version: 3.9.0(@types/node@20.12.7)(rollup@4.13.0)(typescript@5.4.5)(vite@5.2.10)
@@ -3383,6 +3386,10 @@ packages:
 
   /tinybench@2.6.0:
     resolution: {integrity: sha512-N8hW3PG/3aOoZAN5V/NSAEDz0ZixDSSt5b/a05iqtpgfLWMSVuCo7w0k2vVvEjdrIoeGqZzweX2WlyioNIHchA==}
+    dev: true
+
+  /tinybench@2.8.0:
+    resolution: {integrity: sha512-1/eK7zUnIklz4JUUlL+658n58XO2hHLQfSk1Zf2LKieUjxidN16eKFEoDEfjHc3ohofSSqK3X5yO6VGb6iW8Lw==}
     dev: true
 
   /tinypool@0.8.4:
