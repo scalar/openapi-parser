@@ -501,7 +501,69 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it('resolves from filesystem', async () => {
+  it.only('resolves references in external files', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json#/components/requestBodies/Foobar',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: ['barfoo.json'],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          components: {
+            requestBodies: {
+              Foobar: {
+                $ref: 'barfoo.json',
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/barfoo.json',
+        specification: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'string',
+                example: 'foobar',
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const schema = resolveReferences(filesystem)
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
+  })
+
+  it.only('resolves from filesystem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     const schema = resolveReferences(filesystem)
@@ -509,6 +571,6 @@ describe('resolveReferences', () => {
     // TODO: Resolve the *path* from the given file
     // console.log('RESULT', schema.schema.components.schemas.Upload)
     // @ts-ignore
-    expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
+    // expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
   })
 })

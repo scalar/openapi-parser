@@ -1,5 +1,11 @@
 import { ERRORS } from '../../configuration'
-import { AnyObject, Filesystem, ResolvedOpenAPI } from '../../types'
+import { dirname, join } from '../../polyfills/path'
+import {
+  AnyObject,
+  Filesystem,
+  FilesystemEntry,
+  ResolvedOpenAPI,
+} from '../../types'
 import { getEntrypoint } from '../../utils/getEntrypoint'
 import { makeFilesystem } from '../../utils/makeFilesystem'
 import { unescapeJsonPointer } from './unescapeJsonPointer'
@@ -17,7 +23,12 @@ import { unescapeJsonPointer } from './unescapeJsonPointer'
 /**
  * Takes a specification and resolves all references.
  */
-export function resolveReferences(input: AnyObject, specification?: AnyObject) {
+export function resolveReferences(
+  // Just a specification, or a set of files
+  input: AnyObject | Filesystem,
+  // Fallback to the entrypoint
+  file?: FilesystemEntry,
+) {
   // Detach from input
   const clonedInput = structuredClone(input)
 
@@ -28,32 +39,45 @@ export function resolveReferences(input: AnyObject, specification?: AnyObject) {
   const entrypoint = getEntrypoint(filesystem)
 
   // Recursively resolve all references
-  resolve(entrypoint, filesystem)
+  resolve(
+    file?.specification ?? entrypoint.specification,
+    filesystem,
+    file ?? entrypoint,
+  )
 
   // If we replace references with content, that includes a reference, we can’t deal with that right-away.
   // That’s why we need a second run.
-  resolve(entrypoint, filesystem)
+  resolve(
+    file?.specification ?? entrypoint.specification,
+    filesystem,
+    file ?? entrypoint,
+  )
 
   // Return the resolved specification
-  return getEntrypoint(filesystem).specification as ResolvedOpenAPI.Document
+  return (file ?? getEntrypoint(filesystem))
+    .specification as ResolvedOpenAPI.Document
 
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.
    */
-  function resolve(schema: AnyObject, filesystem: Filesystem) {
+  function resolve(
+    schema: AnyObject,
+    filesystem: Filesystem,
+    file: FilesystemEntry,
+  ) {
     // Iterate over the whole objecct
     Object.entries(schema ?? {}).forEach(([key, value]) => {
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
-        const target = resolveUri(
-          filesystem,
-          specification ?? entrypoint.specification,
-          schema.$ref,
-        )
+        const target = resolveUri(filesystem, file, schema, schema.$ref)
+        // [ { filename: './foobar.json '} ]
 
+        // { filename: './foobar.json '}
         // if (target === undefined) {
+        // { content: … }
         //   throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+        // 'foobar.json#/foo/bar'
         // }
 
         // Get rid of the reference
@@ -69,7 +93,7 @@ export function resolveReferences(input: AnyObject, specification?: AnyObject) {
       }
 
       if (typeof value === 'object' && !isCircular(value)) {
-        resolve(value, filesystem)
+        resolve(value, filesystem, file)
       }
     })
   }
@@ -89,8 +113,13 @@ function isCircular(schema: AnyObject) {
  * Resolves a URI to a part of the specification
  */
 function resolveUri(
+  // [ { filename: './foobar.json '} ]
   filesystem: Filesystem,
+  // { filename: './foobar.json '}
+  file: FilesystemEntry,
+  // { content: … }
   specification: AnyObject,
+  // 'foobar.json#/foo/bar'
   uri: string,
 ): AnyObject {
   if (typeof uri !== 'string') return
@@ -99,23 +128,29 @@ function resolveUri(
 
   // External references
   if (prefix) {
-    const externalReference = filesystem.find(
-      (file) => file.filename === prefix,
-    )
+    const targetFilename = join(dirname(file?.filename), prefix)
+    const externalReference = filesystem.find((entry) => {
+      return entry.filename === targetFilename
+    })
 
     if (!externalReference) {
-      console.log('uri', uri)
       throw new Error(ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix))
     }
 
+    const resolvedReferences = resolveReferences(filesystem, externalReference)
+
     // $ref: 'other-file.yaml'
     if (path === undefined) {
-      // TODO: We should resolve references in there first I guess.
-      return externalReference.specification
+      return resolvedReferences
     }
 
     // $ref: 'other-file.yaml#/foo/bar'
-    return resolveUri(filesystem, externalReference.specification, `#${path}`)
+    return resolveUri(
+      filesystem,
+      externalReference,
+      resolvedReferences,
+      `#${path}`,
+    )
   }
 
   // Pointers
