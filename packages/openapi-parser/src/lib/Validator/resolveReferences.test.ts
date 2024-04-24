@@ -5,8 +5,18 @@
 import SwaggerParser from '@apidevtools/swagger-parser'
 import { describe, expect, it } from 'vitest'
 
+import { relativePath } from '../../../tests/utils'
+import { path } from '../../polyfills'
 import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
+import { loadFiles, resolve, validate } from '../../utils'
 import { resolveReferences } from './resolveReferences'
+
+// TODO: Wow, there must be a better way to get a file path that works no matter which process you’re running
+// (vitest in root, or vitest in the package folder).
+// Any ideas?
+const EXAMPLE_FILE = path
+  .join(import.meta.url, '../../../../', './tests/filesystem/api/openapi.yaml')
+  .replace('file:/', '/')
 
 describe('resolveReferences', () => {
   it('resolves references', async () => {
@@ -389,5 +399,22 @@ describe('resolveReferences', () => {
 
     // Circular references can’t be JSON.stringify’d (easily)
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
+  })
+
+  it('resolves from filesytem', async () => {
+    const filesystem = loadFiles(EXAMPLE_FILE)
+
+    const result = await resolve(filesystem)
+
+    expect(result.valid).toBe(true)
+
+    expect(result.errors).toBe(undefined)
+    expect(result.version).toBe('3.0')
+    // TODO: Resolve the *path* from the given file
+    // console.log('RESULT', result.schema.components.schemas.Upload)
+    // @ts-ignore
+    expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(
+      'Coordinates',
+    )
   })
 })
