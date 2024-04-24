@@ -31,14 +31,6 @@ jobs:
         uses: dtinth/setup-github-actions-caching-for-turbo@v1
       - name: Build
         run: pnpm turbo build
-      - name: Cache example files
-        id: cache-real-world-examples
-        uses: actions/cache@v4
-        with:
-          path: packages/openapi-parser/tests/files
-          key: real-world-examples
-      - name: 'Prepare test environment (fetch example files)'
-        run: pnpm test:prepare
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
