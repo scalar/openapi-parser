@@ -23,6 +23,8 @@
     "lint:fix": "pnpm -r lint:fix",
     "test": "vitest",
     "test:prepare": "vite-node scripts/fetch-files.ts",
+    "bench": "vitest bench",
+    "profile": "vite-node packages/openapi-parser/createProfile.ts",
     "types:check": "pnpm -r types:check"
   }
 }
