@@ -439,7 +439,10 @@ describe('resolveReferences', () => {
       },
     ]
 
-    const schema = await resolve(filesystem)
+    const schema = resolveReferences(filesystem)
+
+    console.log('RESULT', JSON.stringify(schema, null, 2))
+
     expect(
       // @ts-ignore
       schema.paths['/foobar'].post.requestBody.content['application/json']
@@ -492,7 +495,7 @@ describe('resolveReferences', () => {
       },
     ]
 
-    const schema = await resolve(filesystem)
+    const schema = resolveReferences(filesystem)
     expect(
       // @ts-ignore
       schema.paths['/foobar'].post.requestBody.content['application/json']
@@ -503,7 +506,7 @@ describe('resolveReferences', () => {
   it('resolves from filesytem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
-    const result = await resolve(filesystem)
+    const result = resolveReferences(filesystem)
 
     expect(result.valid).toBe(true)
 
