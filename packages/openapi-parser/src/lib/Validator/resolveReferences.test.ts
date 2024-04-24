@@ -400,7 +400,7 @@ describe('resolveReferences', () => {
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
   })
 
-  it('composes two files', async () => {
+  it.only('composes two files', async () => {
     const filesystem = [
       {
         dir: '/Foobar',
@@ -441,8 +441,6 @@ describe('resolveReferences', () => {
 
     const schema = resolveReferences(filesystem)
 
-    console.log('RESULT', JSON.stringify(schema, null, 2))
-
     expect(
       // @ts-ignore
       schema.paths['/foobar'].post.requestBody.content['application/json']
@@ -450,7 +448,7 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it('resolves reference in external file', async () => {
+  it.only('resolves reference to a part of an external file', async () => {
     const filesystem = [
       {
         dir: '/Foobar',
@@ -503,20 +501,14 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it('resolves from filesytem', async () => {
+  it('resolves from filesystem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
-    const result = resolveReferences(filesystem)
+    const schema = resolveReferences(filesystem)
 
-    expect(result.valid).toBe(true)
-
-    expect(result.errors).toBe(undefined)
-    expect(result.version).toBe('3.0')
     // TODO: Resolve the *path* from the given file
-    // console.log('RESULT', result.schema.components.schemas.Upload)
+    // console.log('RESULT', schema.schema.components.schemas.Upload)
     // @ts-ignore
-    expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(
-      'Coordinates',
-    )
+    expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
   })
 })

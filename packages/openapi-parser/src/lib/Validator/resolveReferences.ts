@@ -104,11 +104,18 @@ function resolveUri(
     )
 
     if (!externalReference) {
+      console.log('uri', uri)
       throw new Error(ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix))
     }
 
-    // TODO: We should resolve references in there first I guess.
-    return externalReference.specification
+    // $ref: 'other-file.yaml'
+    if (path === undefined) {
+      // TODO: We should resolve references in there first I guess.
+      return externalReference.specification
+    }
+
+    // $ref: 'other-file.yaml#/foo/bar'
+    return resolveUri(filesystem, externalReference.specification, `#${path}`)
   }
 
   // Pointers
