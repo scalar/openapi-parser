@@ -32,7 +32,6 @@ describe('resolveReferences', () => {
           },
         },
       },
-
       components: {
         requestBodies: {
           Foobar: {
@@ -399,6 +398,106 @@ describe('resolveReferences', () => {
 
     // Circular references can’t be JSON.stringify’d (easily)
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
+  })
+
+  it('composes two files', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'string',
+                example: 'foobar',
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const schema = await resolve(filesystem)
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
+  })
+
+  it('resolves reference in external file', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json#/components/requestBodies/Foobar',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          components: {
+            requestBodies: {
+              Foobar: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'string',
+                      example: 'foobar',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const schema = await resolve(filesystem)
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
   })
 
   it('resolves from filesytem', async () => {
