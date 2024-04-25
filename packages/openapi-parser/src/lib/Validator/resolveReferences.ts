@@ -73,7 +73,8 @@ export function resolveReferences(
         const target = resolveUri(schema.$ref, file, filesystem)
 
         if (target === undefined) {
-          throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+          // throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+          return undefined
         }
 
         // Get rid of the reference
