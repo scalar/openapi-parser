@@ -20,9 +20,7 @@ Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAP
 
 References are hard and the following features aren’t implemented yet (but will be in the future):
 
-- references inside inside referenced files (recursion, yay)
-- circular references in referenced files (recursion inside recursion, yay)
-- URLs (low priority though)
+- URLs
 
 ## Installation
 
