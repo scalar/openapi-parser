@@ -14,7 +14,7 @@
   },
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @scalar/openapi-parser dev",
+    "dev": "pnpm --filter demo dev",
     "build": "pnpm -r build",
     "bump": "CI=true pnpm run test && pnpm changeset version",
     "format": "pnpm prettier --write .",
