@@ -5,18 +5,15 @@
 import SwaggerParser from '@apidevtools/swagger-parser'
 import { describe, expect, it } from 'vitest'
 
-import { relativePath } from '../../../tests/utils'
 import { path } from '../../polyfills'
 import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
-import { loadFiles, resolve, validate } from '../../utils'
+import { loadFiles } from '../../utils'
 import { resolveReferences } from './resolveReferences'
 
-// TODO: Wow, there must be a better way to get a file path that works no matter which process you’re running
-// (vitest in root, or vitest in the package folder).
-// Any ideas?
-const EXAMPLE_FILE = path
-  .join(import.meta.url, '../../../../', './tests/filesystem/api/openapi.yaml')
-  .replace('file:/', '/')
+const EXAMPLE_FILE = path.join(
+  new URL(import.meta.url).pathname,
+  '../../../../tests/filesystem/api/openapi.yaml',
+)
 
 describe('resolveReferences', () => {
   it('resolves a single reference', async () => {
