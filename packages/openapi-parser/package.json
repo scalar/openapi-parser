@@ -30,7 +30,6 @@
     "directory": "packages/openapi-parser"
   },
   "scripts": {
-    "dev": "vite dev",
     "types:check": "tsc --noEmit --skipLibCheck",
     "build": "pnpm types:check && vite build",
     "test": "vitest"
