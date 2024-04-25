@@ -150,8 +150,6 @@ function resolveUri(
   // Pointers
   const segments = unescapeJsonPointer(path).split('/').slice(1)
 
-  // TODO: For some reason, we don’t have the correct specification here.
-
   return segments.reduce((acc, key) => {
     return acc[key]
   }, file.specification)
