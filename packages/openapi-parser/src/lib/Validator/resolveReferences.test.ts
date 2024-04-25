@@ -19,7 +19,36 @@ const EXAMPLE_FILE = path
   .replace('file:/', '/')
 
 describe('resolveReferences', () => {
-  it('resolves references', async () => {
+  it('resolves a single reference', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Foobar',
+            },
+          },
+        },
+      },
+      components: {
+        requestBodies: {
+          Foobar: {
+            content: {},
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const schema = resolveReferences(specification)
+
+    // Assertion
+    expect(schema.paths['/foobar'].post.requestBody.content).not.toBe(undefined)
+  })
+
+  it('matches output of @apidevtools/swagger-parser', async () => {
     const specification = {
       openapi: '3.1.0',
       info: {},
@@ -400,7 +429,7 @@ describe('resolveReferences', () => {
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
   })
 
-  it.only('composes two files', async () => {
+  it('composes two files', async () => {
     const filesystem = [
       {
         dir: '/Foobar',
@@ -448,7 +477,7 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it.only('resolves reference to a part of an external file', async () => {
+  it('resolves reference to a part of an external file', async () => {
     const filesystem = [
       {
         dir: '/Foobar',
@@ -501,7 +530,7 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it.only('resolves references in external files', async () => {
+  it('resolves references in external files', async () => {
     const filesystem = [
       {
         dir: '/Foobar',
@@ -563,7 +592,7 @@ describe('resolveReferences', () => {
     ).toBe('foobar')
   })
 
-  it.only('resolves from filesystem', async () => {
+  it('resolves from filesystem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     const schema = resolveReferences(filesystem)

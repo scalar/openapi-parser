@@ -70,15 +70,11 @@ export function resolveReferences(
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
-        const target = resolveUri(filesystem, file, schema, schema.$ref)
-        // [ { filename: './foobar.json '} ]
+        const target = resolveUri(schema.$ref, file, filesystem)
 
-        // { filename: './foobar.json '}
-        // if (target === undefined) {
-        // { content: … }
-        //   throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
-        // 'foobar.json#/foo/bar'
-        // }
+        if (target === undefined) {
+          throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+        }
 
         // Get rid of the reference
         delete schema.$ref
@@ -113,16 +109,18 @@ function isCircular(schema: AnyObject) {
  * Resolves a URI to a part of the specification
  */
 function resolveUri(
-  // [ { filename: './foobar.json '} ]
-  filesystem: Filesystem,
-  // { filename: './foobar.json '}
-  file: FilesystemEntry,
-  // { content: … }
-  specification: AnyObject,
   // 'foobar.json#/foo/bar'
   uri: string,
+  // { filename: './foobar.json '}
+  file: FilesystemEntry,
+  // [ { filename: './foobar.json '} ]
+  filesystem: Filesystem,
 ): AnyObject {
-  if (typeof uri !== 'string') return
+  // Ignore invalid URIs
+  if (typeof uri !== 'string') {
+    return
+  }
+
   // Understand the URI
   const [prefix, path] = uri.split('#', 2)
 
@@ -145,18 +143,15 @@ function resolveUri(
     }
 
     // $ref: 'other-file.yaml#/foo/bar'
-    return resolveUri(
-      filesystem,
-      externalReference,
-      resolvedReferences,
-      `#${path}`,
-    )
+    return resolveUri(`#${path}`, externalReference, filesystem)
   }
 
   // Pointers
   const segments = unescapeJsonPointer(path).split('/').slice(1)
 
+  // TODO: For some reason, we don’t have the correct specification here.
+
   return segments.reduce((acc, key) => {
     return acc[key]
-  }, specification)
+  }, file.specification)
 }
