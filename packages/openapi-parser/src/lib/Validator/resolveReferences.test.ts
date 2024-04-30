@@ -3,9 +3,9 @@
  * Doesn’t cover all edge cases, doesn’t have big files, but if this works you’re almost there.
  */
 import SwaggerParser from '@apidevtools/swagger-parser'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { path } from '../../polyfills'
 import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
 import { loadFiles } from '../../utils'
 import { resolveReferences } from './resolveReferences'
