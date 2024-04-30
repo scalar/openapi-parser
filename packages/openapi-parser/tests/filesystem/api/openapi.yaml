@@ -10,7 +10,7 @@ paths:
         content:
           application/json:
             schema:
-              # $ref: '#/components/schemas/Upload'
+              $ref: '#/components/schemas/Upload'
       responses:
         '201':
           description: Created
@@ -19,7 +19,7 @@ paths:
           content:
             application/problem+json:
               schema:
-                # $ref: '#/components/schemas/Generic_Problem'
+                $ref: '#/components/schemas/Generic_Problem'
 components:
   schemas:
     Generic_Problem:
