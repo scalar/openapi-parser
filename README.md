@@ -128,6 +128,22 @@ const result = openapi()
   .get()
 ```
 
+## Advanced: File references
+
+You can reference other files, too. To do that, the parser needs to know what files are available.
+
+```ts
+import { loadFiles } from '@scalar/openapi-parser'
+
+// load a file and all referenced files
+const filesystem = loadFiles('./openapi.yaml')
+// instead of just passing a single specification, pass the whole “filesystem”
+const result = await resolve(filesystem)
+```
+
+You don’t have to use `loadFiles`, though. You just need to stick to the format. That enables you store the files
+wherever you want (maybe in a database?) or to use the package in a browser environment.
+
 ## Community
 
 We are API nerds. You too? Let’s chat on Discord: <https://discord.gg/scalar>
