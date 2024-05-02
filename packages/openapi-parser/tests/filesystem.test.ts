@@ -14,12 +14,12 @@ describe('filesystem', async () => {
 
     const result = await validate(filesystem)
 
-    // expect(result.errors).toStrictEqual([])
-    // expect(result.valid).toBe(true)
-    // expect(result.version).toBe('3.0')
+    expect(result.errors).toStrictEqual([])
+    expect(result.valid).toBe(true)
+    expect(result.version).toBe('3.0')
   })
 
-  it.todo('resolves filesytem', async () => {
+  it('resolves filesytem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     const result = await resolve(filesystem)

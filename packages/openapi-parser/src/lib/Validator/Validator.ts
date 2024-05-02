@@ -101,7 +101,7 @@ export class Validator {
 
       // Check if the references are valid
       if (schemaResult) {
-        return checkReferences(entrypoint.specification)
+        return checkReferences(filesystem)
       }
 
       // Error handling
