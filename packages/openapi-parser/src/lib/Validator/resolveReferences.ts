@@ -8,7 +8,7 @@ import {
 } from '../../types'
 import { getEntrypoint } from '../../utils/getEntrypoint'
 import { makeFilesystem } from '../../utils/makeFilesystem'
-import { unescapeJsonPointer } from './unescapeJsonPointer'
+import { getSegmentsFromPath } from './getSegmentsFromPath'
 
 // TODO: Add support for all pointer words
 // export const pointerWords = new Set([
@@ -148,7 +148,7 @@ function resolveUri(
   }
 
   // Pointers
-  const segments = unescapeJsonPointer(path).split('/').slice(1)
+  const segments = getSegmentsFromPath(path)
 
   // Try to find the URI
   try {
