@@ -24,9 +24,8 @@ export const ERRORS = {
   // URI_MUST_BE_STRING: 'uri parameter or $id attribute must be a string',
   OPENAPI_VERSION_NOT_SUPPORTED:
     'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
-  INVALID_REFERENCE: 'Can’t resolve URI: %s',
-  EXTERNAL_REFERENCE_NOT_FOUND: 'External reference not found: %s',
-  URI_NOT_FOUND: 'Can’t resolve URI: %s',
+  INVALID_REFERENCE: 'Can’t resolve reference: %s',
+  EXTERNAL_REFERENCE_NOT_FOUND: 'Can’t resolve external reference: %s',
 } as const
 
 export type VALIDATOR_ERROR = keyof typeof ERRORS

@@ -20,6 +20,21 @@ import { getSegmentsFromPath } from './getSegmentsFromPath'
 //   '$schema',
 // ])
 
+export type ErrorObject = {
+  message: string
+  code: keyof typeof ERRORS
+}
+
+export type ResolveReferencesResult = {
+  valid: boolean
+  errors: ErrorObject[]
+  schema: AnyObject | ResolvedOpenAPI.Document
+}
+
+export type ResolveResult = {
+  errors: ErrorObject[]
+}
+
 /**
  * Takes a specification and resolves all references.
  */
@@ -28,14 +43,14 @@ export function resolveReferences(
   input: AnyObject | Filesystem,
   // Fallback to the entrypoint
   file?: FilesystemEntry,
-): {
-  valid: boolean
-  errors: {
-    message: string
-    code: (typeof ERRORS)[keyof typeof ERRORS]
-  }[]
-  schema: AnyObject | ResolvedOpenAPI.Document
-} {
+  // Errors that occurred during the process
+  errors?: ErrorObject[],
+): ResolveReferencesResult {
+  // Initialize errors
+  if (errors === undefined) {
+    errors = []
+  }
+
   // Detach from input
   const clonedInput = structuredClone(input)
 
@@ -60,10 +75,19 @@ export function resolveReferences(
     file ?? entrypoint,
   )
 
+  // Remove duplicats (according to message) from errors
+  errors = errors.filter(
+    (error, index, self) =>
+      index ===
+      self.findIndex(
+        (t) => t.message === error.message && t.code === error.code,
+      ),
+  )
+
   // Return the resolved specification
   return {
-    valid: true,
-    errors: [],
+    valid: errors.length === 0,
+    errors: errors,
     schema: (file ?? getEntrypoint(filesystem))
       .specification as ResolvedOpenAPI.Document,
   }
@@ -75,16 +99,22 @@ export function resolveReferences(
     schema: AnyObject,
     filesystem: Filesystem,
     file: FilesystemEntry,
-  ) {
+  ): ResolveResult {
+    let result: ResolveResult | undefined
+
     // Iterate over the whole objecct
     Object.entries(schema ?? {}).forEach(([key, value]) => {
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
-        const target = resolveUri(schema.$ref, file, filesystem)
+        const target = resolveUri(schema.$ref, file, filesystem, errors)
 
         if (target === undefined) {
-          // throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref))
+          errors.push({
+            code: 'INVALID_REFERENCE',
+            message: ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref),
+          })
+
           return undefined
         }
 
@@ -101,9 +131,13 @@ export function resolveReferences(
       }
 
       if (typeof value === 'object' && !isCircular(value)) {
-        resolve(value, filesystem, file)
+        result = resolve(value, filesystem, file)
       }
     })
+
+    return {
+      errors: result?.errors ?? [],
+    }
   }
 }
 
@@ -127,9 +161,15 @@ function resolveUri(
   file: FilesystemEntry,
   // [ { filename: './foobar.json '} ]
   filesystem: Filesystem,
+  errors?: ErrorObject[],
 ) {
   // Ignore invalid URIs
   if (typeof uri !== 'string') {
+    errors.push({
+      code: 'INVALID_REFERENCE',
+      message: ERRORS.INVALID_REFERENCE.replace('%s', uri),
+    })
+
     return
   }
 
@@ -144,10 +184,15 @@ function resolveUri(
     })
 
     if (!externalReference) {
-      throw new Error(ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix))
+      errors.push({
+        code: 'EXTERNAL_REFERENCE_NOT_FOUND',
+        message: ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix),
+      })
+
+      return
     }
 
-    const result = resolveReferences(filesystem, externalReference)
+    const result = resolveReferences(filesystem, externalReference, errors)
 
     // $ref: 'other-file.yaml'
     if (path === undefined) {
@@ -155,7 +200,7 @@ function resolveUri(
     }
 
     // $ref: 'other-file.yaml#/foo/bar'
-    return resolveUri(`#${path}`, externalReference, filesystem)
+    return resolveUri(`#${path}`, externalReference, filesystem, errors)
   }
 
   // Pointers
@@ -166,7 +211,5 @@ function resolveUri(
     return segments.reduce((acc, key) => {
       return acc[key]
     }, file.specification)
-  } catch (error) {
-    throw new Error(ERRORS.URI_NOT_FOUND.replace('%s', uri))
-  }
+  } catch (error) {}
 }

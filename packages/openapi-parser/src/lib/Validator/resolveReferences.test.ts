@@ -45,6 +45,34 @@ describe('resolveReferences', () => {
     expect(schema.paths['/foobar'].post.requestBody.content).not.toBe(undefined)
   })
 
+  it('returns an error when a reference can’t be found', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/WrongReference',
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const { valid, errors } = resolveReferences(specification)
+
+    // Assertion
+    expect(valid).toBe(false)
+    expect(errors).not.toBe(undefined)
+    expect(errors).not.toBe([])
+    expect(errors.length).toBe(1)
+    expect(errors[0].message).toBe(
+      'Can’t resolve reference: #/components/WrongReference',
+    )
+  })
+
   it('matches output of @apidevtools/swagger-parser', async () => {
     const specification = {
       openapi: '3.1.0',

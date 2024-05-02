@@ -8,10 +8,11 @@ export function checkReferences(specification: AnyObject) {
     // TODO: This actually resolves all references. We could pass an option to make a dry run (tiny performance
     // improvement) or we return the schema, so the user can use it. Not doing anything with it, is a waste of
     // resources, though.
-    resolveReferences(specification)
+    const result = resolveReferences(specification)
 
     return {
-      valid: true,
+      valid: result?.valid ?? false,
+      errors: result?.errors ?? [],
       // schema: schema,
     }
   } catch (error) {
