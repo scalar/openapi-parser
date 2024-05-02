@@ -20,7 +20,8 @@ import { getSegmentsFromPath } from './getSegmentsFromPath'
 //   '$schema',
 // ])
 
-export type ErrorObject = {
+// TODO: Replace existing error object
+type ErrorObject = {
   message: string
   code: keyof typeof ERRORS
 }
@@ -31,7 +32,8 @@ export type ResolveReferencesResult = {
   schema: AnyObject | ResolvedOpenAPI.Document
 }
 
-export type ResolveResult = {
+// TODO: Exists already, clean up
+type ResolveResult = {
   errors: ErrorObject[]
 }
 

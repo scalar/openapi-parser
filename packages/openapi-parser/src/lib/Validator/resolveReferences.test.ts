@@ -347,6 +347,7 @@ describe('resolveReferences', () => {
     const { schema } = resolveReferences(specification)
 
     // Assertion
+    // @ts-ignore
     expect(schema.swagger).toBe('2.0')
     expect(
       schema.paths['/foobar'].post.responses[200].schema.properties.dictionaries
