@@ -3,17 +3,19 @@ import { describe, expect, it } from 'vitest'
 import { resolve } from '../../../../src'
 import schemaProperties from './schemaProperties.yaml'
 
-describe.todo('schemaProperties', () => {
+describe('schemaProperties', () => {
   it('returns an error', async () => {
-    const result = await resolve(schemaProperties)
+    const { valid, errors, schema } = await resolve(schemaProperties)
 
-    // TODO: Swagger Editor
-    //
-    // Resolver error at components.schemas.SomeObject.$ref
-    // Could not resolve reference: undefined undefined
-    expect(result?.schema?.components?.schemas?.SomeObject).not.toBe(undefined)
-    expect(result.errors?.[0]?.error).toBe(`: type must be string`)
-    expect(result.errors?.length).toBe(1)
-    expect(result.valid).toBe(false)
+    expect(schema?.components?.schemas?.SomeObject).not.toBe(undefined)
+
+    expect(errors).not.toBe(undefined)
+    expect(errors).not.toStrictEqual([])
+    // @ts-ignore
+    expect(errors[0]?.message).toBe(
+      'Can’t resolve external reference: ../resources/myobject.yml',
+    )
+    expect(errors.length).toBe(1)
+    expect(valid).toBe(false)
   })
 })
