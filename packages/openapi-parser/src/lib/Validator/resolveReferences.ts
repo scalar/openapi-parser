@@ -150,7 +150,13 @@ function resolveUri(
   // Pointers
   const segments = unescapeJsonPointer(path).split('/').slice(1)
 
-  return segments.reduce((acc, key) => {
-    return acc[key]
-  }, file.specification)
+  try {
+    return segments.reduce((acc, key) => {
+      return acc[key]
+    }, file.specification)
+  } catch (error) {
+    // TODO: Move to error messages
+    const URI_NOT_FOUND = 'Can’t resolve URI: %s'
+    throw new Error(URI_NOT_FOUND.replace('%s', uri))
+  }
 }
