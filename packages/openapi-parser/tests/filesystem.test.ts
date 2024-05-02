@@ -14,7 +14,7 @@ describe('filesystem', async () => {
 
     const result = await validate(filesystem)
 
-    // expect(result.errors).toBe(undefined)
+    // expect(result.errors).toStrictEqual([])
     // expect(result.valid).toBe(true)
     // expect(result.version).toBe('3.0')
   })
@@ -26,7 +26,7 @@ describe('filesystem', async () => {
 
     expect(result.valid).toBe(true)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.0')
     // TODO: Resolve the *path* from the given file
     // console.log('RESULT', result.schema.components.schemas.Upload)

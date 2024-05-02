@@ -13,7 +13,7 @@ describe('resolve', async () => {
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.schema.info.title).toBe('Hello World')
   })
@@ -28,7 +28,7 @@ describe('resolve', async () => {
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.schema.info.title).toBe('Hello World')
   })
@@ -43,7 +43,7 @@ describe('resolve', async () => {
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.schema.info.title).toBe('Hello World')
   })
@@ -96,7 +96,7 @@ paths: {}
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.1')
   })
@@ -111,7 +111,7 @@ paths: {}
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.0')
   })
@@ -126,7 +126,7 @@ paths: {}
       "paths": {}
     }`)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.version).toBe('2.0')
   })
@@ -188,7 +188,7 @@ it('resolves a simple reference', async () => {
 
   const result = await resolve(openapi)
 
-  expect(result.errors).toBe(undefined)
+  expect(result.errors).toStrictEqual([])
   expect(result.valid).toBe(true)
 
   // Original

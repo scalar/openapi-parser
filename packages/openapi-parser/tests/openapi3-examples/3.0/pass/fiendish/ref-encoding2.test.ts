@@ -7,7 +7,7 @@ describe('ref-encoding2', () => {
   it('passes', async () => {
     const result = await resolve(refEncoding2)
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.version).toBe('2.0')
   })

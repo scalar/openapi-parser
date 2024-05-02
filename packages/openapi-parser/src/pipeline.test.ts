@@ -164,7 +164,7 @@ describe('pipeline', () => {
     const validation = await openapi().load(specification).validate()
     const result = await validation.resolve()
 
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
     expect(result.schema.info.title).toBe('Hello World')
   })

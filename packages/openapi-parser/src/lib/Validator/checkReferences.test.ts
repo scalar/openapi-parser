@@ -37,9 +37,8 @@ describe('checkReferences', () => {
     }
 
     const result = checkReferences(specification)
-    expect(result.errors).toBe(undefined)
+    expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)
-    expect(result.errors).toBeUndefined()
   })
 
   it('returns false for a broken internal reference', () => {

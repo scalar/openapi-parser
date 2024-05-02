@@ -66,7 +66,7 @@ describe('resolveReferences', () => {
     // Assertion
     expect(valid).toBe(false)
     expect(errors).not.toBe(undefined)
-    expect(errors).not.toBe([])
+    expect(errors).not.toStrictEqual([])
     expect(errors.length).toBe(1)
     expect(errors[0].message).toBe(
       'Can’t resolve reference: #/components/WrongReference',

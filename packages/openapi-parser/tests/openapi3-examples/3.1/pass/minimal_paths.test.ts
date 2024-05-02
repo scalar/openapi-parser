@@ -7,7 +7,7 @@ describe('minimal_paths', () => {
   it('passes', async () => {
     const result = await resolve(minimal_paths)
     expect(result.valid).toBe(true)
-    expect(result.errors).toBeUndefined()
+    expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.1')
   })
 })
