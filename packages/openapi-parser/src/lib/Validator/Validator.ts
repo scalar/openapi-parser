@@ -13,7 +13,6 @@ import {
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
 import { checkReferences } from './checkReferences'
-import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
 
 // All available schemas
