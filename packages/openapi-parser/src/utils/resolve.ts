@@ -27,7 +27,7 @@ export async function resolve(
   //   }
   // }
 
-  const schema = resolveReferences(filesystem)
+  const { schema } = resolveReferences(filesystem)
 
   return {
     valid: result.valid,

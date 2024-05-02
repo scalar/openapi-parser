@@ -19,7 +19,7 @@ export function makeFilesystem(
     {
       isEntrypoint: true,
       specification,
-      filename: 'openapi.json',
+      filename: null,
       dir: './',
       references: getListOfReferences(specification),
     },

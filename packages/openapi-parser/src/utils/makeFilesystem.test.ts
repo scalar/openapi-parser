@@ -9,9 +9,11 @@ describe('isFilesystem', () => {
     const result = makeFilesystem({
       foo: 'bar',
     })
+
     expect(result).not.toBe({
       foo: 'bar',
     })
+
     expect(isFilesystem(result)).toBe(true)
   })
 })

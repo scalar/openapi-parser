@@ -39,7 +39,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(schema.paths['/foobar'].post.requestBody.content).not.toBe(undefined)
@@ -89,10 +89,10 @@ describe('resolveReferences', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveReferences(specification)
+    const newParser = resolveReferences(specification)
 
     // Assertion
-    expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
+    expect(newParser.schema.paths['/foobar'].post.requestBody).toMatchObject(
       oldSchema.paths['/foobar'].post.requestBody,
     )
   })
@@ -146,10 +146,10 @@ describe('resolveReferences', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveReferences(specification)
+    const newParser = resolveReferences(specification)
 
     // Assertion
-    expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
+    expect(newParser.schema.paths['/foobar'].post.requestBody).toMatchObject(
       oldSchema.paths['/foobar'].post.requestBody,
     )
   })
@@ -194,7 +194,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(
@@ -246,7 +246,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(
@@ -316,9 +316,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(
-      specification,
-    ) as ResolvedOpenAPIV2.Document
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(schema.swagger).toBe('2.0')
@@ -337,7 +335,7 @@ describe('resolveReferences', () => {
   })
 
   it('resolves a simple circular reference', async () => {
-    const schema: AnyObject = {
+    const partialSpecification: AnyObject = {
       foo: {
         bar: {
           $ref: '#/foo',
@@ -345,18 +343,18 @@ describe('resolveReferences', () => {
       },
     }
 
-    const result = resolveReferences(schema)
+    const { schema } = resolveReferences(partialSpecification)
 
     // Circular references can’t be JSON.stringify’d (easily)
-    expect(() => JSON.stringify(result, null, 2)).toThrow()
+    expect(() => JSON.stringify(schema, null, 2)).toThrow()
 
     // Sky is the limit
     // @ts-expect-error We’re misusing the function and pass a partial specification only.
-    expect(result.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
+    expect(schema.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
   })
 
   it('resolves a more advanced circular reference', async () => {
-    const schema: AnyObject = {
+    const partialSpecification: AnyObject = {
       type: 'object',
       properties: {
         element: { $ref: '#/schemas/element' },
@@ -379,14 +377,14 @@ describe('resolveReferences', () => {
     }
 
     // Typecasting: We’re misusing the function and pass a partial specification only.
-    const result = resolveReferences(schema) as any
+    const { schema } = resolveReferences(partialSpecification) as any
 
     // Circular references can’t be JSON.stringify’d (easily)
-    expect(() => JSON.stringify(result, null, 2)).toThrow()
+    expect(() => JSON.stringify(schema, null, 2)).toThrow()
 
     // Sky is the liit
     expect(
-      result.schemas.element.properties.element.properties.element.properties
+      schema.schemas.element.properties.element.properties.element.properties
         .element,
     ).toBeTypeOf('object')
   })
@@ -407,7 +405,7 @@ describe('resolveReferences', () => {
       },
     }
 
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Original specification should not be mutated
     expect(specification.properties.element.$ref).toBeTypeOf('string')
@@ -465,7 +463,7 @@ describe('resolveReferences', () => {
       },
     ]
 
-    const schema = resolveReferences(filesystem)
+    const { schema } = resolveReferences(filesystem)
 
     expect(
       // @ts-ignore
@@ -519,7 +517,7 @@ describe('resolveReferences', () => {
       },
     ]
 
-    const schema = resolveReferences(filesystem)
+    const { schema } = resolveReferences(filesystem)
     expect(
       // @ts-ignore
       schema.paths['/foobar'].post.requestBody.content['application/json']
@@ -581,7 +579,7 @@ describe('resolveReferences', () => {
       },
     ]
 
-    const schema = resolveReferences(filesystem)
+    const { schema } = resolveReferences(filesystem)
     expect(
       // @ts-ignore
       schema.paths['/foobar'].post.requestBody.content['application/json']
@@ -592,7 +590,7 @@ describe('resolveReferences', () => {
   it('resolves from filesystem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
-    const schema = resolveReferences(filesystem)
+    const { schema } = resolveReferences(filesystem)
 
     // TODO: Resolve the *path* from the given file
     // console.log('RESULT', schema.schema.components.schemas.Upload)

@@ -24,11 +24,18 @@ import { getSegmentsFromPath } from './getSegmentsFromPath'
  * Takes a specification and resolves all references.
  */
 export function resolveReferences(
-  // Just a specification, or a set of files
+  // Just a specification, or a set of files.
   input: AnyObject | Filesystem,
   // Fallback to the entrypoint
   file?: FilesystemEntry,
-) {
+): {
+  valid: boolean
+  errors: {
+    message: string
+    code: (typeof ERRORS)[keyof typeof ERRORS]
+  }[]
+  schema: AnyObject | ResolvedOpenAPI.Document
+} {
   // Detach from input
   const clonedInput = structuredClone(input)
 
@@ -54,8 +61,12 @@ export function resolveReferences(
   )
 
   // Return the resolved specification
-  return (file ?? getEntrypoint(filesystem))
-    .specification as ResolvedOpenAPI.Document
+  return {
+    valid: true,
+    errors: [],
+    schema: (file ?? getEntrypoint(filesystem))
+      .specification as ResolvedOpenAPI.Document,
+  }
 
   /**
    * Resolves the circular reference to an object and deletes the $ref properties.
@@ -116,7 +127,7 @@ function resolveUri(
   file: FilesystemEntry,
   // [ { filename: './foobar.json '} ]
   filesystem: Filesystem,
-): AnyObject {
+) {
   // Ignore invalid URIs
   if (typeof uri !== 'string') {
     return
@@ -136,11 +147,11 @@ function resolveUri(
       throw new Error(ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix))
     }
 
-    const resolvedReferences = resolveReferences(filesystem, externalReference)
+    const result = resolveReferences(filesystem, externalReference)
 
     // $ref: 'other-file.yaml'
     if (path === undefined) {
-      return resolvedReferences
+      return result.schema
     }
 
     // $ref: 'other-file.yaml#/foo/bar'

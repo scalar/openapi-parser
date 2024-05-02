@@ -34,7 +34,7 @@ export type ResolveResult = {
   valid: boolean
   version: string | undefined
   specification?: OpenAPI.Document
-  schema?: ResolvedOpenAPI.Document
+  schema?: AnyObject | ResolvedOpenAPI.Document
   errors?: ErrorObject[]
 }
 
