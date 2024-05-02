@@ -16,6 +16,7 @@ import { checkReferences } from './checkReferences'
 import { transformErrors } from './transformErrors'
 
 // All available schemas
+// TODO: Merge with supportedVersions from configuration
 const schemas = {
   '2.0': Swagger20,
   '3.0': OpenApi30,
