@@ -64,13 +64,41 @@ describe('resolveReferences', () => {
     const { valid, errors } = resolveReferences(specification)
 
     // Assertion
-    expect(valid).toBe(false)
     expect(errors).not.toBe(undefined)
     expect(errors).not.toStrictEqual([])
-    expect(errors.length).toBe(1)
     expect(errors[0].message).toBe(
       'Can’t resolve reference: #/components/WrongReference',
     )
+    expect(errors.length).toBe(1)
+    expect(valid).toBe(false)
+  })
+
+  it('returns an error when an external reference can’t be found', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: 'foo/bar/foobar.yaml#/components/WrongReference',
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const { valid, errors } = resolveReferences(specification)
+
+    // Assertion
+    expect(errors).not.toBe(undefined)
+    expect(errors).not.toStrictEqual([])
+    expect(errors[0].message).toBe(
+      'Can’t resolve external reference: foo/bar/foobar.yaml',
+    )
+    expect(errors.length).toBe(1)
+    expect(valid).toBe(false)
   })
 
   it('matches output of @apidevtools/swagger-parser', async () => {

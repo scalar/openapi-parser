@@ -112,11 +112,6 @@ export function resolveReferences(
         const target = resolveUri(schema.$ref, file, filesystem, errors)
 
         if (target === undefined) {
-          errors.push({
-            code: 'INVALID_REFERENCE',
-            message: ERRORS.INVALID_REFERENCE.replace('%s', schema.$ref),
-          })
-
           return undefined
         }
 
@@ -213,5 +208,10 @@ function resolveUri(
     return segments.reduce((acc, key) => {
       return acc[key]
     }, file.specification)
-  } catch (error) {}
+  } catch (error) {
+    errors.push({
+      code: 'INVALID_REFERENCE',
+      message: ERRORS.INVALID_REFERENCE.replace('%s', uri),
+    })
+  }
 }
