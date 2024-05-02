@@ -46,12 +46,6 @@ export class Validator {
 
   public specification: AnyObject
 
-  resolveReferences(filesystem?: Filesystem) {
-    return resolveReferences(
-      filesystem.find((file) => file.isEntrypoint === true).specification,
-    )
-  }
-
   /**
    * Checks whether a specification is valid and all references can be resolved.
    */
