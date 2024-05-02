@@ -26,6 +26,7 @@ export const ERRORS = {
     'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
   INVALID_REFERENCE: 'Can’t resolve URI: %s',
   EXTERNAL_REFERENCE_NOT_FOUND: 'External reference not found: %s',
+  URI_NOT_FOUND: 'Can’t resolve URI: %s',
 } as const
 
 export type VALIDATOR_ERROR = keyof typeof ERRORS
