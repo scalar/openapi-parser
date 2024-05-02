@@ -28,8 +28,7 @@ describe('filesystem', async () => {
 
     expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.0')
-    // TODO: Resolve the *path* from the given file
-    // console.log('RESULT', result.schema.components.schemas.Upload)
+    // Resolve the *path* from the given file
     // @ts-ignore
     expect(result.schema.components.schemas.Upload.allOf[0].title).toBe(
       'Coordinates',
