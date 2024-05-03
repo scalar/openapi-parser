@@ -41,5 +41,3 @@ export const ERRORS = {
 } as const
 
 export type VALIDATOR_ERROR = keyof typeof ERRORS
-
-export const inlinedRefs = 'x-inlined-refs'

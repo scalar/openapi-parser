@@ -5,12 +5,11 @@ import {
   OpenApiSpecifications,
   type OpenApiVersion,
   OpenApiVersions,
-  inlinedRefs,
   jsonSchemaVersions,
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
-import { checkReferences } from './checkReferences'
+import { resolveReferences } from './resolveReferences'
 import { transformErrors } from './transformErrors'
 
 export class Validator {
@@ -25,8 +24,6 @@ export class Validator {
       errors: string
     }
   > = {}
-
-  protected externalRefs: Record<string, AnyObject> = {}
 
   protected errors: string
 
@@ -61,11 +58,6 @@ export class Validator {
         }
       }
 
-      // TODO: Do we want to keep external references in the spec?
-      if (Object.keys(this.externalRefs).length > 0) {
-        specification[inlinedRefs] = this.externalRefs
-      }
-
       // Meta data about the specification
       const { version, specificationType, specificationVersion } =
         getOpenApiVersion(specification)
@@ -89,17 +81,28 @@ export class Validator {
       const validateSchema = await this.getAjvValidator(version)
       const schemaResult = validateSchema(specification)
 
-      // Check if the references are valid
-      if (schemaResult) {
-        return checkReferences(filesystem)
-      }
-
       // Error handling
       if (validateSchema.errors) {
         if (validateSchema.errors.length > 0) {
           return {
             valid: false,
             errors: transformErrors(entrypoint, validateSchema.errors),
+          }
+        }
+      }
+
+      // Check if the references are valid
+      if (schemaResult) {
+        const resolvedReferences = resolveReferences(filesystem)
+
+        if (resolvedReferences.errors.length > 0) {
+          return {
+            valid: false,
+            errors: resolvedReferences.errors,
+          }
+        } else {
+          return {
+            ...resolvedReferences,
           }
         }
       }

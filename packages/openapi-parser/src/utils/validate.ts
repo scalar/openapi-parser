@@ -8,8 +8,9 @@ import { makeFilesystem } from './makeFilesystem'
 export async function validate(
   value: string | AnyObject | Filesystem,
 ): Promise<ValidateResult> {
-  const validator = new Validator()
   const filesystem = makeFilesystem(value)
+
+  const validator = new Validator()
   const result = await validator.validate(filesystem)
 
   return {
