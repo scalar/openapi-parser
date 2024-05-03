@@ -1,12 +1,24 @@
 import Ajv04 from 'ajv-draft-04'
 import Ajv2020 from 'ajv/dist/2020'
 
-/**
- * A list of the supported OpenAPI versions
- */
-export const supportedVersions = ['2.0', '3.0', '3.1'] as const
+import Swagger20 from '../schemas/v2.0/schema.json'
+import OpenApi30 from '../schemas/v3.0/schema.json'
+import OpenApi31 from '../schemas/v3.1/schema.json'
 
-export type SupportedVersion = (typeof supportedVersions)[number]
+/**
+ * A list of the supported OpenAPI specifications
+ */
+export const OpenApiSpecifications = {
+  '2.0': Swagger20,
+  '3.0': OpenApi30,
+  '3.1': OpenApi31,
+}
+
+export type OpenApiVersion = keyof typeof OpenApiSpecifications
+
+export const OpenApiVersions = Object.keys(
+  OpenApiSpecifications,
+) as OpenApiVersion[]
 
 /**
  * Configure available JSON Schema versions

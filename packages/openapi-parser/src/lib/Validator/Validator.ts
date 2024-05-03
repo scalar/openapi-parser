@@ -1,32 +1,22 @@
 import addFormats from 'ajv-formats'
 
-import Swagger20 from '../../../schemas/v2.0/schema.json'
-import OpenApi30 from '../../../schemas/v3.0/schema.json'
-import OpenApi31 from '../../../schemas/v3.1/schema.json'
 import {
   ERRORS,
-  type SupportedVersion,
+  OpenApiSpecifications,
+  type OpenApiVersion,
+  OpenApiVersions,
   inlinedRefs,
   jsonSchemaVersions,
-  supportedVersions,
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
 import { checkReferences } from './checkReferences'
 import { transformErrors } from './transformErrors'
 
-// All available schemas
-// TODO: Merge with supportedVersions from configuration
-const schemas = {
-  '2.0': Swagger20,
-  '3.0': OpenApi30,
-  '3.1': OpenApi31,
-}
-
 export class Validator {
   public version: string
 
-  public static supportedVersions = supportedVersions
+  public static supportedVersions = OpenApiVersions
 
   // Object with function *or* object { errors: string }
   protected ajvValidators: Record<
@@ -130,14 +120,14 @@ export class Validator {
   /**
    * Ajv JSON schema validator
    */
-  async getAjvValidator(version: SupportedVersion) {
+  async getAjvValidator(version: OpenApiVersion) {
     // Schema loaded already
     if (this.ajvValidators[version]) {
       return this.ajvValidators[version]
     }
 
     // Load OpenAPI Schema
-    const schema = schemas[version]
+    const schema = OpenApiSpecifications[version]
 
     // Load JSON Schema
     const AjvClass = jsonSchemaVersions[schema.$schema]
