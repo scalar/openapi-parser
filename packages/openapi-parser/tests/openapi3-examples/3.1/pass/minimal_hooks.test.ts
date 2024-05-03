@@ -7,7 +7,7 @@ describe('minimal_hooks', () => {
   it('passes', async () => {
     const result = await resolve(minimal_hooks)
     expect(result.valid).toBe(true)
-    expect(result.errors).toBeUndefined()
+    expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.1')
   })
 })

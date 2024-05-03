@@ -7,7 +7,7 @@ describe.todo('duplicateOperationId', () => {
   it('returns an error', async () => {
     const result = await resolve(duplicateOperationId)
 
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `something something duplicate operationId`,
     )
     expect(result.errors?.length).toBe(1)

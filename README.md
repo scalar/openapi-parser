@@ -20,9 +20,7 @@ Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAP
 
 References are hard and the following features aren’t implemented yet (but will be in the future):
 
-- references inside inside referenced files (recursion, yay)
-- circular references in referenced files (recursion inside recursion, yay)
-- URLs (low priority though)
+- URLs
 
 ## Installation
 
@@ -129,6 +127,22 @@ const result = openapi()
   // done!
   .get()
 ```
+
+## Advanced: File references
+
+You can reference other files, too. To do that, the parser needs to know what files are available.
+
+```ts
+import { loadFiles } from '@scalar/openapi-parser'
+
+// load a file and all referenced files
+const filesystem = loadFiles('./openapi.yaml')
+// instead of just passing a single specification, pass the whole “filesystem”
+const result = await resolve(filesystem)
+```
+
+You don’t have to use `loadFiles`, though. You just need to stick to the format. That enables you store the files
+wherever you want (maybe in a database?) or to use the package in a browser environment.
 
 ## Community
 

@@ -3,13 +3,20 @@
  * Doesn’t cover all edge cases, doesn’t have big files, but if this works you’re almost there.
  */
 import SwaggerParser from '@apidevtools/swagger-parser'
+import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
+import { loadFiles } from '.'
+import type { AnyObject } from '../types'
 import { resolveReferences } from './resolveReferences'
 
+const EXAMPLE_FILE = path.join(
+  new URL(import.meta.url).pathname,
+  '../../../tests/filesystem/api/openapi.yaml',
+)
+
 describe('resolveReferences', () => {
-  it('resolves references', async () => {
+  it('resolves a single reference', async () => {
     const specification = {
       openapi: '3.1.0',
       info: {},
@@ -22,7 +29,91 @@ describe('resolveReferences', () => {
           },
         },
       },
+      components: {
+        requestBodies: {
+          Foobar: {
+            content: {},
+          },
+        },
+      },
+    }
 
+    // Run the specification through our new parser
+    const { schema } = resolveReferences(specification)
+
+    // Assertion
+    expect(schema.paths['/foobar'].post.requestBody.content).not.toBe(undefined)
+  })
+
+  it('returns an error when a reference can’t be found', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/WrongReference',
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const { valid, errors } = resolveReferences(specification)
+
+    // Assertion
+    expect(errors).not.toBe(undefined)
+    expect(errors).not.toStrictEqual([])
+    expect(errors[0].message).toBe(
+      'Can’t resolve reference: #/components/WrongReference',
+    )
+    expect(errors.length).toBe(1)
+    expect(valid).toBe(false)
+  })
+
+  it('returns an error when an external reference can’t be found', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: 'foo/bar/foobar.yaml#/components/WrongReference',
+            },
+          },
+        },
+      },
+    }
+
+    // Run the specification through our new parser
+    const { valid, errors } = resolveReferences(specification)
+
+    // Assertion
+    expect(errors).not.toBe(undefined)
+    expect(errors).not.toStrictEqual([])
+    expect(errors[0].message).toBe(
+      'Can’t resolve external reference: foo/bar/foobar.yaml',
+    )
+    expect(errors.length).toBe(1)
+    expect(valid).toBe(false)
+  })
+
+  it('matches output of @apidevtools/swagger-parser', async () => {
+    const specification = {
+      openapi: '3.1.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Foobar',
+            },
+          },
+        },
+      },
       components: {
         requestBodies: {
           Foobar: {
@@ -54,10 +145,10 @@ describe('resolveReferences', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveReferences(specification)
+    const newParser = resolveReferences(specification)
 
     // Assertion
-    expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
+    expect(newParser.schema.paths['/foobar'].post.requestBody).toMatchObject(
       oldSchema.paths['/foobar'].post.requestBody,
     )
   })
@@ -111,10 +202,10 @@ describe('resolveReferences', () => {
     })) as any
 
     // Run the specification through our new parser
-    const newSchema = resolveReferences(specification)
+    const newParser = resolveReferences(specification)
 
     // Assertion
-    expect(newSchema.paths['/foobar'].post.requestBody).toMatchObject(
+    expect(newParser.schema.paths['/foobar'].post.requestBody).toMatchObject(
       oldSchema.paths['/foobar'].post.requestBody,
     )
   })
@@ -159,7 +250,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(
@@ -211,7 +302,7 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Assertion
     expect(
@@ -281,11 +372,10 @@ describe('resolveReferences', () => {
     }
 
     // Run the specification through our new parser
-    const schema = resolveReferences(
-      specification,
-    ) as ResolvedOpenAPIV2.Document
+    const { schema } = resolveReferences(specification)
 
     // Assertion
+    // @ts-ignore
     expect(schema.swagger).toBe('2.0')
     expect(
       schema.paths['/foobar'].post.responses[200].schema.properties.dictionaries
@@ -302,7 +392,7 @@ describe('resolveReferences', () => {
   })
 
   it('resolves a simple circular reference', async () => {
-    const schema: AnyObject = {
+    const partialSpecification: AnyObject = {
       foo: {
         bar: {
           $ref: '#/foo',
@@ -310,18 +400,18 @@ describe('resolveReferences', () => {
       },
     }
 
-    const result = resolveReferences(schema)
+    const { schema } = resolveReferences(partialSpecification)
 
     // Circular references can’t be JSON.stringify’d (easily)
-    expect(() => JSON.stringify(result, null, 2)).toThrow()
+    expect(() => JSON.stringify(schema, null, 2)).toThrow()
 
     // Sky is the limit
     // @ts-expect-error We’re misusing the function and pass a partial specification only.
-    expect(result.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
+    expect(schema.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
   })
 
   it('resolves a more advanced circular reference', async () => {
-    const schema: AnyObject = {
+    const partialSpecification: AnyObject = {
       type: 'object',
       properties: {
         element: { $ref: '#/schemas/element' },
@@ -344,14 +434,14 @@ describe('resolveReferences', () => {
     }
 
     // Typecasting: We’re misusing the function and pass a partial specification only.
-    const result = resolveReferences(schema) as any
+    const { schema } = resolveReferences(partialSpecification) as any
 
     // Circular references can’t be JSON.stringify’d (easily)
-    expect(() => JSON.stringify(result, null, 2)).toThrow()
+    expect(() => JSON.stringify(schema, null, 2)).toThrow()
 
     // Sky is the liit
     expect(
-      result.schemas.element.properties.element.properties.element.properties
+      schema.schemas.element.properties.element.properties.element.properties
         .element,
     ).toBeTypeOf('object')
   })
@@ -372,7 +462,7 @@ describe('resolveReferences', () => {
       },
     }
 
-    const schema = resolveReferences(specification)
+    const { schema } = resolveReferences(specification)
 
     // Original specification should not be mutated
     expect(specification.properties.element.$ref).toBeTypeOf('string')
@@ -389,5 +479,179 @@ describe('resolveReferences', () => {
 
     // Circular references can’t be JSON.stringify’d (easily)
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
+  })
+
+  it('composes two files', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'string',
+                example: 'foobar',
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const { schema } = resolveReferences(filesystem)
+
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
+  })
+
+  it('resolves reference to a part of an external file', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json#/components/requestBodies/Foobar',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          components: {
+            requestBodies: {
+              Foobar: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'string',
+                      example: 'foobar',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const { schema } = resolveReferences(filesystem)
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
+  })
+
+  it('resolves references in external files', async () => {
+    const filesystem = [
+      {
+        dir: '/Foobar',
+        isEntrypoint: true,
+        references: ['other/folder/foobar.json'],
+        filename: 'openapi.json',
+        specification: {
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: 'other/folder/foobar.json#/components/requestBodies/Foobar',
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: ['barfoo.json'],
+        filename: 'other/folder/foobar.json',
+        specification: {
+          components: {
+            requestBodies: {
+              Foobar: {
+                $ref: 'barfoo.json',
+              },
+            },
+          },
+        },
+      },
+      {
+        dir: '/Foobar/other/folder',
+        isEntrypoint: false,
+        references: [],
+        filename: 'other/folder/barfoo.json',
+        specification: {
+          content: {
+            'application/json': {
+              schema: {
+                type: 'string',
+                example: 'foobar',
+              },
+            },
+          },
+        },
+      },
+    ]
+
+    const { schema } = resolveReferences(filesystem)
+    expect(
+      // @ts-ignore
+      schema.paths['/foobar'].post.requestBody.content['application/json']
+        .schema.example,
+    ).toBe('foobar')
+  })
+
+  it('resolves from filesystem', async () => {
+    const filesystem = loadFiles(EXAMPLE_FILE)
+
+    const { schema } = resolveReferences(filesystem)
+
+    // TODO: Resolve the *path* from the given file
+    // console.log('RESULT', schema.schema.components.schemas.Upload)
+    // @ts-ignore
+    // expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
   })
 })

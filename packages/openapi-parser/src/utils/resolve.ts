@@ -1,4 +1,4 @@
-import { Validator } from '../lib'
+import { Validator, resolveReferences } from '../lib'
 import type { AnyObject, Filesystem, OpenAPI, ResolveResult } from '../types'
 import { makeFilesystem } from './makeFilesystem'
 
@@ -27,7 +27,7 @@ export async function resolve(
   //   }
   // }
 
-  const schema = validator.resolveReferences(filesystem)
+  const { schema } = resolveReferences(filesystem)
 
   return {
     valid: result.valid,

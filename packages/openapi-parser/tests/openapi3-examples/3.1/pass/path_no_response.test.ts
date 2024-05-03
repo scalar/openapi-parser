@@ -7,7 +7,7 @@ describe('path_no_response', () => {
   it('passes', async () => {
     const result = await resolve(path_no_response)
     expect(result.valid).toBe(true)
-    expect(result.errors).toBeUndefined()
+    expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.1')
   })
 })

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { makeFilesystem } from '../../utils/makeFilesystem'
+import { makeFilesystem } from './makeFilesystem'
 import { transformErrors } from './transformErrors'
 
 describe('transformErrors', () => {
@@ -12,13 +12,7 @@ describe('transformErrors', () => {
 
     expect(result).toEqual([
       {
-        error: 'example error message',
-        path: '',
-        start: {
-          column: 1,
-          line: 1,
-          offset: 0,
-        },
+        message: 'example error message',
       },
     ])
   })

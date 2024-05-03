@@ -24,6 +24,6 @@ paths:
 components:
   schemas:
     Generic_Problem:
-      $ref: schemas/does-not-exist.yaml
+      $ref: schemas/does-not-exist.yaml#/components/schema/requestBody
     Upload:
       $ref: schemas/upload.yaml

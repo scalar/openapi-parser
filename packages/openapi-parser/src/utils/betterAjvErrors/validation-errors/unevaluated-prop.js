@@ -25,7 +25,7 @@ export default class UnevaluatedPropValidationError extends BaseValidationError 
 
     return {
       ...this.getLocation(`${this.instancePath}/${params.unevaluatedProperty}`),
-      error: `${this.getDecoratedPath()} Property ${params.unevaluatedProperty} is not expected to be here`,
+      message: `${this.getDecoratedPath()} Property ${params.unevaluatedProperty} is not expected to be here`,
       path: this.instancePath,
     }
   }

@@ -1,5 +1,6 @@
 import type { OpenAPI } from 'openapi-types'
 
+import { ERRORS } from '../configuration'
 import type { ResolvedOpenAPI } from './openapi'
 
 export type {
@@ -21,20 +22,15 @@ export type ValidateResult = {
 }
 
 export type ErrorObject = {
-  start: {
-    line: number
-    column: number
-    offset: number
-  }
-  error: string
-  path: string
+  message: string
+  code?: keyof typeof ERRORS | string
 }
 
 export type ResolveResult = {
   valid: boolean
   version: string | undefined
   specification?: OpenAPI.Document
-  schema?: ResolvedOpenAPI.Document
+  schema?: AnyObject | ResolvedOpenAPI.Document
   errors?: ErrorObject[]
 }
 

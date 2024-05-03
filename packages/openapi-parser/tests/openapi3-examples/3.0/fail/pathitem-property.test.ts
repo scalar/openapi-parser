@@ -7,7 +7,7 @@ describe('pathitem-property', () => {
   it('returns an error', async () => {
     const result = await resolve(pathitemProperty)
 
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `Property GET is not expected to be here`,
     )
     expect(result.errors?.length).toBe(1)

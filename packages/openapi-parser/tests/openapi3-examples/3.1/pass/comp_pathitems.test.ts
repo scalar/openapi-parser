@@ -7,7 +7,7 @@ describe('comp_pathitems', () => {
   it('passes', async () => {
     const result = await resolve(comp_pathitems)
     expect(result.valid).toBe(true)
-    expect(result.errors).toBeUndefined()
+    expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.1')
   })
 })

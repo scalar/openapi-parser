@@ -8,7 +8,7 @@ describe('server_enum_unknown', () => {
     const result = await resolve(server_enum_unknown)
 
     // TODO: The message should return something related to the unknown enum value
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `: format must match format "uri-reference"`,
     )
     expect(result.valid).toBe(false)

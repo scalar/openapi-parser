@@ -9,30 +9,22 @@ import { AnyObject, normalize, openapi } from '../src'
 const expectedErrors = {
   'packages/openapi-parser/tests/files/airport-webappspotcom.yaml': [
     {
-      start: { line: 1, column: 1, offset: 0 },
-      error: "must have required property 'tokenUrl'",
-      path: '/securityDefinitions/google_id_token',
+      message: "must have required property 'tokenUrl'",
     },
   ],
   'packages/openapi-parser/tests/files/opensuseorgobs.yaml': [
     {
-      start: { line: 1, column: 1, offset: 0 },
-      error: "must have required property '$ref'",
-      path: '/paths/~1published~1{project_name}~1{repository_name}~1{architecture_name}~1{binary_filename}?view=ymp/get/responses/200',
+      message: "must have required property '$ref'",
     },
   ],
   'packages/openapi-parser/tests/files/royalmailcomclick-and-drop.yaml': [
     {
-      start: { line: 1, column: 1, offset: 0 },
-      error: "must have required property 'schema'",
-      path: '/parameters/orderIdentifiers',
+      message: "must have required property 'schema'",
     },
   ],
   'packages/openapi-parser/tests/files/spotifycom.yaml': [
     {
-      start: { line: 1, column: 1, offset: 0 },
-      error: 'Can’t resolve URI: ../policies.yaml',
-      path: '',
+      message: 'Can’t resolve URI: ../policies.yaml',
     },
   ],
 }

@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest'
 import { normalize, resolveReferences } from '../../../src'
 import specification from './specification.json'
 
-describe.todo('Circular $refs to ancestor', () => {
+// Circular $refs to ancestor
+describe.todo('ancestor', () => {
   it('relative path', async () => {
     const schema = resolveReferences(normalize(specification))
 

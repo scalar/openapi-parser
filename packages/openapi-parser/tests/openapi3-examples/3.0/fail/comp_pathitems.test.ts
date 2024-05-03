@@ -8,7 +8,7 @@ describe('comp_pathitems', () => {
     const result = await resolve(comp_pathitems)
 
     // TODO: Should probably complain about the pathItems?
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `must have required property 'paths'`,
     )
     expect(result.errors?.length).toBe(1)

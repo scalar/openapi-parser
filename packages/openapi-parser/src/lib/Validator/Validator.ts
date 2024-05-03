@@ -1,32 +1,21 @@
 import addFormats from 'ajv-formats'
 
-import Swagger20 from '../../../schemas/v2.0/schema.json'
-import OpenApi30 from '../../../schemas/v3.0/schema.json'
-import OpenApi31 from '../../../schemas/v3.1/schema.json'
 import {
   ERRORS,
-  type SupportedVersion,
-  inlinedRefs,
+  OpenApiSpecifications,
+  type OpenApiVersion,
+  OpenApiVersions,
   jsonSchemaVersions,
-  supportedVersions,
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
-import { checkReferences } from './checkReferences'
-import { resolveReferences } from './resolveReferences'
-import { transformErrors } from './transformErrors'
-
-// All available schemas
-const schemas = {
-  '2.0': Swagger20,
-  '3.0': OpenApi30,
-  '3.1': OpenApi31,
-}
+import { resolveReferences } from '../../utils/resolveReferences'
+import { transformErrors } from '../../utils/transformErrors'
 
 export class Validator {
   public version: string
 
-  public static supportedVersions = supportedVersions
+  public static supportedVersions = OpenApiVersions
 
   // Object with function *or* object { errors: string }
   protected ajvValidators: Record<
@@ -36,8 +25,6 @@ export class Validator {
     }
   > = {}
 
-  protected externalRefs: Record<string, AnyObject> = {}
-
   protected errors: string
 
   protected specificationVersion: string
@@ -45,12 +32,6 @@ export class Validator {
   protected specificationType: string
 
   public specification: AnyObject
-
-  resolveReferences(filesystem?: Filesystem) {
-    return resolveReferences(
-      filesystem.find((file) => file.isEntrypoint === true).specification,
-    )
-  }
 
   /**
    * Checks whether a specification is valid and all references can be resolved.
@@ -77,11 +58,6 @@ export class Validator {
         }
       }
 
-      // TODO: Do we want to keep external references in the spec?
-      if (Object.keys(this.externalRefs).length > 0) {
-        specification[inlinedRefs] = this.externalRefs
-      }
-
       // Meta data about the specification
       const { version, specificationType, specificationVersion } =
         getOpenApiVersion(specification)
@@ -105,17 +81,28 @@ export class Validator {
       const validateSchema = await this.getAjvValidator(version)
       const schemaResult = validateSchema(specification)
 
-      // Check if the references are valid
-      if (schemaResult) {
-        return checkReferences(entrypoint.specification)
-      }
-
       // Error handling
       if (validateSchema.errors) {
         if (validateSchema.errors.length > 0) {
           return {
             valid: false,
             errors: transformErrors(entrypoint, validateSchema.errors),
+          }
+        }
+      }
+
+      // Check if the references are valid
+      if (schemaResult) {
+        const resolvedReferences = resolveReferences(filesystem)
+
+        if (resolvedReferences.errors.length > 0) {
+          return {
+            valid: false,
+            errors: resolvedReferences.errors,
+          }
+        } else {
+          return {
+            ...resolvedReferences,
           }
         }
       }
@@ -136,14 +123,14 @@ export class Validator {
   /**
    * Ajv JSON schema validator
    */
-  async getAjvValidator(version: SupportedVersion) {
+  async getAjvValidator(version: OpenApiVersion) {
     // Schema loaded already
     if (this.ajvValidators[version]) {
       return this.ajvValidators[version]
     }
 
     // Load OpenAPI Schema
-    const schema = schemas[version]
+    const schema = OpenApiSpecifications[version]
 
     // Load JSON Schema
     const AjvClass = jsonSchemaVersions[schema.$schema]
