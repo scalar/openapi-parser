@@ -1,15 +1,15 @@
-import { ERRORS } from '../../configuration'
-import { dirname, join } from '../../polyfills/path'
+import { ERRORS } from '../configuration'
+import { dirname, join } from '../polyfills/path'
 import type {
   AnyObject,
   ErrorObject,
   Filesystem,
   FilesystemEntry,
   ResolvedOpenAPI,
-} from '../../types'
-import { getEntrypoint } from '../../utils/getEntrypoint'
-import { makeFilesystem } from '../../utils/makeFilesystem'
+} from '../types'
+import { getEntrypoint } from './getEntrypoint'
 import { getSegmentsFromPath } from './getSegmentsFromPath'
+import { makeFilesystem } from './makeFilesystem'
 
 // TODO: Add support for all pointer words
 // export const pointerWords = new Set([

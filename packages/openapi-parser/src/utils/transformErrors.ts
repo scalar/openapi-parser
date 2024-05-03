@@ -1,5 +1,5 @@
-import type { AnyObject } from '../../types'
-import { betterAjvErrors } from '../../utils/betterAjvErrors'
+import type { AnyObject } from '../types'
+import { betterAjvErrors } from './betterAjvErrors'
 
 /**
  * Transforms ajv errors, finds the positions in the schema and returns an enriched format.

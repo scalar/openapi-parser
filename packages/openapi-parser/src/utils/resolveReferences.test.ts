@@ -6,13 +6,13 @@ import SwaggerParser from '@apidevtools/swagger-parser'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import type { AnyObject, ResolvedOpenAPIV2 } from '../../types'
-import { loadFiles } from '../../utils'
+import { loadFiles } from '.'
+import type { AnyObject } from '../types'
 import { resolveReferences } from './resolveReferences'
 
 const EXAMPLE_FILE = path.join(
   new URL(import.meta.url).pathname,
-  '../../../../tests/filesystem/api/openapi.yaml',
+  '../../../tests/filesystem/api/openapi.yaml',
 )
 
 describe('resolveReferences', () => {

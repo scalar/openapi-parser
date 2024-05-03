@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { makeFilesystem } from '../../utils/makeFilesystem'
+import { makeFilesystem } from './makeFilesystem'
 import { transformErrors } from './transformErrors'
 
 describe('transformErrors', () => {

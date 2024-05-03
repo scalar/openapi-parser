@@ -9,8 +9,8 @@ import {
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
-import { resolveReferences } from './resolveReferences'
-import { transformErrors } from './transformErrors'
+import { resolveReferences } from '../../utils/resolveReferences'
+import { transformErrors } from '../../utils/transformErrors'
 
 export class Validator {
   public version: string
