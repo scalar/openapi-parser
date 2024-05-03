@@ -34,7 +34,7 @@ watch(value, async (newValue) => {
 watch(
   value,
   async (newValue) => {
-    result.value = toJson(resolveReferences(normalize(newValue)).schema)
+    result.value = toJson(resolveReferences(normalize(newValue)))
   },
   {
     immediate: true,
