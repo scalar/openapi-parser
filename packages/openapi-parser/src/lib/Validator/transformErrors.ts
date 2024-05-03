@@ -10,13 +10,7 @@ export function transformErrors(specification: AnyObject, errors: any) {
   if (typeof errors === 'string') {
     return [
       {
-        start: {
-          line: 1,
-          column: 1,
-          offset: 0,
-        },
-        error: errors,
-        path: '',
+        message: errors,
       },
     ]
   }
@@ -26,7 +20,7 @@ export function transformErrors(specification: AnyObject, errors: any) {
     indent: 2,
     colorize: false,
   }).map((error) => {
-    error.error = error.error.trim()
+    error.message = error.message.trim()
 
     return error
   })

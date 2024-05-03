@@ -8,7 +8,7 @@ describe('no_containers', () => {
     const result = await resolve(no_containers)
 
     // TODO: Fix the expected error message should mention 'paths'
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `must have required property 'webhooks'`,
     )
     expect(result.valid).toBe(false)

@@ -9,13 +9,7 @@ describe('validate', async () => {
     expect(result.valid).toBe(false)
     expect(result.errors).toMatchObject([
       {
-        error: 'Cannot find JSON, YAML or filename in data',
-        path: '',
-        start: {
-          column: 1,
-          line: 1,
-          offset: 0,
-        },
+        message: 'Cannot find JSON, YAML or filename in data',
       },
     ])
   })
@@ -34,13 +28,7 @@ describe('validate', async () => {
     expect(Array.isArray(result.errors)).toBe(true)
     expect(result.errors.length).toBe(1)
     expect(result.errors[0]).toMatchObject({
-      error: "must have required property 'info'",
-      path: '',
-      start: {
-        column: 1,
-        line: 1,
-        offset: 0,
-      },
+      message: "must have required property 'info'",
     })
   })
 })

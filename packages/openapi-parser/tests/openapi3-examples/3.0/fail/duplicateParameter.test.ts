@@ -7,7 +7,7 @@ describe.todo('duplicateParameter', () => {
   it('returns an error', async () => {
     const result = await resolve(duplicateParameter)
 
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `something something duplicate parameter`,
     )
     expect(result.errors?.length).toBe(1)

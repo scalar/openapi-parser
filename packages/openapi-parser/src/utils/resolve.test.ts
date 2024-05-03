@@ -60,7 +60,7 @@ describe('resolve', async () => {
 
     expect(result.valid).toBe(false)
     expect(result.errors).toHaveLength(1)
-    expect(result.errors[0].error).toContain(
+    expect(result.errors[0].message).toContain(
       'Cannot find supported Swagger/OpenAPI version in specification',
     )
   })
@@ -70,7 +70,7 @@ describe('resolve', async () => {
 
     expect(result.valid).toBe(false)
     expect(result.errors).toHaveLength(1)
-    expect(result.errors[0].error).toBe(
+    expect(result.errors[0].message).toBe(
       'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
     )
   })

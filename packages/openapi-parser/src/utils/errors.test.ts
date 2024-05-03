@@ -12,13 +12,7 @@ describe('errors', () => {
     expect(result).toMatchObject({
       errors: [
         {
-          error: `must have required property 'info'`,
-          path: '',
-          start: {
-            column: 1,
-            line: 1,
-            offset: 0,
-          },
+          message: `must have required property 'info'`,
         },
       ],
       valid: false,
@@ -52,18 +46,7 @@ describe('errors', () => {
       },
       errors: [
         {
-          error: `Property foobar is not expected to be here`,
-          path: '/paths/~1test',
-          start: {
-            column: 1,
-            line: 1,
-            offset: 0,
-          },
-          end: {
-            column: 5,
-            line: 1,
-            offset: 4,
-          },
+          message: `Property foobar is not expected to be here`,
         },
       ],
       valid: false,

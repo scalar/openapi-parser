@@ -12,13 +12,7 @@ describe('transformErrors', () => {
 
     expect(result).toEqual([
       {
-        error: 'example error message',
-        path: '',
-        start: {
-          column: 1,
-          line: 1,
-          offset: 0,
-        },
+        message: 'example error message',
       },
     ])
   })

@@ -7,7 +7,7 @@ describe.todo('duplicateRequired', () => {
   it('returns an error', async () => {
     const result = await resolve(duplicateRequired)
 
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       `something something duplicate required properties`,
     )
     expect(result.errors?.length).toBe(1)

@@ -7,7 +7,7 @@ describe('info_summary', () => {
   it('returns an error', async () => {
     const result = await resolve(info_summary)
 
-    expect(result.errors?.[0]?.error).toBe(
+    expect(result.errors?.[0]?.message).toBe(
       'Property summary is not expected to be here',
     )
     expect(result.errors?.length).toBe(1)

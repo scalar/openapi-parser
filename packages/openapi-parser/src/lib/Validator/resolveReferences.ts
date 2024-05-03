@@ -1,7 +1,8 @@
 import { ERRORS } from '../../configuration'
 import { dirname, join } from '../../polyfills/path'
-import {
+import type {
   AnyObject,
+  ErrorObject,
   Filesystem,
   FilesystemEntry,
   ResolvedOpenAPI,
@@ -19,12 +20,6 @@ import { getSegmentsFromPath } from './getSegmentsFromPath'
 //   '$dynamicAnchor',
 //   '$schema',
 // ])
-
-// TODO: Replace existing error object
-type ErrorObject = {
-  message: string
-  code: keyof typeof ERRORS
-}
 
 export type ResolveReferencesResult = {
   valid: boolean
