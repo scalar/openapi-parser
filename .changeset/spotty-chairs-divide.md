@@ -1,5 +1,5 @@
 ---
-"@scalar/openapi-parser": patch
+"@scalar/openapi-parser": minor
 ---
 
 feat: file references
