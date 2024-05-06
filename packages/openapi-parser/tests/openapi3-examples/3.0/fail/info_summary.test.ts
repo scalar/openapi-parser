@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import info_summary from './info_summary.yaml'
 
 describe('info_summary', () => {
   it('returns an error', async () => {
-    const result = await resolve(info_summary)
+    const result = await validate(info_summary)
 
     expect(result.errors?.[0]?.message).toBe(
       'Property summary is not expected to be here',

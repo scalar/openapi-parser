@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../../src'
+import { validate } from '../../../../../src'
 import refEncoding2 from './ref-encoding2.yaml'
 
 describe('ref-encoding2', () => {
   it('passes', async () => {
-    const result = await resolve(refEncoding2)
+    const result = await validate(refEncoding2)
 
     expect(result.errors).toStrictEqual([])
     expect(result.valid).toBe(true)

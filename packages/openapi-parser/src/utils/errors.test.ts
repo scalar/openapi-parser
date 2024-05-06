@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from './resolve'
+import { validate } from './validate'
 
 describe('errors', () => {
   it('info required', async () => {
-    const result = await resolve({
+    const result = await validate({
       openapi: '3.1.0',
       paths: {},
     })
@@ -38,12 +38,9 @@ describe('errors', () => {
         },
       },
     }
-    const result = await resolve(spec)
+    const result = await validate(spec)
 
     expect(result).toMatchObject({
-      schema: {
-        ...spec,
-      },
       errors: [
         {
           message: `Property foobar is not expected to be here`,

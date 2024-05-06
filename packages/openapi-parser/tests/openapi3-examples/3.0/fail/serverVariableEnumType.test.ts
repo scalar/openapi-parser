@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import serverVariableEnumType from './serverVariableEnumType.yaml'
 
 describe('serverVariableEnumType', () => {
   it('returns an error', async () => {
-    const result = await resolve(serverVariableEnumType)
+    const result = await validate(serverVariableEnumType)
 
     // TODO: Swagger Editor has a better error message
     //

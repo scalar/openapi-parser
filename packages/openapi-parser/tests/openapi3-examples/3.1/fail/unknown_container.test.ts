@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import unknown_container from './unknown_container.yaml'
 
 describe('unknown_container', () => {
   it('returns an error', async () => {
-    const result = await resolve(unknown_container)
+    const result = await validate(unknown_container)
 
     // TODO: The message should complain about the unknown container
     expect(result.errors?.[0]?.message).toBe(

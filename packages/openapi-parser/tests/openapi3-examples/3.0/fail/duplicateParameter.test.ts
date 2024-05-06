@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import duplicateParameter from './duplicateParameter.yaml'
 
 describe.todo('duplicateParameter', () => {
   it('returns an error', async () => {
-    const result = await resolve(duplicateParameter)
+    const result = await validate(duplicateParameter)
 
     expect(result.errors?.[0]?.message).toBe(
       `something something duplicate parameter`,

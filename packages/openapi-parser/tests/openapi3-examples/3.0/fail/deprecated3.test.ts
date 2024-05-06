@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import deprecated3 from './deprecated3.yaml'
 
 describe.todo('deprecated3', () => {
   it('returns an error', async () => {
-    const result = await resolve(deprecated3)
+    const result = await validate(deprecated3)
 
     expect(result.errors?.[0]?.message).toBe(`something something deprecated`)
     expect(result.errors?.length).toBe(1)

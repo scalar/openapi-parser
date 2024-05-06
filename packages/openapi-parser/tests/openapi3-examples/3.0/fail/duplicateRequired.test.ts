@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import duplicateRequired from './duplicateRequired.yaml'
 
 describe.todo('duplicateRequired', () => {
   it('returns an error', async () => {
-    const result = await resolve(duplicateRequired)
+    const result = await validate(duplicateRequired)
 
     expect(result.errors?.[0]?.message).toBe(
       `something something duplicate required properties`,

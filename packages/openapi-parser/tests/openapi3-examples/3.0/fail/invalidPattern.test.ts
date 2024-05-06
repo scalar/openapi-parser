@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import invalidPattern from './invalidPattern.yaml'
 
 describe('invalidPattern', () => {
   it('returns an error', async () => {
-    const result = await resolve(invalidPattern)
+    const result = await validate(invalidPattern)
 
     // TODO: Swagger Editor
     //

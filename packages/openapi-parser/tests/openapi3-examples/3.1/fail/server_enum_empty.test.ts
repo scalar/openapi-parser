@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import server_enum_empty from './server_enum_empty.yaml'
 
 describe('server_enum_empty', () => {
   it('returns an error', async () => {
-    const result = await resolve(server_enum_empty)
+    const result = await validate(server_enum_empty)
 
     // TODO: The error should return something related to the empty enum
     expect(result.errors?.[0]?.message).toBe(

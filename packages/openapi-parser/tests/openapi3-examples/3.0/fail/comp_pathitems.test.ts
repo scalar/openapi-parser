@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import comp_pathitems from './comp_pathitems.yaml'
 
 describe('comp_pathitems', () => {
   it('returns an error', async () => {
-    const result = await resolve(comp_pathitems)
+    const result = await validate(comp_pathitems)
 
     // TODO: Should probably complain about the pathItems?
     expect(result.errors?.[0]?.message).toBe(

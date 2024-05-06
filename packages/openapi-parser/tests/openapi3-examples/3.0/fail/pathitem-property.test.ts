@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import pathitemProperty from './pathitem-property.yaml'
 
 describe('pathitem-property', () => {
   it('returns an error', async () => {
-    const result = await resolve(pathitemProperty)
+    const result = await validate(pathitemProperty)
 
     expect(result.errors?.[0]?.message).toBe(
       `Property GET is not expected to be here`,

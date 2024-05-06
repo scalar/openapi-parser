@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../../src'
+import { validate } from '../../../../../src'
 import openApiUi from './openapi-ui.yaml'
 
 describe('openapi-ui', () => {
   it('apiWithExamples', async () => {
-    const result = await resolve(openApiUi)
+    const result = await validate(openApiUi)
 
     // TODO: SwaggerUI has a more helpful error message:
     //

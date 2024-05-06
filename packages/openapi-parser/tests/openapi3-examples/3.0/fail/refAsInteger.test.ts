@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import refAsInteger from './refAsInteger.yaml'
 
 describe('refAsInteger', () => {
   it('returns an error', async () => {
-    const result = await resolve(refAsInteger)
+    const result = await validate(refAsInteger)
 
     // TODO: Swagger Editor
     //

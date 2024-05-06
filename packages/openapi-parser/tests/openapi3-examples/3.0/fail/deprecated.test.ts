@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import deprecated from './deprecated.yaml'
 
 describe('deprecated', () => {
   it('returns an error', async () => {
-    const result = await resolve(deprecated)
+    const result = await validate(deprecated)
 
     expect(result.errors?.[0]?.message).toBe(`: type must be boolean`)
     expect(result.errors?.length).toBe(1)
