@@ -1,6 +1,8 @@
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { openapi } from '.'
+import { readFilesPlugin } from './utils/load'
 
 const specification = {
   openapi: '3.1.0',
@@ -11,9 +13,39 @@ const specification = {
   paths: {},
 }
 
+const EXAMPLE_FILE = join(
+  new URL(import.meta.url).pathname,
+  '../utils/examples/openapi.yaml',
+)
+
 describe('pipeline', () => {
-  it('upgrade', async () => {
-    const result = openapi()
+  it.only('load', async () => {
+    const result = await openapi()
+      .load({
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      })
+      .get()
+
+    expect(result.openapi).toBe('3.1.0')
+  })
+
+  it.only('load file', async () => {
+    const result = await openapi()
+      .load(EXAMPLE_FILE, {
+        plugins: [readFilesPlugin],
+      })
+      .get()
+
+    expect(result.openapi).toBe('3.1.0')
+  })
+
+  it.only('upgrade', async () => {
+    const result = await openapi()
       .load({
         openapi: '3.0.0',
         info: {
@@ -29,7 +61,7 @@ describe('pipeline', () => {
   })
 
   it('details', async () => {
-    const result = openapi()
+    const result = await openapi()
       .load({
         openapi: '3.0.0',
         info: {
@@ -44,7 +76,7 @@ describe('pipeline', () => {
   })
 
   it('upgrade + details', async () => {
-    const result = openapi()
+    const result = await openapi()
       .load({
         openapi: '3.0.0',
         info: {
@@ -89,7 +121,7 @@ describe('pipeline', () => {
       },
     }
 
-    const result = openapi()
+    const result = await openapi()
       .load(specification)
       .filter((schema) => !schema?.['x-internal'])
       .get()
@@ -129,7 +161,7 @@ describe('pipeline', () => {
       },
     }
 
-    const result = openapi()
+    const result = await openapi()
       .load(specification)
       .filter((schema) => !schema?.tags?.includes('Beta'))
       .get()
@@ -139,7 +171,7 @@ describe('pipeline', () => {
     expect(result.paths['/foobar'].get).not.toBeUndefined()
   })
 
-  it('validate', async () => {
+  it.only('validate', async () => {
     const result = await openapi().load(specification).validate()
 
     expect(result).toMatchObject({
@@ -149,18 +181,18 @@ describe('pipeline', () => {
   })
 
   it('toJson', async () => {
-    const result = openapi().load(specification).toJson()
+    const result = await openapi().load(specification).toJson()
 
     expect(result).toBe(JSON.stringify(specification, null, 2))
   })
 
-  it('resolve', async () => {
+  it.only('resolve', async () => {
     const result = await openapi().load(specification).resolve()
 
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('validate + resolve', async () => {
+  it.only('validate + resolve', async () => {
     const validation = await openapi().load(specification).validate()
     expect(validation.valid).toBe(true)
 

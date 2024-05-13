@@ -1,14 +1,16 @@
-import type { AnyObject } from './types'
+import type { AnyObject, Filesystem } from './types'
 import {
   details,
   filter,
-  normalize,
+  getEntrypoint,
+  load,
   resolve,
   toJson,
   toYaml,
   upgrade,
   validate,
 } from './utils'
+import { type LoadPlugin } from './utils/load'
 
 export function openapi() {
   return {
@@ -16,39 +18,62 @@ export function openapi() {
   }
 }
 
+export type ActionQueue = {
+  action: typeof load | typeof upgrade
+  async: boolean
+  options?: AnyObject
+}[]
+
 /**
  * Load an OpenAPI specification.
  *
- * Example: openapi().load({ openapi: '3.0.0' })
+ * Example: await openapi().load({ openapi: '3.0.0' })
  */
-function loadAction(specification: string | AnyObject) {
-  const normalizedSpecification = normalize(specification)
+function loadAction(
+  specification: string | AnyObject,
+  options?: {
+    plugins: LoadPlugin[]
+  },
+) {
+  const queue: ActionQueue = [
+    {
+      action: load,
+      async: true,
+      options: options,
+    },
+  ]
 
   return {
-    get: () => getAction(normalizedSpecification),
-    details: () => detailsAction(normalizedSpecification),
+    get: () => getAction(specification, queue),
+    details: () => detailsAction(entrypoint),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(normalizedSpecification, callback),
-    upgrade: () => upgradeAction(normalizedSpecification),
-    validate: () => validateAction(normalizedSpecification),
-    resolve: () => resolveAction(normalizedSpecification),
-    toJson: () => toJsonAction(normalizedSpecification),
-    toYaml: () => toYamlAction(normalizedSpecification),
+      filterAction(entrypoint, callback),
+    upgrade: () => upgradeAction(specification, queue),
+    validate: () => validateAction(specification, queue),
+    resolve: () => resolveAction(specification, queue),
+    toJson: () => toJsonAction(entrypoint),
+    toYaml: () => toYamlAction(entrypoint),
   }
 }
 
 /**
  * Upgrade an OpenAPI specification.
  */
-function upgradeAction(specification: AnyObject) {
-  const upgradedSpecification = upgrade(specification)
+function upgradeAction(
+  specification: string | AnyObject,
+  queue: ActionQueue = [],
+) {
+  queue.push({
+    action: upgrade,
+    async: false,
+  })
 
   return {
-    get: () => getAction(upgradedSpecification),
+    get: () => getAction(specification, queue),
     details: () => detailsAction(upgradedSpecification),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(upgradedSpecification, callback),
-    validate: () => validateAction(upgradedSpecification),
+    validate: () => validateAction(specification, queue),
     resolve: () => resolveAction(upgradedSpecification),
     toJson: () => toJsonAction(upgradedSpecification),
     toYaml: () => toYamlAction(upgradedSpecification),
@@ -58,14 +83,19 @@ function upgradeAction(specification: AnyObject) {
 /**
  * Validate an OpenAPI specification.
  */
-async function validateAction(specification: AnyObject) {
+async function validateAction(
+  specification: string | AnyObject,
+  queue: ActionQueue,
+) {
+  const filesystem = await workThroughQueue(specification, queue)
+
   return {
-    ...(await validate(specification)),
+    ...(await validate(filesystem)),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, callback),
     get: () => getAction(specification),
     details: () => detailsAction(specification),
-    resolve: () => resolveAction(specification),
+    resolve: () => resolveAction(specification, queue),
     toJson: () => toJsonAction(specification),
     toYaml: () => toYamlAction(specification),
   }
@@ -74,9 +104,14 @@ async function validateAction(specification: AnyObject) {
 /**
  * Resolve references in an OpenAPI specification.
  */
-async function resolveAction(specification: AnyObject) {
+async function resolveAction(
+  specification: string | AnyObject,
+  queue: ActionQueue = [],
+) {
+  const filesystem = await workThroughQueue(specification, queue)
+
   return {
-    ...(await resolve(specification)),
+    ...(await resolve(getEntrypoint(filesystem).specification)),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, callback),
     toJson: () => toJsonAction(specification),
@@ -88,8 +123,8 @@ async function resolveAction(specification: AnyObject) {
  * Remove parts of an OpenAPI specification with the given callback.
  */
 function filterAction(
-  specification: AnyObject,
-  callback: (specification: AnyObject) => boolean,
+  specification: string | AnyObject,
+  callback: (specification: string | AnyObject) => boolean,
 ) {
   const filteredSpecification = filter(specification, callback)
 
@@ -105,18 +140,42 @@ function filterAction(
   }
 }
 
-function getAction(specification: AnyObject) {
-  return specification
+async function getAction(
+  specification: string | AnyObject,
+  queue: ActionQueue,
+) {
+  const filesystem = await workThroughQueue(specification, queue)
+
+  // Return the specification of the entrypoint
+  // TODO: IRKS
+  return getEntrypoint(filesystem).specification
 }
 
-function detailsAction(specification: AnyObject) {
+function detailsAction(specification: string | AnyObject) {
   return details(specification)
 }
 
-function toJsonAction(specification: AnyObject) {
+function toJsonAction(specification: string | AnyObject) {
   return toJson(specification)
 }
 
-function toYamlAction(specification: AnyObject) {
+function toYamlAction(specification: string | AnyObject) {
   return toYaml(specification)
+}
+
+async function workThroughQueue(
+  specification: string | AnyObject,
+  queue: ActionQueue,
+) {
+  let result = specification
+
+  for (const { action, async, options } of queue) {
+    if (async) {
+      result = await action(result, options)
+    } else {
+      result = action(result, options)
+    }
+  }
+
+  return result
 }

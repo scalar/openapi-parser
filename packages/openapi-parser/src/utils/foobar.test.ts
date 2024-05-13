@@ -29,14 +29,16 @@ describe('isFile', async () => {
   })
 })
 
+const EXAMPLE_FILE = path.join(
+  new URL(import.meta.url).pathname,
+  '../examples/openapi.yaml',
+)
+
 describe('load', async () => {
   it('loads file', async () => {
-    const filesystem = await load(
-      path.join(new URL(import.meta.url).pathname, '../examples/openapi.yaml'),
-      {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
-      },
-    )
+    const filesystem = await load(EXAMPLE_FILE, {
+      plugins: [readFilesPlugin, fetchUrlsPlugin],
+    })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
       openapi: '3.1.0',
