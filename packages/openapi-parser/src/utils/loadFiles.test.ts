@@ -9,7 +9,7 @@ const EXAMPLE_FILE = path.join(
 )
 
 describe('loadFiles', async () => {
-  it('loads all files', async () => {
+  it('loads all files from the filesystem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
     expect(filesystem.length).toBe(4)
