@@ -2,7 +2,9 @@ import { existsSync, readFileSync } from 'node:fs'
 import YAML from 'yaml'
 
 import { ERRORS } from '../configuration'
+import { getListOfReferences } from './getListOfReferences'
 import { makeFilesystem } from './makeFilesystem'
+import { normalize } from './normalize'
 
 export type LoadPlugin = {
   check: (value?: any) => boolean
@@ -111,7 +113,34 @@ export async function load(
     if (plugin.check(value)) {
       const content = await plugin.get(value)
 
-      return makeFilesystem(content)
+      const listOfReferences = getListOfReferences(normalize(content))
+
+      let filesystem = makeFilesystem(content, {
+        dir: value,
+        filename: value,
+      })
+
+      // No other references
+      if (listOfReferences.length === 0) {
+        return filesystem
+      }
+
+      // Load other external references
+      for (const reference of listOfReferences) {
+        const otherFiles = await load(reference, options)
+
+        filesystem = [
+          ...filesystem,
+          ...otherFiles.map((entry) => ({
+            isEntrypoint: false,
+            dir: reference,
+            filename: reference,
+            ...entry,
+          })),
+        ]
+
+        return filesystem
+      }
     }
   }
 

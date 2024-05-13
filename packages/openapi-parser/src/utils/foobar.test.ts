@@ -29,13 +29,13 @@ describe('isFile', async () => {
   })
 })
 
-const EXAMPLE_FILE = path.join(
-  new URL(import.meta.url).pathname,
-  '../examples/openapi.yaml',
-)
-
 describe('load', async () => {
   it('loads file', async () => {
+    const EXAMPLE_FILE = path.join(
+      new URL(import.meta.url).pathname,
+      '../examples/openapi.yaml',
+    )
+
     const filesystem = await load(EXAMPLE_FILE, {
       plugins: [readFilesPlugin, fetchUrlsPlugin],
     })
@@ -48,7 +48,11 @@ describe('load', async () => {
       },
       paths: {},
     })
+
+    console.log(JSON.stringify(filesystem, null, 2))
   })
+
+  // TODO: Load all referenced files from the filesystem
 
   it('fetches url', async () => {
     // @ts-expect-error only partially patched
@@ -75,6 +79,81 @@ describe('load', async () => {
         version: '1.0.0',
       },
       paths: {},
+    })
+  })
+
+  it('fetches referenced urls', async () => {
+    // @ts-expect-error only partially patched
+    global.fetch = async (url: string) => {
+      if (url === 'https://example.com/openapi.yaml') {
+        return {
+          text: async () =>
+            YAML.stringify({
+              openapi: '3.1.0',
+              info: {
+                title: 'Hello World',
+                version: '1.0.0',
+              },
+              paths: {
+                '/foobar': {
+                  post: {
+                    requestBody: {
+                      $ref: 'https://example.com/foobar.json',
+                    },
+                  },
+                },
+              },
+            }),
+        }
+      }
+
+      if (url === 'https://example.com/foobar.json') {
+        return {
+          text: async () =>
+            JSON.stringify({
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'string',
+                    example: 'foobar',
+                  },
+                },
+              },
+            }),
+        }
+      }
+    }
+
+    const filesystem = await load('https://example.com/openapi.yaml', {
+      plugins: [readFilesPlugin, fetchUrlsPlugin],
+    })
+
+    expect(filesystem[0].specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: 'https://example.com/foobar.json',
+            },
+          },
+        },
+      },
+    })
+
+    expect(filesystem[1].specification).toMatchObject({
+      content: {
+        'application/json': {
+          schema: {
+            type: 'string',
+            example: 'foobar',
+          },
+        },
+      },
     })
   })
 
