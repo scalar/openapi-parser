@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import hello from './hello.yaml'
 
 describe('hello', () => {
   it('passes', async () => {
-    const result = await resolve(hello)
+    const result = await validate(hello)
 
-    expect(result.valid).toBe(true)
+    expect(result.errors?.length).toBe(0)
     expect(result.version).toBe('3.0')
   })
 })

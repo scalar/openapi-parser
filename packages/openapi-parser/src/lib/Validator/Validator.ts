@@ -92,24 +92,12 @@ export class Validator {
       }
 
       // Check if the references are valid
-      if (schemaResult) {
-        const resolvedReferences = resolveReferences(filesystem)
+      const resolvedReferences = resolveReferences(filesystem)
 
-        if (resolvedReferences.errors.length > 0) {
-          return {
-            valid: false,
-            errors: resolvedReferences.errors,
-          }
-        } else {
-          return {
-            ...resolvedReferences,
-          }
-        }
-      }
-
-      // Whoops … no errors? Actually, that should never happen.
       return {
-        valid: false,
+        valid: schemaResult && resolvedReferences.valid,
+        errors: [...(schemaResult.errors ?? []), ...resolvedReferences.errors],
+        schema: resolvedReferences.schema,
       }
     } catch (error) {
       // Something went horribly wrong!

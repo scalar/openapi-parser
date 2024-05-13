@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import nonBearerHttpSec from './nonBearerHttpSec.yaml'
 
 describe('nonBearerHttpSec', () => {
   it('passes', async () => {
-    const result = await resolve(nonBearerHttpSec)
+    const result = await validate(nonBearerHttpSec)
 
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.0')

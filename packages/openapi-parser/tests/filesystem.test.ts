@@ -24,8 +24,6 @@ describe('filesystem', async () => {
 
     const result = await resolve(filesystem)
 
-    expect(result.valid).toBe(true)
-
     expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.0')
     // Resolve the *path* from the given file

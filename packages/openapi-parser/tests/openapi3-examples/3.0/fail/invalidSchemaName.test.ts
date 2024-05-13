@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import invalidSchemaName from './invalidSchemaName.json'
 
 describe('invalidSchemaName', () => {
   it('returns an error', async () => {
-    const result = await resolve(invalidSchemaName)
+    const result = await validate(invalidSchemaName)
 
     // TODO: Swagger Editor
     //

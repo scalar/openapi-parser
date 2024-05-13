@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import missingPathParam2 from './missingPathParam2.yaml'
 
 describe.todo('missingPathParam2', () => {
   it('returns an error', async () => {
-    const result = await resolve(missingPathParam2)
+    const result = await validate(missingPathParam2)
 
     // TODO: Swagger Editor
     //

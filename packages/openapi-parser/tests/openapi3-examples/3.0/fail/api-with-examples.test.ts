@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import apiWithExamples from './api-with-examples.yaml'
 
 describe('api-with-examples', () => {
   it('returns an error', async () => {
-    const result = await resolve(apiWithExamples)
+    const result = await validate(apiWithExamples)
 
     // TODO: Swagger Editor:
     //

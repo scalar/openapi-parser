@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { loadFiles, resolve } from '../../../../src'
+import { loadFiles, validate } from '../../../../src'
 
 const EXAMPLE_FILE = path.join(
   new URL(import.meta.url).pathname,
@@ -12,7 +12,7 @@ describe('externalPathItemRef', () => {
   it('passes', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
-    const result = resolve(filesystem)
+    const result = validate(filesystem)
 
     // TODO: Better expectation
     // expect(result.valid).toBe(true)

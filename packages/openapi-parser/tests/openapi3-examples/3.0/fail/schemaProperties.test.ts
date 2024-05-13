@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import schemaProperties from './schemaProperties.yaml'
 
 describe('schemaProperties', () => {
   it('returns an error', async () => {
-    const { valid, errors, schema } = await resolve(schemaProperties)
+    const { valid, errors, schema } = await validate(schemaProperties)
 
     expect(schema?.components?.schemas?.SomeObject).not.toBe(undefined)
 

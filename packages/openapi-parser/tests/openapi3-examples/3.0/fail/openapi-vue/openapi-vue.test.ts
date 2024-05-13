@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../../src'
+import { validate } from '../../../../../src'
 import edit1 from './edit1.json'
 import openApiVue from './openapi.json'
 
 describe('openapi-vue', () => {
   it('openapi', async () => {
-    const result = await resolve(openApiVue)
+    const result = await validate(openApiVue)
 
     // TODO: SwaggerUI has a more helpful error message:
     //
@@ -20,7 +20,7 @@ describe('openapi-vue', () => {
   })
 
   it('edit1', async () => {
-    const result = await resolve(edit1)
+    const result = await validate(edit1)
 
     // TODO: SwaggerUI has a more helpful error message:
     //

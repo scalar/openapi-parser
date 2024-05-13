@@ -1,6 +1,10 @@
-import { Validator, resolveReferences } from '../lib'
+import { resolveReferences } from '../lib'
 import type { AnyObject, Filesystem, OpenAPI, ResolveResult } from '../types'
+import { details } from './details'
+import { getEntrypoint } from './getEntrypoint'
+import { isFilesystem } from './isFilesystem'
 import { makeFilesystem } from './makeFilesystem'
+import { normalize } from './normalize'
 
 /**
  * Validates an OpenAPI schema and resolves all references.
@@ -8,32 +12,15 @@ import { makeFilesystem } from './makeFilesystem'
 export async function resolve(
   value: string | AnyObject | Filesystem,
 ): Promise<ResolveResult> {
-  const validator = new Validator()
   const filesystem = makeFilesystem(value)
-  const result = await validator.validate(filesystem)
+  const entrypoint = getEntrypoint(filesystem)
 
-  // Detach the specification from the validator
-  // TODO: What if a filesystem with multiple files is passed?
-  const specification = structuredClone(
-    validator.specification,
-  ) as OpenAPI.Document
-
-  // Error handling
-  // if (!result.valid) {
-  //   return {
-  //     valid: false,
-  //     version: undefined,
-  //     errors: result.errors,
-  //   }
-  // }
-
-  const { schema } = resolveReferences(filesystem)
+  const result = resolveReferences(filesystem)
 
   return {
-    valid: result.valid,
-    version: validator.version,
+    specification: entrypoint.specification as OpenAPI.Document,
     errors: result.errors,
-    specification,
-    schema,
+    schema: result.schema,
+    ...details(entrypoint.specification),
   }
 }

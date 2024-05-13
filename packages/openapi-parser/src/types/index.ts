@@ -19,6 +19,7 @@ export type ValidateResult = {
   specification?: OpenAPI.Document
   version?: string
   errors?: ErrorObject[]
+  schema?: AnyObject | ResolvedOpenAPI.Document
 }
 
 export type ErrorObject = {
@@ -27,7 +28,6 @@ export type ErrorObject = {
 }
 
 export type ResolveResult = {
-  valid: boolean
   version: string | undefined
   specification?: OpenAPI.Document
   schema?: AnyObject | ResolvedOpenAPI.Document

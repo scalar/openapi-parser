@@ -649,9 +649,7 @@ describe('resolveReferences', () => {
 
     const { schema } = resolveReferences(filesystem)
 
-    // TODO: Resolve the *path* from the given file
-    // console.log('RESULT', schema.schema.components.schemas.Upload)
-    // @ts-ignore
-    // expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
+    // Resolve the *path* from the given file
+    expect(schema.components.schemas.Upload.allOf[0].title).toBe('Coordinates')
   })
 })

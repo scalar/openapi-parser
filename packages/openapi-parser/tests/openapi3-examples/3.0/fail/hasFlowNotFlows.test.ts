@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import hasFlowNotFlows from './hasFlowNotFlows.json'
 
 describe('hasFlowNotFlows', () => {
   it('returns an error', async () => {
-    const result = await resolve(hasFlowNotFlows)
+    const result = await validate(hasFlowNotFlows)
 
     // TODO: This should probably mention the incorrect security type?
     expect(result.errors?.[0]?.message).toBe(

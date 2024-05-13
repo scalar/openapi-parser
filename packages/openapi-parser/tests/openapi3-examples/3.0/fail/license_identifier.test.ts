@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from '../../../../src'
+import { validate } from '../../../../src'
 import license_identifier from './license_identifier.yaml'
 
 describe('license_identifier', () => {
   it('returns an error', async () => {
-    const result = await resolve(license_identifier)
+    const result = await validate(license_identifier)
 
     // TODO: Swagger Editor
     //

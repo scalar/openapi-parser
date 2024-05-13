@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { getListOfReferences, resolve } from '../../../../src'
+import { getListOfReferences, validate } from '../../../../src'
 
 describe('cyclical', () => {
   it('resolves circular references', async () => {
@@ -36,7 +36,7 @@ describe('cyclical', () => {
       },
     }
 
-    const result = await resolve(specification)
+    const result = await validate(specification)
 
     expect(result.valid).toBe(true)
     expect(result.version).toBe('3.0')
@@ -95,7 +95,7 @@ describe('cyclical', () => {
       },
     }
 
-    const result = await resolve([
+    const result = await validate([
       {
         isEntrypoint: true,
         specification: baseFile,
