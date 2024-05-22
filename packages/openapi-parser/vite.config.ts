@@ -11,6 +11,9 @@ export default defineConfig({
       name: '@scalar/openapi-parser',
       formats: ['es'],
     },
+    rollupOptions: {
+      external: ['node:fs', 'node:path'],
+    },
   },
   test: {
     coverage: {
