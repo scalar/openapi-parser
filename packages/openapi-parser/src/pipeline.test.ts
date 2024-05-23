@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 
 import { openapi } from '.'
-import { readFilesPlugin } from './utils/load'
+import { readFilesPlugin } from './utils/load/plugins/readFilesPlugin'
 
 const specification = {
   openapi: '3.1.0',

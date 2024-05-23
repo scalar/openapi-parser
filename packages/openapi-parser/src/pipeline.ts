@@ -10,7 +10,7 @@ import {
   upgrade,
   validate,
 } from './utils'
-import { type LoadPlugin } from './utils/load'
+import { type LoadPlugin } from './utils/load/load'
 import { makeFilesystem } from './utils/makeFilesystem'
 
 export function openapi() {

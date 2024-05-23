@@ -2,32 +2,10 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import YAML from 'yaml'
 
-import { getEntrypoint } from './getEntrypoint'
-import { fetchUrlsPlugin, load, readFilesPlugin } from './load'
-
-describe('isFile', async () => {
-  it('returns true for a file name', async () => {
-    expect(readFilesPlugin.check('openapi.yaml')).toBe(true)
-  })
-
-  it('returns true for a path', async () => {
-    expect(readFilesPlugin.check('specification/openapi.yaml')).toBe(true)
-  })
-
-  it('returns false for an object', async () => {
-    expect(readFilesPlugin.check({})).toBe(false)
-  })
-
-  it('returns false for undefinded', async () => {
-    expect(readFilesPlugin.check()).toBe(false)
-  })
-
-  it('returns false for an url', async () => {
-    expect(
-      readFilesPlugin.check('http://example.com/specification/openapi.yaml'),
-    ).toBe(false)
-  })
-})
+import { getEntrypoint } from '../getEntrypoint'
+import { load } from './load'
+import { fetchUrlsPlugin } from './plugins/fetchUrlsPlugin'
+import { readFilesPlugin } from './plugins/readFilesPlugin'
 
 describe('load', async () => {
   it('loads file', async () => {
@@ -49,7 +27,7 @@ describe('load', async () => {
       paths: {},
     })
 
-    console.log(JSON.stringify(filesystem, null, 2))
+    // console.log(JSON.stringify(filesystem, null, 2))
   })
 
   // TODO: Load all referenced files from the filesystem

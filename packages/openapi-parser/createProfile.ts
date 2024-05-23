@@ -11,6 +11,6 @@ const specification = {
   paths: {},
 }
 
-await openapi().load(structuredClone(specification)).resolve()
+await openapi().load(structuredClone(specification)).resolve().get()
 
 console.profileEnd()
