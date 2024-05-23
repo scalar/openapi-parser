@@ -16,11 +16,12 @@ export default defineConfig({
       // It’s working with the alias, too. It’s just required to enable HMR.
       // It also does not match components since we want the built version
       {
-        // Resolve the uncompiled source code for all @scalar packages
-        // @scalar/* -> packages/*/
-        // (not @scalar/components/*/style.css)
-        find: /^@scalar\/(?!(openapi-parser|snippetz|components\/style\.css|components\b))(.+)/,
-        replacement: path.resolve(__dirname, '../packages/$2/src/index.ts'),
+        // Resolve the uncompiled source code for @scalar/openapi-parser packages
+        find: '@scalar/openapi-parser',
+        replacement: path.resolve(
+          __dirname,
+          '../packages/openapi-parser/src/index.ts',
+        ),
       },
     ],
   },

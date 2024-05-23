@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs'
+import fs from 'node:fs'
 
 import { ERRORS } from '../../../configuration'
 import { dirname, join } from '../../../polyfills/path'
@@ -36,12 +36,12 @@ export const readFilesPlugin: LoadPlugin = {
     return true
   },
   async get(value?: any) {
-    if (!existsSync(value)) {
+    if (!fs.existsSync(value)) {
       throw new Error(ERRORS.FILE_DOES_NOT_EXIST.replace('%s', value))
     }
 
     try {
-      return readFileSync(value, 'utf-8')
+      return fs.readFileSync(value, 'utf-8')
     } catch (error) {
       console.error('[readFilesPlugin]', error)
     }
