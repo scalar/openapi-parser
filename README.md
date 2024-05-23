@@ -133,16 +133,22 @@ const result = openapi()
 You can reference other files, too. To do that, the parser needs to know what files are available.
 
 ```ts
-import { loadFiles } from '@scalar/openapi-parser'
+import {
+  fetchUrlsPlugin,
+  loadFiles,
+  readFilesPlugin,
+} from '@scalar/openapi-parser'
 
-// load a file and all referenced files
-const filesystem = loadFiles('./openapi.yaml')
-// instead of just passing a single specification, pass the whole “filesystem”
+// Load a file and all referenced files
+const filesystem = await load('./openapi.yaml', {
+  plugins: [readFilesPlugin, fetchUrlsPlugin],
+})
+
+// Instead of just passing a single specification, pass the whole “filesystem”
 const result = await dereference(filesystem)
 ```
 
-You don’t have to use `loadFiles`, though. You just need to stick to the format. That enables you store the files
-wherever you want (maybe in a database?) or to use the package in a browser environment.
+As you see, `load()` supports plugin. You can write your own plugin, if you’d like to fetch API defintions from another data source, for example your database. Look at the source code of the `readFilesPlugin` to learn how this could look like.
 
 ## Community
 
