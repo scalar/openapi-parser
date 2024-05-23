@@ -200,9 +200,11 @@ async function workThroughQueue(
   for (const { action, async, options } of queue) {
     if (async) {
       // TODO: Some might not need options?
+      // @ts-expect-error TODO: Fix this
       result = await action(result, options)
     } else {
       // TODO: Some might not need options?
+      // @ts-expect-error TODO: Fix this
       result = action(result, options)
     }
 
