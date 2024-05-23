@@ -38,7 +38,7 @@
     "@apidevtools/swagger-parser": "^10.1.0",
     "@modyfi/vite-plugin-yaml": "^1.1.0",
     "@types/js-yaml": "^4.0.9",
-    "glob": "^10.3.15",
+    "glob": "^10.3.16",
     "just-diff": "^6.0.2",
     "rollup-plugin-webpack-stats": "^0.2.6",
     "tinybench": "^2.8.0",
@@ -47,7 +47,7 @@
   },
   "dependencies": {
     "@humanwhocodes/momoa": "^3.0.2",
-    "@types/node": "^20.12.11",
+    "@types/node": "^20.12.12",
     "ajv": "^8.13.0",
     "ajv-draft-04": "^1.0.0",
     "ajv-formats": "^3.0.1",
