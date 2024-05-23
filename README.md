@@ -128,7 +128,7 @@ const result = openapi()
   .get()
 ```
 
-## Advanced: File references
+## Advanced: URL and file references
 
 You can reference other files, too. To do that, the parser needs to know what files are available.
 
