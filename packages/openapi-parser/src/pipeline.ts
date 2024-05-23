@@ -20,7 +20,7 @@ export function openapi() {
 }
 
 export type ActionQueue = {
-  action: typeof load | typeof upgrade
+  action: typeof load | typeof upgrade | typeof filter
   async: boolean
   options?: AnyObject
 }[]
@@ -53,12 +53,12 @@ function loadAction(
     get: () => getAction(specification, queue),
     details: () => detailsAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(entrypoint, callback),
+      filterAction(specification, queue, callback),
     upgrade: () => upgradeAction(specification, queue),
     validate: () => validateAction(specification, queue),
     resolve: () => resolveAction(specification, queue),
-    toJson: () => toJsonAction(entrypoint),
-    toYaml: () => toYamlAction(entrypoint),
+    toJson: () => toJsonAction(specification, queue),
+    toYaml: () => toYamlAction(specification, queue),
   }
 }
 
@@ -78,11 +78,11 @@ function upgradeAction(
     get: () => getAction(specification, queue),
     details: () => detailsAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(upgradedSpecification, callback),
+      filterAction(specification, queue, callback),
     validate: () => validateAction(specification, queue),
-    resolve: () => resolveAction(upgradedSpecification),
-    toJson: () => toJsonAction(upgradedSpecification),
-    toYaml: () => toYamlAction(upgradedSpecification),
+    resolve: () => resolveAction(specification, queue),
+    toJson: () => toJsonAction(specification, queue),
+    toYaml: () => toYamlAction(specification, queue),
   }
 }
 
@@ -98,30 +98,33 @@ async function validateAction(
   return {
     ...(await validate(filesystem)),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, callback),
-    get: () => getAction(specification),
+      filterAction(specification, queue, callback),
+    get: () => getAction(specification, queue),
     details: () => detailsAction(specification, queue),
     resolve: () => resolveAction(specification, queue),
-    toJson: () => toJsonAction(specification),
-    toYaml: () => toYamlAction(specification),
+    toJson: () => toJsonAction(specification, queue),
+    toYaml: () => toYamlAction(specification, queue),
   }
 }
 
 /**
  * Resolve references in an OpenAPI specification.
  */
-async function resolveAction(
+function resolveAction(
   specification: AnyApiDefinitionFormat,
   queue: ActionQueue = [],
 ) {
-  const filesystem = await workThroughQueue(specification, queue)
+  queue.push({
+    action: resolve,
+    async: true,
+  })
 
   return {
-    ...(await resolve(getEntrypoint(filesystem).specification)),
+    get: () => getAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, callback),
-    toJson: () => toJsonAction(specification),
-    toYaml: () => toYamlAction(specification),
+      filterAction(specification, queue, callback),
+    toJson: () => toJsonAction(specification, queue),
+    toYaml: () => toYamlAction(specification, queue),
   }
 }
 
@@ -130,19 +133,24 @@ async function resolveAction(
  */
 function filterAction(
   specification: AnyApiDefinitionFormat,
+  queue: ActionQueue = [],
   callback: (specification: AnyApiDefinitionFormat) => boolean,
 ) {
-  const filteredSpecification = filter(specification, callback)
+  queue.push({
+    action: filter,
+    options: callback,
+    async: false,
+  })
 
   return {
-    get: () => getAction(filteredSpecification),
+    get: () => getAction(specification, queue),
     details: () => detailsAction(specification, queue),
-    filter: () => filterAction(filteredSpecification, callback),
-    upgrade: () => upgradeAction(filteredSpecification),
-    validate: () => validateAction(filteredSpecification),
-    resolve: () => resolveAction(filteredSpecification),
-    toJson: () => toJsonAction(filteredSpecification),
-    toYaml: () => toYamlAction(filteredSpecification),
+    filter: () => filterAction(specification, queue, callback),
+    upgrade: () => upgradeAction(specification, queue),
+    validate: () => validateAction(specification, queue),
+    resolve: () => resolveAction(specification, queue),
+    toJson: () => toJsonAction(specification, queue),
+    toYaml: () => toYamlAction(specification, queue),
   }
 }
 
@@ -166,12 +174,22 @@ async function detailsAction(
   return details(getEntrypoint(filesystem).specification)
 }
 
-function toJsonAction(specification: AnyApiDefinitionFormat) {
-  return toJson(specification)
+async function toJsonAction(
+  specification: AnyApiDefinitionFormat,
+  queue: ActionQueue,
+) {
+  const filesystem = await workThroughQueue(specification, queue)
+
+  return toJson(getEntrypoint(filesystem).specification)
 }
 
-function toYamlAction(specification: AnyApiDefinitionFormat) {
-  return toYaml(specification)
+async function toYamlAction(
+  specification: AnyApiDefinitionFormat,
+  queue: ActionQueue,
+) {
+  const filesystem = await workThroughQueue(specification, queue)
+
+  return toYaml(getEntrypoint(filesystem).specification)
 }
 
 async function workThroughQueue(
@@ -188,6 +206,9 @@ async function workThroughQueue(
       // TODO: Some might not need options?
       result = action(result, options)
     }
+
+    // console.log('typeof action', action)
+    // console.log('result', result)
   }
 
   return makeFilesystem(result)
