@@ -1,4 +1,5 @@
 import ViteYaml from '@modyfi/vite-plugin-yaml'
+import { builtinModules } from 'node:module'
 import { webpackStats } from 'rollup-plugin-webpack-stats'
 import dts from 'vite-plugin-dts'
 import { defineConfig } from 'vitest/config'
@@ -12,7 +13,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: ['node:fs', 'node:path'],
+      external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
     },
   },
   test: {

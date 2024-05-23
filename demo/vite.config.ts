@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue'
+import { builtinModules } from 'node:module'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 
@@ -7,7 +8,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     rollupOptions: {
-      external: ['node:fs', 'node:path'],
+      external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
     },
   },
   resolve: {
