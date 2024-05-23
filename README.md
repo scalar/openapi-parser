@@ -191,6 +191,13 @@ Thanks a ton for all the help and inspiration:
                     <sub><b>Drew-Kimberly</b></sub>
                 </a>
             </td>
+            <td align="center">
+                <a href="https://github.com/x-delfino">
+                    <img src="https://avatars.githubusercontent.com/u/67192579?v=4" width="100;" alt="x-delfino"/>
+                    <br />
+                    <sub><b>x-delfino</b></sub>
+                </a>
+            </td>
 		</tr>
 	<tbody>
 </table>
