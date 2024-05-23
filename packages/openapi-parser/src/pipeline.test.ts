@@ -60,7 +60,7 @@ describe('pipeline', () => {
     expect(result.openapi).toBe('3.1.0')
   })
 
-  it('details', async () => {
+  it.only('details', async () => {
     const result = await openapi()
       .load({
         openapi: '3.0.0',
@@ -73,6 +73,22 @@ describe('pipeline', () => {
       .details()
 
     expect(result.version).toBe('3.0')
+  })
+
+  it.only('upgrade + details', async () => {
+    const result = await openapi()
+      .load({
+        openapi: '3.0.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      })
+      .upgrade()
+      .details()
+
+    expect(result.version).toBe('3.1')
   })
 
   it('upgrade + details', async () => {
