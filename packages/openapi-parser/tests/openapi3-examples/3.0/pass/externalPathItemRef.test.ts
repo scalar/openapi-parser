@@ -16,10 +16,13 @@ describe('externalPathItemRef', () => {
 
     const result = await validate(filesystem)
 
-    console.log(result)
-
-    // TODO: Better expectation
-    // expect(result.valid).toBe(true)
-    // expect(result.version).toBe('3.0')
+    expect(result.schema.paths['/test'].get).not.toBeUndefined()
+    expect(result.schema.paths['/test'].get).toMatchObject({
+      responses: {
+        '200': {
+          description: 'OK',
+        },
+      },
+    })
   })
 })

@@ -27,5 +27,6 @@ export function getListOfReferences(specification: AnyObject) {
     return value
   })
 
-  return references
+  // Remove duplicates
+  return [...new Set(references)]
 }

@@ -6,7 +6,7 @@ import SwaggerParser from '@apidevtools/swagger-parser'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { loadFiles } from '.'
+import { load, readFilesPlugin } from '.'
 import type { AnyObject } from '../types'
 import { resolveReferences } from './resolveReferences'
 
@@ -622,7 +622,7 @@ describe('resolveReferences', () => {
         dir: '/Foobar/other/folder',
         isEntrypoint: false,
         references: [],
-        filename: 'other/folder/barfoo.json',
+        filename: 'barfoo.json',
         specification: {
           content: {
             'application/json': {
@@ -645,7 +645,9 @@ describe('resolveReferences', () => {
   })
 
   it('resolves from filesystem', async () => {
-    const filesystem = loadFiles(EXAMPLE_FILE)
+    const filesystem = await load(EXAMPLE_FILE, {
+      plugins: [readFilesPlugin],
+    })
 
     const { schema } = resolveReferences(filesystem)
 

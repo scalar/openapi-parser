@@ -160,8 +160,7 @@ async function getAction(
 ) {
   const filesystem = await workThroughQueue(specification, queue)
 
-  // Return the specification of the entrypoint
-  // TODO: IRKS
+  // TODO: Shouldn’t we return the schema or something here?
   return getEntrypoint(filesystem).specification
 }
 

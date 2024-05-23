@@ -170,9 +170,8 @@ function resolveUri(
 
   // External references
   if (prefix) {
-    const targetFilename = join(dirname(file?.filename), prefix)
     const externalReference = filesystem.find((entry) => {
-      return entry.filename === targetFilename
+      return entry.filename === prefix
     })
 
     if (!externalReference) {

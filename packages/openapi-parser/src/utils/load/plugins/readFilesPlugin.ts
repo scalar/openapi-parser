@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 
 import { ERRORS } from '../../../configuration'
+import { dirname, join } from '../../../polyfills/path'
 import { isJson } from '../../isJson'
 import { isYaml } from '../../isYaml'
 import { LoadPlugin } from '../load'
@@ -44,5 +45,15 @@ export const readFilesPlugin: LoadPlugin = {
     } catch (error) {
       console.error('[readFilesPlugin]', error)
     }
+  },
+  resolvePath(value: any, reference: string) {
+    const dir = dirname(value)
+    return join(dir, reference)
+  },
+  getDir(value: any) {
+    return dirname(value)
+  },
+  getFilename(value: any) {
+    return value.split('/').pop()
   },
 }
