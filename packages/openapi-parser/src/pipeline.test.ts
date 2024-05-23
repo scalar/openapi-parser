@@ -93,7 +93,7 @@ describe('pipeline', () => {
     expect(result.version).toBe('3.0')
   })
 
-  it('upgrade > resolve', async () => {
+  it('upgrade > dereference', async () => {
     const result = await openapi()
       .load({
         openapi: '3.0.0',
@@ -104,7 +104,7 @@ describe('pipeline', () => {
         paths: {},
       })
       .upgrade()
-      .resolve()
+      .dereference()
       .get()
 
     expect(result.version).toBe('3.1')
@@ -250,17 +250,17 @@ describe('pipeline', () => {
     expect(result).toBe(YAML.stringify(specification))
   })
 
-  it('resolve', async () => {
-    const result = await openapi().load(specification).resolve().get()
+  it('dereference', async () => {
+    const result = await openapi().load(specification).dereference().get()
 
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('validate > resolve', async () => {
+  it('validate > dereference', async () => {
     const validation = await openapi().load(specification).validate()
     expect(validation.valid).toBe(true)
 
-    const result = await validation.resolve().get()
+    const result = await validation.dereference().get()
     expect(result.errors).toStrictEqual([])
     expect(result.schema.info.title).toBe('Hello World')
   })

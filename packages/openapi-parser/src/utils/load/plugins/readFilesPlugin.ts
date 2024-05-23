@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 
 import { ERRORS } from '../../../configuration'
 import { isJson } from '../../isJson'
-import { isYaml } from '../isYaml'
+import { isYaml } from '../../isYaml'
 import { LoadPlugin } from '../load'
 
 export const readFilesPlugin: LoadPlugin = {

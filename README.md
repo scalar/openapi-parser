@@ -56,7 +56,7 @@ if (!result.valid) {
 ### Resolve references
 
 ```ts
-import { resolve } from '@scalar/openapi-parser'
+import { dereference } from '@scalar/openapi-parser'
 
 const specification = `{
   "openapi": "3.1.0",
@@ -67,7 +67,7 @@ const specification = `{
   "paths": {}
 }`
 
-const result = await resolve(specification)
+const result = await dereference(specification)
 ```
 
 ## Modify an OpenAPI specification
@@ -138,7 +138,7 @@ import { loadFiles } from '@scalar/openapi-parser'
 // load a file and all referenced files
 const filesystem = loadFiles('./openapi.yaml')
 // instead of just passing a single specification, pass the whole “filesystem”
-const result = await resolve(filesystem)
+const result = await dereference(filesystem)
 ```
 
 You don’t have to use `loadFiles`, though. You just need to stick to the format. That enables you store the files

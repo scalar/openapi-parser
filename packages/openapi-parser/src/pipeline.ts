@@ -1,10 +1,10 @@
 import type { AnyObject, Filesystem } from './types'
 import {
+  dereference,
   details,
   filter,
   getEntrypoint,
   load,
-  resolve,
   toJson,
   toYaml,
   upgrade,
@@ -56,7 +56,7 @@ function loadAction(
       filterAction(specification, queue, callback),
     upgrade: () => upgradeAction(specification, queue),
     validate: () => validateAction(specification, queue),
-    resolve: () => resolveAction(specification, queue),
+    dereference: () => dereferenceAction(specification, queue),
     toJson: () => toJsonAction(specification, queue),
     toYaml: () => toYamlAction(specification, queue),
   }
@@ -80,7 +80,7 @@ function upgradeAction(
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, queue, callback),
     validate: () => validateAction(specification, queue),
-    resolve: () => resolveAction(specification, queue),
+    dereference: () => dereferenceAction(specification, queue),
     toJson: () => toJsonAction(specification, queue),
     toYaml: () => toYamlAction(specification, queue),
   }
@@ -101,7 +101,7 @@ async function validateAction(
       filterAction(specification, queue, callback),
     get: () => getAction(specification, queue),
     details: () => detailsAction(specification, queue),
-    resolve: () => resolveAction(specification, queue),
+    dereference: () => dereferenceAction(specification, queue),
     toJson: () => toJsonAction(specification, queue),
     toYaml: () => toYamlAction(specification, queue),
   }
@@ -110,12 +110,12 @@ async function validateAction(
 /**
  * Resolve references in an OpenAPI specification.
  */
-function resolveAction(
+function dereferenceAction(
   specification: AnyApiDefinitionFormat,
   queue: ActionQueue = [],
 ) {
   queue.push({
-    action: resolve,
+    action: dereference,
     async: true,
   })
 
@@ -148,7 +148,7 @@ function filterAction(
     filter: () => filterAction(specification, queue, callback),
     upgrade: () => upgradeAction(specification, queue),
     validate: () => validateAction(specification, queue),
-    resolve: () => resolveAction(specification, queue),
+    dereference: () => dereferenceAction(specification, queue),
     toJson: () => toJsonAction(specification, queue),
     toYaml: () => toYamlAction(specification, queue),
   }

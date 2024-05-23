@@ -107,7 +107,7 @@ describe('diff', async () => {
 
     const { schema: newSchema, errors } = await openapi()
       .load(structuredClone(specification))
-      .resolve()
+      .dereference()
       .get()
 
     // Errors expected

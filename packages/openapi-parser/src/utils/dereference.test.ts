@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { resolve } from './resolve'
+import { dereference } from './dereference'
 
 describe('resolve', async () => {
   it('resolves an OpenAPI 3.1.0 file', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "openapi": "3.1.0",
       "info": {
           "title": "Hello World",
@@ -18,7 +18,7 @@ describe('resolve', async () => {
   })
 
   it('resolves an OpenAPI 3.0.0 file', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "openapi": "3.0.0",
       "info": {
           "title": "Hello World",
@@ -32,7 +32,7 @@ describe('resolve', async () => {
   })
 
   it('resolves an Swagger 2.0 file', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "swagger": "2.0",
       "info": {
           "title": "Hello World",
@@ -46,7 +46,7 @@ describe('resolve', async () => {
   })
 
   it('returns version 3.1', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "openapi": "3.1.0",
       "info": {
           "title": "Hello World",
@@ -60,7 +60,7 @@ describe('resolve', async () => {
   })
 
   it('returns version 3.0', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "openapi": "3.0.0",
       "info": {
           "title": "Hello World",
@@ -74,7 +74,7 @@ describe('resolve', async () => {
   })
 
   it('returns version 2.0', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "swagger": "2.0",
       "info": {
           "title": "Hello World",
@@ -88,7 +88,7 @@ describe('resolve', async () => {
   })
 
   it('doesn’t return version 4.0', async () => {
-    const result = await resolve(`{
+    const result = await dereference(`{
       "openapi": "4.0",
       "info": {
           "title": "Hello World",
@@ -141,7 +141,7 @@ it('resolves a simple reference', async () => {
     },
   }
 
-  const result = await resolve(openapi)
+  const result = await dereference(openapi)
 
   expect(result.errors).toStrictEqual([])
 

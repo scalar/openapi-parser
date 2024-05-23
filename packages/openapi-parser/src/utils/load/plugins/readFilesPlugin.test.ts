@@ -8,7 +8,7 @@ describe('readFilesPlugin', async () => {
   })
 
   it('returns true for a path', async () => {
-    expect(readFilesPlugin.check('specification/openapi.yaml')).toBe(true)
+    expect(readFilesPlugin.check('../specification/openapi.yaml')).toBe(true)
   })
 
   it('returns false for an object', async () => {

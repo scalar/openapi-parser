@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { loadFiles, resolve, validate } from '../src'
+import { dereference, loadFiles, validate } from '../src'
 
 const EXAMPLE_FILE = path.join(
   new URL(import.meta.url).pathname,
@@ -19,10 +19,10 @@ describe('filesystem', async () => {
     expect(result.version).toBe('3.0')
   })
 
-  it('resolves filesytem', async () => {
+  it('dereference filesytem', async () => {
     const filesystem = loadFiles(EXAMPLE_FILE)
 
-    const result = await resolve(filesystem)
+    const result = await dereference(filesystem)
 
     expect(result.errors).toStrictEqual([])
     expect(result.version).toBe('3.0')

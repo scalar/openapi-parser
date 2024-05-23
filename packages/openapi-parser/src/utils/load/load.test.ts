@@ -11,7 +11,7 @@ describe('load', async () => {
   it('loads file', async () => {
     const EXAMPLE_FILE = path.join(
       new URL(import.meta.url).pathname,
-      '../examples/openapi.yaml',
+      '../../examples/openapi.yaml',
     )
 
     const filesystem = await load(EXAMPLE_FILE, {
