@@ -81,7 +81,6 @@ describe('pipeline', () => {
           paths: {},
         },
         filename: 'openapi.yaml',
-        dir: '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/src/utils/examples',
         references: [],
       },
     ])
