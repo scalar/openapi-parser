@@ -70,7 +70,7 @@ const specification = `{
 const result = await dereference(specification)
 ```
 
-## Modify an OpenAPI specification
+### Modify an OpenAPI specification
 
 ```ts
 import { filter } from '@scalar/openapi-parser'
@@ -87,7 +87,7 @@ const specification = `{
 const result = filter(specification, (schema) => !schema?.['x-internal'])
 ```
 
-## Upgrade your OpenAPI specification
+### Upgrade your OpenAPI specification
 
 There’s an `upgrade` command to upgrade all your OpenAPI specifications to the latest OpenAPI version.
 
@@ -109,7 +109,7 @@ console.log(result.openapi)
 // Output: 3.1.0
 ```
 
-## Pipeline syntax
+### Pipeline syntax
 
 ```ts
 import { openapi } from '@scalar/openapi-parser'
