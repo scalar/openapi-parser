@@ -1,4 +1,4 @@
-import YAML from 'yaml'
+import { parse } from 'yaml'
 
 export function isYaml(value: string) {
   // Line breaks
@@ -7,7 +7,7 @@ export function isYaml(value: string) {
   }
 
   try {
-    YAML.parse(value)
+    parse(value)
     return true
   } catch (error) {
     console.log('ADSAS', error)

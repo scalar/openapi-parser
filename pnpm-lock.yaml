@@ -57,9 +57,6 @@ importers:
 
   packages/openapi-parser:
     dependencies:
-      '@humanwhocodes/momoa':
-        specifier: ^3.0.2
-        version: 3.0.2
       ajv:
         specifier: ^8.13.0
         version: 8.13.0
@@ -708,11 +705,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /@humanwhocodes/momoa@3.0.2:
-    resolution: {integrity: sha512-YrVdm6ntzi49kj/YlFQF5MClnOeZJv2d34tZqdrMKzVCOi0EC6pD/0z9SWb8fU9bTPkmUNPsYVJ1wFd4QamBBQ==}
-    engines: {node: '>=18'}
-    dev: false
 
   /@isaacs/cliui@8.0.2:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}

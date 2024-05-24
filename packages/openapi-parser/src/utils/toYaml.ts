@@ -1,5 +1,5 @@
-import YAML from 'yaml'
+import { stringify } from 'yaml'
 
 import { AnyObject } from '../types'
 
-export const toYaml = (value: AnyObject) => YAML.stringify(value)
+export const toYaml = (value: AnyObject) => stringify(value)

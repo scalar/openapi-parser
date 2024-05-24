@@ -1,4 +1,4 @@
-import YAML from 'yaml'
+import { parse } from 'yaml'
 
 import { AnyObject, Filesystem } from '../types'
 import { isFilesystem } from './isFilesystem'
@@ -18,7 +18,7 @@ export function normalize(
     try {
       return JSON.parse(specification)
     } catch (error) {
-      return YAML.parse(specification)
+      return parse(specification)
     }
   }
 

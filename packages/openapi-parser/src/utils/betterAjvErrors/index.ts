@@ -1,5 +1,3 @@
-import { parse } from '@humanwhocodes/momoa'
-
 import prettify from './helpers'
 
 type BetterAjvErrorsOptions = {
@@ -28,13 +26,11 @@ export function betterAjvErrors(
   const { indent = null, json = null } = options
 
   const jsonRaw = json || JSON.stringify(data, null, indent)
-  const jsonAst = parse(jsonRaw)
 
   const customErrorToStructure = (error) => error.getError()
   const customErrors = prettify(errors, {
     data,
     schema,
-    jsonAst,
     jsonRaw,
   })
 

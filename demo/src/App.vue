@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { fetchUrlsPlugin, openapi } from '@scalar/openapi-parser'
+import {
+  dereference,
+  fetchUrlsPlugin,
+  load,
+  toJson,
+} from '@scalar/openapi-parser'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
 
@@ -47,14 +52,14 @@ watch(value, async (newValue) => {
 watchDebounced(
   value,
   async (newValue) => {
-    result.value = (
-      await openapi()
-        .load(newValue, {
-          plugins: [fetchUrlsPlugin()],
-        })
-        .dereference()
-        .get()
-    )?.schema
+    const content = await load(newValue, {
+      plugins: [fetchUrlsPlugin()],
+    })
+    const { schema } = await dereference(content)
+
+    if (schema) {
+      result.value = toJson(schema)
+    }
   },
   {
     debounce: 500,
