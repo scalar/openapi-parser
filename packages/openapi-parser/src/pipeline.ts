@@ -51,6 +51,7 @@ function loadAction(
 
   return {
     get: () => getAction(specification, queue),
+    files: () => filesAction(specification, queue),
     details: () => detailsAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, queue, callback),
@@ -76,6 +77,7 @@ function upgradeAction(
 
   return {
     get: () => getAction(specification, queue),
+    files: () => filesAction(specification, queue),
     details: () => detailsAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, queue, callback),
@@ -100,6 +102,7 @@ async function validateAction(
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, queue, callback),
     get: () => getAction(specification, queue),
+    files: () => filesAction(specification, queue),
     details: () => detailsAction(specification, queue),
     dereference: () => dereferenceAction(specification, queue),
     toJson: () => toJsonAction(specification, queue),
@@ -121,6 +124,7 @@ function dereferenceAction(
 
   return {
     get: () => getAction(specification, queue),
+    files: () => filesAction(specification, queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(specification, queue, callback),
     toJson: () => toJsonAction(specification, queue),
@@ -144,6 +148,7 @@ function filterAction(
 
   return {
     get: () => getAction(specification, queue),
+    files: () => filesAction(specification, queue),
     details: () => detailsAction(specification, queue),
     filter: () => filterAction(specification, queue, callback),
     upgrade: () => upgradeAction(specification, queue),
@@ -162,6 +167,13 @@ async function getAction(
 
   // TODO: Shouldn’t we return the schema or something here?
   return getEntrypoint(filesystem).specification
+}
+
+async function filesAction(
+  specification: AnyApiDefinitionFormat,
+  queue: ActionQueue,
+) {
+  return await workThroughQueue(specification, queue)
 }
 
 async function detailsAction(

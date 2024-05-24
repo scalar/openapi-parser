@@ -62,6 +62,31 @@ describe('pipeline', () => {
     expect(result.openapi).toBe('3.1.0')
   })
 
+  it('files', async () => {
+    const filesystem = await openapi()
+      .load(EXAMPLE_FILE, {
+        plugins: [readFilesPlugin],
+      })
+      .files()
+
+    expect(filesystem).toMatchObject([
+      {
+        isEntrypoint: true,
+        specification: {
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+            version: '1.0.0',
+          },
+          paths: {},
+        },
+        filename: 'openapi.yaml',
+        dir: '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/src/utils/examples',
+        references: [],
+      },
+    ])
+  })
+
   it('upgrade from 3.0 to 3.1', async () => {
     const result = await openapi()
       .load({
