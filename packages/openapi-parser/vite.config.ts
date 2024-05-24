@@ -12,7 +12,14 @@ export default defineConfig({
       formats: ['es'],
     },
     rollupOptions: {
-      external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
+      external: [
+        ...builtinModules,
+        ...builtinModules.map((m) => `node:${m}`),
+        'ajv/dist/2020',
+        'ajv-draft-04',
+        'ajv-formats',
+        'yaml',
+      ],
     },
   },
   test: {

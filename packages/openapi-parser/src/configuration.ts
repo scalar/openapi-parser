@@ -1,6 +1,3 @@
-import Ajv04 from 'ajv-draft-04'
-import Ajv2020 from 'ajv/dist/2020'
-
 import Swagger20 from '../schemas/v2.0/schema.json'
 import OpenApi30 from '../schemas/v3.0/schema.json'
 import OpenApi31 from '../schemas/v3.1/schema.json'
@@ -19,14 +16,6 @@ export type OpenApiVersion = keyof typeof OpenApiSpecifications
 export const OpenApiVersions = Object.keys(
   OpenApiSpecifications,
 ) as OpenApiVersion[]
-
-/**
- * Configure available JSON Schema versions
- */
-export const jsonSchemaVersions = {
-  'http://json-schema.org/draft-04/schema#': Ajv04,
-  'https://json-schema.org/draft/2020-12/schema': Ajv2020,
-}
 
 /**
  * List of error messages used in the Validator

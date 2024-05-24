@@ -1,16 +1,25 @@
+import Ajv04 from 'ajv-draft-04'
 import addFormats from 'ajv-formats'
+import Ajv2020 from 'ajv/dist/2020'
 
 import {
   ERRORS,
   OpenApiSpecifications,
   type OpenApiVersion,
   OpenApiVersions,
-  jsonSchemaVersions,
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
 import { details as getOpenApiVersion } from '../../utils'
 import { resolveReferences } from '../../utils/resolveReferences'
 import { transformErrors } from '../../utils/transformErrors'
+
+/**
+ * Configure available JSON Schema versions
+ */
+export const jsonSchemaVersions = {
+  'http://json-schema.org/draft-04/schema#': Ajv04,
+  'https://json-schema.org/draft/2020-12/schema': Ajv2020,
+}
 
 export class Validator {
   public version: string

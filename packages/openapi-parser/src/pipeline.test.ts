@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import YAML from 'yaml'
+import { stringify } from 'yaml'
 
 import { openapi } from '.'
 import { readFilesPlugin } from './utils/load/plugins/readFilesPlugin'
@@ -271,7 +271,7 @@ describe('pipeline', () => {
   it('toYaml', async () => {
     const result = await openapi().load(specification).toYaml()
 
-    expect(result).toBe(YAML.stringify(specification))
+    expect(result).toBe(stringify(specification))
   })
 
   it('dereference', async () => {
