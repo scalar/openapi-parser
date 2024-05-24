@@ -1,7 +1,7 @@
 import { LoadPlugin } from '../load'
 
 export const fetchUrlsPluginDefaultConfiguration = {
-  limit: 10,
+  limit: 20,
 }
 
 export const fetchUrlsPlugin: (customConfiguration?: {
