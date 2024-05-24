@@ -468,6 +468,7 @@ export namespace OpenAPIV3 {
 
   export interface ReferenceObject {
     $ref?: string
+    [key: string]: any
   }
 
   export interface ExampleObject {
@@ -507,6 +508,7 @@ export namespace OpenAPIV3 {
     headers?: { [header: string]: ReferenceObject | HeaderObject }
     content?: { [media: string]: MediaTypeObject }
     links?: { [link: string]: ReferenceObject | LinkObject }
+    [key: string]: any
   }
 
   export interface LinkObject {
@@ -695,6 +697,7 @@ export namespace OpenAPIV2 {
 
   export interface ReferenceObject {
     $ref: string
+    [key: string]: any
   }
 
   export type Response = ResponseObject | ReferenceObject
@@ -710,6 +713,7 @@ export namespace OpenAPIV2 {
     schema?: Schema
     headers?: HeadersObject
     examples?: ExampleObject
+    [key: string]: any
   }
 
   export interface HeadersObject {
@@ -722,13 +726,6 @@ export namespace OpenAPIV2 {
 
   export interface ExampleObject {
     [index: string]: any
-  }
-
-  export interface ResponseObject {
-    description?: string
-    schema?: Schema
-    headers?: HeadersObject
-    examples?: ExampleObject
   }
 
   export type OperationObject<T extends {} = {}> = {
