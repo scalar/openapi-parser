@@ -9,35 +9,12 @@ export default class EnumValidationError extends BaseValidationError {
     this.name = 'EnumValidationError'
   }
 
-  print() {
-    const {
-      message,
-      params: { allowedValues },
-    } = this.options
-    const chalk = this.getChalk()
-    const bestMatch = this.findBestMatch()
-
-    const output = [
-      chalk`{red {bold ENUM} ${message}}`,
-      chalk`{red (${allowedValues.join(', ')})}\n`,
-    ]
-
-    return output.concat(
-      this.getCodeFrame(
-        bestMatch !== null
-          ? chalk`👈🏽  Did you mean {magentaBright ${bestMatch}} here?`
-          : chalk`👈🏽  Unexpected value, should be equal to one of the allowed values`,
-      ),
-    )
-  }
-
   getError() {
     const { message, params } = this.options
     const bestMatch = this.findBestMatch()
     const allowedValues = params.allowedValues.join(', ')
 
     const output = {
-      ...this.getLocation(),
       message: `${message}: ${allowedValues}`,
       path: this.instancePath,
     }

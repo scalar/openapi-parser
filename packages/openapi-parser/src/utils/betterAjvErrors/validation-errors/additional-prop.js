@@ -7,24 +7,10 @@ export default class AdditionalPropValidationError extends BaseValidationError {
     this.options.isIdentifierLocation = true
   }
 
-  print() {
-    const { message, params } = this.options
-    const chalk = this.getChalk()
-    const output = [chalk`{red {bold ADDITIONAL PROPERTY} ${message}}\n`]
-
-    return output.concat(
-      this.getCodeFrame(
-        chalk`😲  {magentaBright ${params.additionalProperty}} is not expected to be here!`,
-        `${this.instancePath}/${params.additionalProperty}`,
-      ),
-    )
-  }
-
   getError() {
     const { params } = this.options
 
     return {
-      ...this.getLocation(`${this.instancePath}/${params.additionalProperty}`),
       message: `Property ${params.additionalProperty} is not expected to be here`,
       path: this.instancePath,
     }
