@@ -1,4 +1,3 @@
-import { spec } from 'node:test/reporters'
 import YAML from 'yaml'
 
 import { AnyObject, Filesystem } from '../types'

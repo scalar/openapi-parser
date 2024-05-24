@@ -9,7 +9,7 @@ describe('server_enum_empty', () => {
 
     // TODO: The error should return something related to the empty enum
     expect(result.errors?.[0]?.message).toBe(
-      `: format must match format "uri-reference"`,
+      `format must match format "uri-reference"`,
     )
     expect(result.valid).toBe(false)
   })

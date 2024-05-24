@@ -19,7 +19,7 @@ npm add @scalar/openapi-parser
 ### Parse
 
 ```ts
-import { resolve } from '@scalar/openapi-parser'
+import { dereference } from '@scalar/openapi-parser'
 
 const file = `{
   "openapi": "3.1.0",
@@ -30,7 +30,7 @@ const file = `{
   "paths": {}
 }`
 
-const result = await resolve(file)
+const result = await dereference(file)
 ```
 
 ### Validate
@@ -59,7 +59,7 @@ if (!result.valid) {
 ### Version
 
 ```ts
-import { resolve } from '@scalar/openapi-parser'
+import { dereference } from '@scalar/openapi-parser'
 
 const file = `{
   "openapi": "3.1.0",
@@ -70,7 +70,7 @@ const file = `{
   "paths": {}
 }`
 
-const result = await resolve(file)
+const result = await dereference(file)
 
 console.log(result.version)
 ```

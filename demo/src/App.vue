@@ -1,16 +1,28 @@
 <script setup lang="ts">
-import { normalize, resolveReferences, toJson } from '@scalar/openapi-parser'
+import { fetchUrlsPlugin, openapi } from '@scalar/openapi-parser'
 import { onMounted, ref, watch } from 'vue'
 
 const value = ref(
   JSON.stringify(
     {
       openapi: '3.1.0',
-      info: {
-        title: 'Hello World',
-        version: '1.0.0',
+      info: {},
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: '#/components/requestBodies/Foobar',
+            },
+          },
+        },
       },
-      paths: {},
+      components: {
+        requestBodies: {
+          Foobar: {
+            content: {},
+          },
+        },
+      },
     },
     null,
     2,
@@ -34,7 +46,14 @@ watch(value, async (newValue) => {
 watch(
   value,
   async (newValue) => {
-    result.value = toJson(resolveReferences(normalize(newValue)))
+    result.value = (
+      await openapi()
+        .load(newValue, {
+          plugins: [fetchUrlsPlugin],
+        })
+        .dereference()
+        .get()
+    )?.schema
   },
   {
     immediate: true,

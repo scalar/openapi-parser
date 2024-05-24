@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
+import { AnyObject } from '../types'
 import { upgrade } from './upgrade'
 
-describe('version', () => {
+describe('upgrade', () => {
   it('doesn’t modify Swagger 2.0 files', async () => {
     const result = upgrade({
       swagger: '2.0',
@@ -11,7 +12,7 @@ describe('version', () => {
         version: '1.0.0',
       },
       paths: {},
-    })
+    }) as AnyObject
 
     expect(result.swagger).toBe('2.0')
   })
@@ -24,7 +25,7 @@ describe('version', () => {
         version: '1.0.0',
       },
       paths: {},
-    })
+    }) as AnyObject
 
     expect(result.openapi).toBe('3.1.0')
   })
@@ -37,7 +38,7 @@ describe('version', () => {
         version: '1.0.0',
       },
       paths: {},
-    })
+    }) as AnyObject
 
     expect(result.openapi).toBe('3.1.0')
   })

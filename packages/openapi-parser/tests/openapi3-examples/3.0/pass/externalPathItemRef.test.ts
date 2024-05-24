@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { loadFiles, validate } from '../../../../src'
+import { load, readFilesPlugin, validate } from '../../../../src'
 
 const EXAMPLE_FILE = path.join(
   new URL(import.meta.url).pathname,
@@ -10,12 +10,19 @@ const EXAMPLE_FILE = path.join(
 
 describe('externalPathItemRef', () => {
   it('passes', async () => {
-    const filesystem = loadFiles(EXAMPLE_FILE)
+    const filesystem = await load(EXAMPLE_FILE, {
+      plugins: [readFilesPlugin],
+    })
 
-    const result = validate(filesystem)
+    const result = await validate(filesystem)
 
-    // TODO: Better expectation
-    // expect(result.valid).toBe(true)
-    // expect(result.version).toBe('3.0')
+    expect(result.schema.paths['/test'].get).not.toBeUndefined()
+    expect(result.schema.paths['/test'].get).toMatchObject({
+      responses: {
+        '200': {
+          description: 'OK',
+        },
+      },
+    })
   })
 })
