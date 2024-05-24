@@ -115,7 +115,7 @@ describe('load', async () => {
 
     // filenames
     expect(filesystem.map((entry) => entry.filename)).toStrictEqual([
-      'openapi.yaml',
+      null,
       'schemas/problem.yaml',
       'schemas/upload.yaml',
       './components/coordinates.yaml',
@@ -209,6 +209,80 @@ describe('load', async () => {
     const filesystem = await load('https://example.com/openapi.yaml', {
       plugins: [readFilesPlugin, fetchUrlsPlugin],
     })
+
+    expect(filesystem[0].specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {
+        '/foobar': {
+          post: {
+            requestBody: {
+              $ref: 'https://example.com/foobar.json',
+            },
+          },
+        },
+      },
+    })
+
+    expect(filesystem[1].specification).toMatchObject({
+      content: {
+        'application/json': {
+          schema: {
+            type: 'string',
+            example: 'foobar',
+          },
+        },
+      },
+    })
+  })
+
+  it('loads string with url reference', async () => {
+    // @ts-expect-error only partially patched
+    global.fetch = async (url: string) => {
+      return {
+        text: async () =>
+          JSON.stringify({
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'string',
+                  example: 'foobar',
+                },
+              },
+            },
+          }),
+      }
+    }
+
+    const filesystem = await load(
+      YAML.stringify({
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                $ref: 'https://example.com/foobar.json',
+              },
+            },
+          },
+        },
+      }),
+      {
+        plugins: [readFilesPlugin, fetchUrlsPlugin],
+      },
+    )
+
+    expect(filesystem.map((entry) => entry.filename)).toStrictEqual([
+      null,
+      'https://example.com/foobar.json',
+    ])
 
     expect(filesystem[0].specification).toMatchObject({
       openapi: '3.1.0',

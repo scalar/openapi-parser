@@ -1,4 +1,4 @@
-import type { AnyObject, Filesystem } from './types'
+import type { AnyObject, Filesystem, OpenAPI } from './types'
 import {
   dereference,
   details,
@@ -165,6 +165,7 @@ async function getAction(queue: Queue) {
   const filesystem = await workThroughQueue(queue)
 
   // TODO: Shouldn’t we return the schema or something here?
+  // TODO: specification actually has errors and stuff, that’s wrong …
   return getEntrypoint(filesystem).specification
 }
 

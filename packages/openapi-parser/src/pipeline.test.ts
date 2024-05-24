@@ -80,7 +80,7 @@ describe('pipeline', () => {
           },
           paths: {},
         },
-        filename: 'openapi.yaml',
+        filename: null,
         references: [],
       },
     ])

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { openapi } from '@scalar/openapi-parser'
+import { fetchUrlsPlugin, openapi } from '@scalar/openapi-parser'
 import { onMounted, ref, watch } from 'vue'
 
 const value = ref(
@@ -46,7 +46,14 @@ watch(value, async (newValue) => {
 watch(
   value,
   async (newValue) => {
-    result.value = (await openapi().load(newValue).dereference().get())?.schema
+    result.value = (
+      await openapi()
+        .load(newValue, {
+          plugins: [fetchUrlsPlugin],
+        })
+        .dereference()
+        .get()
+    )?.schema
   },
   {
     immediate: true,
