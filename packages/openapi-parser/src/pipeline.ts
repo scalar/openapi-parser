@@ -13,22 +13,29 @@ import {
 import { type LoadPlugin } from './utils/load/load'
 import { makeFilesystem } from './utils/makeFilesystem'
 
-export function openapi() {
-  return {
-    load: loadAction,
-  }
+export type Action = {
+  action: typeof load | typeof upgrade | typeof filter
+  options?: AnyObject
 }
 
-export type ActionQueue = {
-  action: typeof load | typeof upgrade | typeof filter
-  async: boolean
-  options?: AnyObject
-}[]
+export type Queue = {
+  specification: AnyApiDefinitionFormat
+  tasks: Action[]
+}
 
 /**
  * JSON, YAML or object representation of an OpenAPI API definition
  */
 export type AnyApiDefinitionFormat = string | AnyObject
+
+/**
+ * Creates a new pipeline
+ */
+export function openapi() {
+  return {
+    load: loadAction,
+  }
+}
 
 /**
  * Load an OpenAPI specification.
@@ -41,94 +48,85 @@ function loadAction(
     plugins: LoadPlugin[]
   },
 ) {
-  const queue: ActionQueue = [
-    {
-      action: load,
-      async: true,
-      options: options,
-    },
-  ]
+  const queue: Queue = {
+    specification: specification,
+    tasks: [
+      {
+        action: load,
+        options: options,
+      },
+    ],
+  }
 
   return {
-    get: () => getAction(specification, queue),
-    files: () => filesAction(specification, queue),
-    details: () => detailsAction(specification, queue),
+    get: () => getAction(queue),
+    files: () => filesAction(queue),
+    details: () => detailsAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, queue, callback),
-    upgrade: () => upgradeAction(specification, queue),
-    validate: () => validateAction(specification, queue),
-    dereference: () => dereferenceAction(specification, queue),
-    toJson: () => toJsonAction(specification, queue),
-    toYaml: () => toYamlAction(specification, queue),
+      filterAction(queue, callback),
+    upgrade: () => upgradeAction(queue),
+    validate: () => validateAction(queue),
+    dereference: () => dereferenceAction(queue),
+    toJson: () => toJsonAction(queue),
+    toYaml: () => toYamlAction(queue),
   }
 }
 
 /**
  * Upgrade an OpenAPI specification.
  */
-function upgradeAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue = [],
-) {
-  queue.push({
+function upgradeAction(queue: Queue) {
+  queue.tasks.push({
     action: upgrade,
-    async: false,
   })
 
   return {
-    get: () => getAction(specification, queue),
-    files: () => filesAction(specification, queue),
-    details: () => detailsAction(specification, queue),
+    get: () => getAction(queue),
+    files: () => filesAction(queue),
+    details: () => detailsAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, queue, callback),
-    validate: () => validateAction(specification, queue),
-    dereference: () => dereferenceAction(specification, queue),
-    toJson: () => toJsonAction(specification, queue),
-    toYaml: () => toYamlAction(specification, queue),
+      filterAction(queue, callback),
+    validate: () => validateAction(queue),
+    dereference: () => dereferenceAction(queue),
+    toJson: () => toJsonAction(queue),
+    toYaml: () => toYamlAction(queue),
   }
 }
 
 /**
  * Validate an OpenAPI specification.
  */
-async function validateAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  const filesystem = await workThroughQueue(specification, queue)
+async function validateAction(queue: Queue) {
+  const filesystem = await workThroughQueue(queue)
 
   return {
     ...(await validate(filesystem)),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, queue, callback),
-    get: () => getAction(specification, queue),
-    files: () => filesAction(specification, queue),
-    details: () => detailsAction(specification, queue),
-    dereference: () => dereferenceAction(specification, queue),
-    toJson: () => toJsonAction(specification, queue),
-    toYaml: () => toYamlAction(specification, queue),
+      filterAction(queue, callback),
+    get: () => getAction(queue),
+    files: () => filesAction(queue),
+    details: () => detailsAction(queue),
+    dereference: () => dereferenceAction(queue),
+    toJson: () => toJsonAction(queue),
+    toYaml: () => toYamlAction(queue),
   }
 }
 
 /**
  * Resolve references in an OpenAPI specification.
  */
-function dereferenceAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue = [],
-) {
-  queue.push({
+function dereferenceAction(queue: Queue) {
+  queue.tasks.push({
     action: dereference,
-    async: true,
   })
 
   return {
-    get: () => getAction(specification, queue),
-    files: () => filesAction(specification, queue),
+    get: () => getAction(queue),
+    files: () => filesAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(specification, queue, callback),
-    toJson: () => toJsonAction(specification, queue),
-    toYaml: () => toYamlAction(specification, queue),
+      filterAction(queue, callback),
+    toJson: () => toJsonAction(queue),
+    toYaml: () => toYamlAction(queue),
   }
 }
 
@@ -136,92 +134,72 @@ function dereferenceAction(
  * Remove parts of an OpenAPI specification with the given callback.
  */
 function filterAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue = [],
+  queue: Queue,
   callback: (specification: AnyApiDefinitionFormat) => boolean,
 ) {
-  queue.push({
+  queue.tasks.push({
     action: filter,
     options: callback,
-    async: false,
   })
 
   return {
-    get: () => getAction(specification, queue),
-    files: () => filesAction(specification, queue),
-    details: () => detailsAction(specification, queue),
-    filter: () => filterAction(specification, queue, callback),
-    upgrade: () => upgradeAction(specification, queue),
-    validate: () => validateAction(specification, queue),
-    dereference: () => dereferenceAction(specification, queue),
-    toJson: () => toJsonAction(specification, queue),
-    toYaml: () => toYamlAction(specification, queue),
+    get: () => getAction(queue),
+    files: () => filesAction(queue),
+    details: () => detailsAction(queue),
+    filter: () => filterAction(queue, callback),
+    upgrade: () => upgradeAction(queue),
+    validate: () => validateAction(queue),
+    dereference: () => dereferenceAction(queue),
+    toJson: () => toJsonAction(queue),
+    toYaml: () => toYamlAction(queue),
   }
 }
 
-async function getAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  const filesystem = await workThroughQueue(specification, queue)
+async function getAction(queue: Queue) {
+  const filesystem = await workThroughQueue(queue)
 
   // TODO: Shouldn’t we return the schema or something here?
   return getEntrypoint(filesystem).specification
 }
 
-async function filesAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  return await workThroughQueue(specification, queue)
+async function filesAction(queue: Queue) {
+  return await workThroughQueue(queue)
 }
 
-async function detailsAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  const filesystem = await workThroughQueue(specification, queue)
+async function detailsAction(queue: Queue) {
+  const filesystem = await workThroughQueue(queue)
 
   return details(getEntrypoint(filesystem).specification)
 }
 
-async function toJsonAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  const filesystem = await workThroughQueue(specification, queue)
+async function toJsonAction(queue: Queue) {
+  const filesystem = await workThroughQueue(queue)
 
   return toJson(getEntrypoint(filesystem).specification)
 }
 
-async function toYamlAction(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-) {
-  const filesystem = await workThroughQueue(specification, queue)
+async function toYamlAction(queue: Queue) {
+  const filesystem = await workThroughQueue(queue)
 
   return toYaml(getEntrypoint(filesystem).specification)
 }
 
-async function workThroughQueue(
-  specification: AnyApiDefinitionFormat,
-  queue: ActionQueue,
-): Promise<Filesystem> {
-  let result = specification
+async function workThroughQueue(queue: Queue): Promise<Filesystem> {
+  let result = queue.specification
 
-  for (const { action, async, options } of queue) {
-    if (async) {
-      // TODO: Some might not need options?
-      // @ts-expect-error TODO: Fix this
-      result = await action(result, options)
-    } else {
-      // TODO: Some might not need options?
-      // @ts-expect-error TODO: Fix this
-      result = action(result, options)
+  for (const { action, options } of queue.tasks) {
+    // Check if action is a function
+    if (typeof action !== 'function') {
+      console.warn('[queue] The given action is not a function:', action)
+      continue
     }
 
-    // console.log('typeof action', action)
-    // console.log('result', result)
+    // Check if action is an async function or a sync function
+    if (action.constructor.name === 'AsyncFunction') {
+      result = await action(result, options as any)
+    } else {
+      result = action(result, options)
+    }
   }
 
   return makeFilesystem(result)

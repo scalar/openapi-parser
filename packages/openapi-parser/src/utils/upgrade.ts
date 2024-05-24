@@ -8,7 +8,10 @@ import { upgradeFromTwoToThree } from './upgradeFromTwoToThree'
 /**
  * Upgrade specification to OpenAPI 3.1.0
  */
-export function upgrade(specification: AnyObject | Filesystem) {
+export function upgrade(
+  specification: AnyObject | Filesystem,
+  _options?: AnyObject,
+) {
   const upgraders = [upgradeFromTwoToThree, upgradeFromThreeToThreeOne]
 
   const wasFilesystem = isFilesystem(specification)
