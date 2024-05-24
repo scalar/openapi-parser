@@ -600,6 +600,7 @@ export namespace OpenAPIV3 {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
+    [key: string]: any
   }
 }
 
@@ -626,6 +627,7 @@ export namespace OpenAPIV2 {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
+    [key: string]: any
   }
 
   export interface SecuritySchemeObjectBase {
