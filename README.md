@@ -133,7 +133,12 @@ const result = openapi()
 You can reference other files, too. To do that, the parser needs to know what files are available.
 
 ```ts
-import { fetchUrlsPlugin, load, readFilesPlugin } from '@scalar/openapi-parser'
+import {
+  dereference,
+  fetchUrlsPlugin,
+  load,
+  readFilesPlugin,
+} from '@scalar/openapi-parser'
 
 // Load a file and all referenced files
 const filesystem = await load('./openapi.yaml', {
