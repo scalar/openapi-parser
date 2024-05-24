@@ -18,6 +18,7 @@ export default defineConfig({
         'ajv/dist/2020',
         'ajv-draft-04',
         'ajv-formats',
+        'yaml',
       ],
     },
   },
