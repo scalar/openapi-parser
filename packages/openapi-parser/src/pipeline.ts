@@ -198,7 +198,7 @@ async function workThroughQueue(queue: Queue): Promise<Filesystem> {
     if (action.constructor.name === 'AsyncFunction') {
       result = await action(result, options as any)
     } else {
-      result = action(result, options)
+      result = action(result, options as any)
     }
   }
 
