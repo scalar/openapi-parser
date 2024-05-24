@@ -597,7 +597,7 @@ export namespace OpenAPIV3 {
   }
 
   export interface TagObject {
-    nam?: string
+    name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
   }
