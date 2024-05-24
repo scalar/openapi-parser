@@ -8,6 +8,81 @@ import { fetchUrlsPlugin } from './plugins/fetchUrlsPlugin'
 import { readFilesPlugin } from './plugins/readFilesPlugin'
 
 describe('load', async () => {
+  it('loads JS object', async () => {
+    const filesystem = await load(
+      {
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      },
+      {
+        plugins: [readFilesPlugin, fetchUrlsPlugin],
+      },
+    )
+
+    expect(getEntrypoint(filesystem).specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {},
+    })
+  })
+
+  it('loads JSON string', async () => {
+    const filesystem = await load(
+      JSON.stringify({
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      }),
+      {
+        plugins: [readFilesPlugin, fetchUrlsPlugin],
+      },
+    )
+
+    expect(getEntrypoint(filesystem).specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {},
+    })
+  })
+
+  it('loads YAML string', async () => {
+    const filesystem = await load(
+      YAML.stringify({
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {},
+      }),
+      {
+        plugins: [readFilesPlugin, fetchUrlsPlugin],
+      },
+    )
+
+    expect(getEntrypoint(filesystem).specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {},
+    })
+  })
+
   it('loads file', async () => {
     const EXAMPLE_FILE = path.join(
       new URL(import.meta.url).pathname,
@@ -26,13 +101,42 @@ describe('load', async () => {
       },
       paths: {},
     })
-
-    // console.log(JSON.stringify(filesystem, null, 2))
   })
 
-  // TODO: Load all referenced files from the filesystem
+  it('loads referenced files in files', async () => {
+    const EXAMPLE_FILE = path.join(
+      new URL(import.meta.url).pathname,
+      '../../../../tests/filesystem/api/openapi.yaml',
+    )
 
-  it('fetches url', async () => {
+    const filesystem = await load(EXAMPLE_FILE, {
+      plugins: [readFilesPlugin],
+    })
+
+    // filenames
+    expect(filesystem.map((entry) => entry.filename)).toStrictEqual([
+      'openapi.yaml',
+      'schemas/problem.yaml',
+      'schemas/upload.yaml',
+      './components/coordinates.yaml',
+    ])
+
+    // dirs
+    expect(filesystem.map((entry) => entry.dir)).toStrictEqual([
+      '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/tests/filesystem/api',
+      '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/tests/filesystem/api/schemas',
+      '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/tests/filesystem/api/schemas',
+      '/Users/hanspagel/Documents/Projects/openapi-parser/packages/openapi-parser/tests/filesystem/api/schemas/components',
+    ])
+
+    // specification
+    expect(filesystem[0].specification).toBeTypeOf('object')
+
+    // only one entrypoint
+    expect(filesystem.filter((entry) => entry.isEntrypoint).length).toBe(1)
+  })
+
+  it('loads url', async () => {
     // @ts-expect-error only partially patched
     global.fetch = async () => ({
       text: async () =>
@@ -60,7 +164,7 @@ describe('load', async () => {
     })
   })
 
-  it('fetches referenced urls', async () => {
+  it('loads referenced urls', async () => {
     // @ts-expect-error only partially patched
     global.fetch = async (url: string) => {
       if (url === 'https://example.com/openapi.yaml') {
@@ -132,81 +236,6 @@ describe('load', async () => {
           },
         },
       },
-    })
-  })
-
-  it('retrieves JS object', async () => {
-    const filesystem = await load(
-      {
-        openapi: '3.1.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
-      },
-      {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
-      },
-    )
-
-    expect(getEntrypoint(filesystem).specification).toMatchObject({
-      openapi: '3.1.0',
-      info: {
-        title: 'Hello World',
-        version: '1.0.0',
-      },
-      paths: {},
-    })
-  })
-
-  it('retrieves JSON string', async () => {
-    const filesystem = await load(
-      JSON.stringify({
-        openapi: '3.1.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
-      }),
-      {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
-      },
-    )
-
-    expect(getEntrypoint(filesystem).specification).toMatchObject({
-      openapi: '3.1.0',
-      info: {
-        title: 'Hello World',
-        version: '1.0.0',
-      },
-      paths: {},
-    })
-  })
-
-  it('retrieves YAML string', async () => {
-    const filesystem = await load(
-      YAML.stringify({
-        openapi: '3.1.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
-      }),
-      {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
-      },
-    )
-
-    expect(getEntrypoint(filesystem).specification).toMatchObject({
-      openapi: '3.1.0',
-      info: {
-        title: 'Hello World',
-        version: '1.0.0',
-      },
-      paths: {},
     })
   })
 })

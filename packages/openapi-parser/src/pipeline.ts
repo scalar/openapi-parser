@@ -13,11 +13,17 @@ import {
 import { type LoadPlugin } from './utils/load/load'
 import { makeFilesystem } from './utils/makeFilesystem'
 
+/**
+ * A queuable action for the pipeline
+ */
 export type Action = {
   action: typeof load | typeof upgrade | typeof filter
   options?: AnyObject
 }
 
+/**
+ * A queue of tasks to run on an OpenAPI specification
+ */
 export type Queue = {
   specification: AnyApiDefinitionFormat
   tasks: Action[]
@@ -184,9 +190,13 @@ async function toYamlAction(queue: Queue) {
   return toYaml(getEntrypoint(filesystem).specification)
 }
 
+/**
+ * Run through a queue of tasks
+ */
 async function workThroughQueue(queue: Queue): Promise<Filesystem> {
-  let result = queue.specification
+  let specification = queue.specification
 
+  // Run through all tasks in the queue
   for (const { action, options } of queue.tasks) {
     // Check if action is a function
     if (typeof action !== 'function') {
@@ -194,13 +204,13 @@ async function workThroughQueue(queue: Queue): Promise<Filesystem> {
       continue
     }
 
-    // Check if action is an async function or a sync function
+    // Check if the action is an async function
     if (action.constructor.name === 'AsyncFunction') {
-      result = await action(result, options as any)
+      specification = await action(specification, options as any)
     } else {
-      result = action(result, options as any)
+      specification = action(specification, options as any)
     }
   }
 
-  return makeFilesystem(result)
+  return makeFilesystem(specification)
 }
