@@ -38,7 +38,7 @@ export default class EnumValidationError extends BaseValidationError {
 
     const output = {
       ...this.getLocation(),
-      message: `${this.getDecoratedPath()} ${message}: ${allowedValues}`,
+      message: `${message}: ${allowedValues}`,
       path: this.instancePath,
     }
 

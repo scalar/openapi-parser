@@ -26,7 +26,7 @@ export default class PatternValidationError extends BaseValidationError {
     return {
       // ...this.getLocation(`${this.instancePath}/${params.propertyName}`),
       ...this.getLocation(),
-      message: `${this.getDecoratedPath()} Property "${propertyName}" must match pattern ${params.pattern}`,
+      message: `Property "${propertyName}" must match pattern ${params.pattern}`,
       path: this.instancePath,
     }
   }

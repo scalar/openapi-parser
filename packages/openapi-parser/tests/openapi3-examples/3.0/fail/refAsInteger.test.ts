@@ -14,9 +14,9 @@ describe('refAsInteger', () => {
     expect(result.errors?.[0]?.message).toBe(
       `Property $ref is not expected to be here`,
     )
-    expect(result.errors?.[1]?.message).toBe(': type must be string')
+    expect(result.errors?.[1]?.message).toBe('type must be string')
     expect(result.errors?.[2]?.message).toBe(
-      ': oneOf must match exactly one schema in oneOf',
+      'oneOf must match exactly one schema in oneOf',
     )
     expect(result.errors?.length).toBe(3)
 

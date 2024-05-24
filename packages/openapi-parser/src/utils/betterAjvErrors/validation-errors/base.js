@@ -1,6 +1,6 @@
 // import { codeFrameColumns } from '@babel/code-frame';
 // import chalk from 'chalk';
-import { getDecoratedDataPath, getMetaFromPath } from '../json'
+import { getMetaFromPath } from '../json'
 
 export default class BaseValidationError {
   // eslint-disable-next-line default-param-last
@@ -33,10 +33,6 @@ export default class BaseValidationError {
       start: loc.start,
       end: isSkipEndLocation ? undefined : loc.end,
     }
-  }
-
-  getDecoratedPath(dataPath = this.instancePath) {
-    return getDecoratedDataPath(this.jsonAst, dataPath)
   }
 
   getCodeFrame(message, dataPath = this.instancePath) {

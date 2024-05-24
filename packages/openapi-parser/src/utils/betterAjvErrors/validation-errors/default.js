@@ -22,7 +22,7 @@ export default class DefaultValidationError extends BaseValidationError {
 
     return {
       ...this.getLocation(),
-      message: `${this.getDecoratedPath()}: ${keyword} ${message}`,
+      message: `${keyword} ${message}`,
       path: this.instancePath,
     }
   }
