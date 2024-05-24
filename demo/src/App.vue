@@ -50,7 +50,7 @@ watchDebounced(
     result.value = (
       await openapi()
         .load(newValue, {
-          plugins: [fetchUrlsPlugin],
+          plugins: [fetchUrlsPlugin()],
         })
         .dereference()
         .get()

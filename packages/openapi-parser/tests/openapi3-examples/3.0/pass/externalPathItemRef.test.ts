@@ -11,7 +11,7 @@ const EXAMPLE_FILE = path.join(
 describe('externalPathItemRef', () => {
   it('passes', async () => {
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin],
+      plugins: [readFilesPlugin()],
     })
 
     const result = await validate(filesystem)

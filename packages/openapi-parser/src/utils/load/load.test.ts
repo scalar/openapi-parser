@@ -19,7 +19,7 @@ describe('load', async () => {
         paths: {},
       },
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -44,7 +44,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -69,7 +69,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -90,7 +90,7 @@ describe('load', async () => {
     )
 
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -110,7 +110,7 @@ describe('load', async () => {
     )
 
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin],
+      plugins: [readFilesPlugin()],
     })
 
     // filenames
@@ -151,7 +151,7 @@ describe('load', async () => {
     })
 
     const filesystem = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -194,7 +194,7 @@ describe('load', async () => {
         },
       },
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -251,7 +251,7 @@ describe('load', async () => {
     }
 
     const filesystem = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(filesystem[0].specification).toMatchObject({
@@ -319,7 +319,7 @@ describe('load', async () => {
         },
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
