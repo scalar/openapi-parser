@@ -19,7 +19,7 @@ describe('load', async () => {
         paths: {},
       },
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -44,7 +44,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -69,7 +69,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 
@@ -90,7 +90,7 @@ describe('load', async () => {
     )
 
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -110,7 +110,7 @@ describe('load', async () => {
     )
 
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin],
+      plugins: [readFilesPlugin()],
     })
 
     // filenames
@@ -151,7 +151,7 @@ describe('load', async () => {
     })
 
     const filesystem = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -162,6 +162,93 @@ describe('load', async () => {
       },
       paths: {},
     })
+  })
+
+  it('handles failed requests', async () => {
+    // Failed request
+    global.fetch = async () => {
+      throw new TypeError('fetch failed')
+    }
+
+    const filesystem = await load(
+      {
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: 'https://DOES_NOT_EXIST',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+      },
+    )
+
+    expect(getEntrypoint(filesystem).specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {},
+    })
+  })
+
+  it('limits the number of requests', async () => {
+    // @ts-expect-error only partially patched
+    global.fetch = async () => {
+      return {
+        text: async () => 'FOOBAR',
+      }
+    }
+
+    const filesystem = await load(
+      {
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: 'https://DOES_NOT_EXIST',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        plugins: [
+          fetchUrlsPlugin({
+            limit: 0,
+          }),
+        ],
+      },
+    )
+
+    expect(filesystem.length).toBe(1)
   })
 
   it('loads referenced urls', async () => {
@@ -207,7 +294,7 @@ describe('load', async () => {
     }
 
     const filesystem = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin, fetchUrlsPlugin],
+      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
     expect(filesystem[0].specification).toMatchObject({
@@ -275,7 +362,7 @@ describe('load', async () => {
         },
       }),
       {
-        plugins: [readFilesPlugin, fetchUrlsPlugin],
+        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
       },
     )
 

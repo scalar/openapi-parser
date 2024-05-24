@@ -142,7 +142,7 @@ import {
 
 // Load a file and all referenced files
 const filesystem = await load('./openapi.yaml', {
-  plugins: [readFilesPlugin, fetchUrlsPlugin],
+  plugins: [readFilesPlugin(), fetchUrlsPlugin()],
 })
 
 // Instead of just passing a single specification, pass the whole “filesystem”

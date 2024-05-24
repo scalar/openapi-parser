@@ -642,7 +642,7 @@ describe('resolveReferences', () => {
 
   it('resolves from filesystem', async () => {
     const filesystem = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin],
+      plugins: [readFilesPlugin()],
     })
 
     const { schema } = resolveReferences(filesystem)

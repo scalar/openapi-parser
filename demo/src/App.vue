@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { fetchUrlsPlugin, openapi } from '@scalar/openapi-parser'
+import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
 
 const value = ref(
@@ -43,19 +44,21 @@ watch(value, async (newValue) => {
   window.localStorage.setItem('value', newValue)
 })
 
-watch(
+watchDebounced(
   value,
   async (newValue) => {
     result.value = (
       await openapi()
         .load(newValue, {
-          plugins: [fetchUrlsPlugin],
+          plugins: [fetchUrlsPlugin()],
         })
         .dereference()
         .get()
     )?.schema
   },
   {
+    debounce: 500,
+    maxWait: 1000,
     immediate: true,
   },
 )

@@ -55,7 +55,7 @@ describe('pipeline', () => {
   it('load file', async () => {
     const result = await openapi()
       .load(EXAMPLE_FILE, {
-        plugins: [readFilesPlugin],
+        plugins: [readFilesPlugin()],
       })
       .get()
 
@@ -65,7 +65,7 @@ describe('pipeline', () => {
   it('files', async () => {
     const filesystem = await openapi()
       .load(EXAMPLE_FILE, {
-        plugins: [readFilesPlugin],
+        plugins: [readFilesPlugin()],
       })
       .files()
 
