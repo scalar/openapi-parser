@@ -1,11 +1,10 @@
 import { ERRORS } from '../configuration'
-import { dirname, join } from '../polyfills/path'
+import { OpenAPI } from '../types'
 import type {
   AnyObject,
   ErrorObject,
   Filesystem,
   FilesystemEntry,
-  ResolvedOpenAPI,
 } from '../types'
 import { getEntrypoint } from './getEntrypoint'
 import { getSegmentsFromPath } from './getSegmentsFromPath'
@@ -24,7 +23,7 @@ import { makeFilesystem } from './makeFilesystem'
 export type ResolveReferencesResult = {
   valid: boolean
   errors: ErrorObject[]
-  schema: AnyObject | ResolvedOpenAPI.Document
+  schema: OpenAPI.Document
 }
 
 // TODO: Exists already, clean up
@@ -86,7 +85,7 @@ export function resolveReferences(
     valid: errors.length === 0,
     errors: errors,
     schema: (file ?? getEntrypoint(filesystem))
-      .specification as ResolvedOpenAPI.Document,
+      .specification as OpenAPI.Document,
   }
 
   /**

@@ -406,7 +406,6 @@ describe('resolveReferences', () => {
     expect(() => JSON.stringify(schema, null, 2)).toThrow()
 
     // Sky is the limit
-    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(schema.foo.bar.bar.bar.bar.bar.bar.bar.bar).toBeTypeOf('object')
   })
 
@@ -468,12 +467,9 @@ describe('resolveReferences', () => {
     expect(specification.properties.element.$ref).toBeTypeOf('string')
 
     // Circular dependency should be resolved
-    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(schema.properties.element.type).toBe('object')
-    // @ts-expect-error We’re misusing the function and pass a partial specification only.
     expect(schema.properties.element.properties.element.type).toBe('object')
     expect(
-      // @ts-expect-error We’re misusing the function and pass a partial specification only.
       schema.properties.element.properties.element.properties.element.type,
     ).toBe('object')
 

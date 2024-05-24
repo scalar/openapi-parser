@@ -1,16 +1,7 @@
-import type { OpenAPI } from 'openapi-types'
-
 import { ERRORS } from '../configuration'
-import type { ResolvedOpenAPI } from './openapi'
+import type { OpenAPI } from './openapi'
 
-export type {
-  ResolvedOpenAPI,
-  ResolvedOpenAPIV2,
-  ResolvedOpenAPIV3,
-  ResolvedOpenAPIV3_1,
-} from './openapi'
-
-export type { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from 'openapi-types'
+export type { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from './openapi'
 
 export type AnyObject = Record<string, any>
 
@@ -19,7 +10,7 @@ export type ValidateResult = {
   specification?: OpenAPI.Document
   version?: string
   errors?: ErrorObject[]
-  schema?: AnyObject | ResolvedOpenAPI.Document
+  schema?: OpenAPI.Document
 }
 
 export type ErrorObject = {
@@ -30,7 +21,7 @@ export type ErrorObject = {
 export type ResolveResult = {
   version: string | undefined
   specification?: OpenAPI.Document
-  schema?: AnyObject | ResolvedOpenAPI.Document
+  schema?: OpenAPI.Document
   errors?: ErrorObject[]
 }
 
