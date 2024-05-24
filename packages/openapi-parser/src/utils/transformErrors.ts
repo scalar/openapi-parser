@@ -16,7 +16,6 @@ export function transformErrors(specification: AnyObject, errors: any) {
   }
 
   return betterAjvErrors(specification, null, errors, {
-    format: 'js',
     indent: 2,
   }).map((error) => {
     error.message = error.message.trim()
