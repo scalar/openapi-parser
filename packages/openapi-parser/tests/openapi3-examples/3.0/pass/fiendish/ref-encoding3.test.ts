@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../../src'
-import refEncoding3 from './ref-encoding3.yaml'
+import refEncoding3 from './ref-encoding3.yaml?raw'
 
 describe('ref-encoding3', () => {
   it('passes', async () => {

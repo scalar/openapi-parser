@@ -36,8 +36,6 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
-    "@modyfi/vite-plugin-yaml": "^1.1.0",
-    "@types/js-yaml": "^4.0.9",
     "glob": "^10.3.16",
     "just-diff": "^6.0.2",
     "rollup-plugin-webpack-stats": "^0.2.6",

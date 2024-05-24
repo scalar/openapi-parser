@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import duplicateOperationId from './duplicateOperationId.yaml'
+import duplicateOperationId from './duplicateOperationId.yaml?raw'
 
 describe.todo('duplicateOperationId', () => {
   it('returns an error', async () => {

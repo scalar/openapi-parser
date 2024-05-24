@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../../src'
-import openApiUi from './openapi-ui.yaml'
+import openApiUi from './openapi-ui.yaml?raw'
 
 describe('openapi-ui', () => {
   it('apiWithExamples', async () => {

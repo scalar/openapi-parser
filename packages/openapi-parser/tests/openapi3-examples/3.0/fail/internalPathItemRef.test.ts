@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import internalPathItemRef from './internalPathItemRef.yaml'
+import internalPathItemRef from './internalPathItemRef.yaml?raw'
 
 describe('internalPathItemRef', () => {
   it('returns an error', async () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import serverVariableEnumType from './serverVariableEnumType.yaml'
+import serverVariableEnumType from './serverVariableEnumType.yaml?raw'
 
 describe('serverVariableEnumType', () => {
   it('returns an error', async () => {

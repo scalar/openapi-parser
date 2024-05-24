@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import server_enum_unknown from './server_enum_unknown.yaml'
+import server_enum_unknown from './server_enum_unknown.yaml?raw'
 
 describe('server_enum_unknown', () => {
   it('returns an error', async () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import schemaProperties from './schemaProperties.yaml'
+import schemaProperties from './schemaProperties.yaml?raw'
 
 describe('schemaProperties', () => {
   it('returns an error', async () => {

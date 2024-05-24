@@ -12,7 +12,7 @@
     "sourceMap": false,
     "lib": ["ESNext", "DOM"],
     "target": "ESNext",
-    "types": ["@modyfi/vite-plugin-yaml/modules"]
+    "types": []
   },
   "include": ["src/**/*", "tests/**/*", "**/*.json", "**/*.yaml"]
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import path_no_response from './path_no_response.yaml'
+import path_no_response from './path_no_response.yaml?raw'
 
 describe('path_no_response', () => {
   it('passes', async () => {

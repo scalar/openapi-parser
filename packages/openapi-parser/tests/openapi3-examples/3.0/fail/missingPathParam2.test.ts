@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import missingPathParam2 from './missingPathParam2.yaml'
+import missingPathParam2 from './missingPathParam2.yaml?raw'
 
 describe.todo('missingPathParam2', () => {
   it('returns an error', async () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import license_identifier from './license_identifier.yaml'
+import license_identifier from './license_identifier.yaml?raw'
 
 describe('license_identifier', () => {
   it('passes', async () => {

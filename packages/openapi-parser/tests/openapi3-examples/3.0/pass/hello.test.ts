@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import hello from './hello.yaml'
+import hello from './hello.yaml?raw'
 
 describe('hello', () => {
   it('passes', async () => {

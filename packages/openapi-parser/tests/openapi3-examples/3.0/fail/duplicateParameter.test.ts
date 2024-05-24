@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import duplicateParameter from './duplicateParameter.yaml'
+import duplicateParameter from './duplicateParameter.yaml?raw'
 
 describe.todo('duplicateParameter', () => {
   it('returns an error', async () => {

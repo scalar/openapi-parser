@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import pathitemProperty from './pathitem-property.yaml'
+import pathitemProperty from './pathitem-property.yaml?raw'
 
 describe('pathitem-property', () => {
   it('returns an error', async () => {

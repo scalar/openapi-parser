@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import invalidPattern from './invalidPattern.yaml'
+import invalidPattern from './invalidPattern.yaml?raw'
 
 describe('invalidPattern', () => {
   it('returns an error', async () => {

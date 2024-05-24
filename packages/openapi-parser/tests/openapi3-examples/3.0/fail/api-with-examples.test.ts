@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import apiWithExamples from './api-with-examples.yaml'
+import apiWithExamples from './api-with-examples.yaml?raw'
 
 describe('api-with-examples', () => {
   it('returns an error', async () => {

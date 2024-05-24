@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import refAsInteger from './refAsInteger.yaml'
+import refAsInteger from './refAsInteger.yaml?raw'
 
 describe('refAsInteger', () => {
   it('returns an error', async () => {

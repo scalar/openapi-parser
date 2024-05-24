@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import minimal_paths from './minimal_paths.yaml'
+import minimal_paths from './minimal_paths.yaml?raw'
 
 describe('minimal_paths', () => {
   it('passes', async () => {

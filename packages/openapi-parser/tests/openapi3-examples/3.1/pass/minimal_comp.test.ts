@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import minimal_comp from './minimal_comp.yaml'
+import minimal_comp from './minimal_comp.yaml?raw'
 
 describe('minimal_comp', () => {
   it('passes', async () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import deprecated from './deprecated.yaml'
+import deprecated from './deprecated.yaml?raw'
 
 describe('deprecated', () => {
   it('returns an error', async () => {

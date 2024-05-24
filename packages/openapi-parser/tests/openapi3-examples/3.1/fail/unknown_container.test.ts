@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import unknown_container from './unknown_container.yaml'
+import unknown_container from './unknown_container.yaml?raw'
 
 describe('unknown_container', () => {
   it('returns an error', async () => {

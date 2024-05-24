@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import mega from './mega.yaml'
+import mega from './mega.yaml?raw'
 
 describe('mega', () => {
   it('passes', async () => {

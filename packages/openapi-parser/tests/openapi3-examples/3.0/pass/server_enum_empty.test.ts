@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import server_enum_empty from './server_enum_empty.yaml'
+import server_enum_empty from './server_enum_empty.yaml?raw'
 
 describe.todo('server_enum_empty', () => {
   it('passes', async () => {

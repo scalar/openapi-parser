@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import nonBearerHttpSec from './nonBearerHttpSec.yaml'
+import nonBearerHttpSec from './nonBearerHttpSec.yaml?raw'
 
 describe('nonBearerHttpSec', () => {
   it('passes', async () => {

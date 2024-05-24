@@ -1,11 +1,10 @@
-import ViteYaml from '@modyfi/vite-plugin-yaml'
 import { builtinModules } from 'node:module'
 import { webpackStats } from 'rollup-plugin-webpack-stats'
 import dts from 'vite-plugin-dts'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [ViteYaml(), dts({ rollupTypes: true }), webpackStats()],
+  plugins: [dts({ rollupTypes: true }), webpackStats()],
   build: {
     lib: {
       entry: ['src/index.ts'],

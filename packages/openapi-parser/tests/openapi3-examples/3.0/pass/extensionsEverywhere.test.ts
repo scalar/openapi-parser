@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { validate } from '../../../../src'
-import extensionsEverywhere from './extensionsEverywhere.yaml'
+import extensionsEverywhere from './extensionsEverywhere.yaml?raw'
 
 describe('extensionsEverywhere', () => {
   it('passes', async () => {
