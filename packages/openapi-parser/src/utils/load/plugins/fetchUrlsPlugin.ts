@@ -1,6 +1,21 @@
 import { LoadPlugin } from '../load'
 
-export const fetchUrlsPlugin: () => LoadPlugin = () => {
+export const fetchUrlsPluginDefaultConfiguration = {
+  limit: 10,
+}
+
+export const fetchUrlsPlugin: (customConfiguration?: {
+  limit?: number | false
+}) => LoadPlugin = (customConfiguration) => {
+  // State
+  let numberOfRequests = 0
+
+  // Configuration
+  const configuration = {
+    ...fetchUrlsPluginDefaultConfiguration,
+    ...customConfiguration,
+  }
+
   return {
     check(value?: any) {
       // Not a string
@@ -16,12 +31,24 @@ export const fetchUrlsPlugin: () => LoadPlugin = () => {
       return true
     },
     async get(value?: any) {
+      // Limit ht enumber of requests
+      if (
+        configuration?.limit !== false &&
+        numberOfRequests >= configuration?.limit
+      ) {
+        console.warn(
+          `[fetchUrlsPlugin] Maximum number of requests reeached (${configuration?.limit}), skipping request`,
+        )
+        return undefined
+      }
+
       try {
+        numberOfRequests++
         const response = await fetch(value)
 
         return await response.text()
       } catch (error) {
-        console.error('[fetchUrlsPlugin]', error.message)
+        console.error('[fetchUrlsPlugin]', error.message, `(${value})`)
       }
     },
   }

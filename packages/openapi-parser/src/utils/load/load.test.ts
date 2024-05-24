@@ -164,7 +164,7 @@ describe('load', async () => {
     })
   })
 
-  it.only('handles failed requests', async () => {
+  it('handles failed requests', async () => {
     // Failed request
     global.fetch = async () => {
       throw new TypeError('fetch failed')
@@ -206,6 +206,49 @@ describe('load', async () => {
       },
       paths: {},
     })
+  })
+
+  it('limits the number of requests', async () => {
+    // @ts-expect-error only partially patched
+    global.fetch = async () => {
+      return {
+        text: async () => 'FOOBAR',
+      }
+    }
+
+    const filesystem = await load(
+      {
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: 'https://DOES_NOT_EXIST',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        plugins: [
+          fetchUrlsPlugin({
+            limit: 0,
+          }),
+        ],
+      },
+    )
+
+    expect(filesystem.length).toBe(1)
   })
 
   it('loads referenced urls', async () => {
