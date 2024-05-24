@@ -1,5 +1,20 @@
 # @scalar/openapi-parser
 
+## 0.4.0
+
+### Minor Changes
+
+- 0b7d7be: refactor!: resolve is renamed to dereference
+- 63f72b4: refactor!: new OpenAPI types, removed the ResolvedOpenAPI types
+- 0b7d7be: refactor!: when using the pipeline syntax all tasks are queued and only executed when you add .get(), .toJson() or toYaml()
+- 56e7033: feat: file references
+- 0b7d7be: chore!: remove `loadFiles` utility, use `load` instead
+
+### Patch Changes
+
+- 03569c8: fix: existsSync is not a function
+- 6436ae1: refactor: resolve should resolve (and not validate)
+
 ## 0.3.2
 
 ### Patch Changes
