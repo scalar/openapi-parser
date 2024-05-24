@@ -917,32 +917,3 @@ export interface IJsonSchema {
   not?: IJsonSchema
   $ref?: string
 }
-
-const exampleSpecification: OpenAPI.Document = {
-  'openapi': '3.1.0',
-  'info': {
-    title: 'Hello World',
-    version: '1.0.0',
-  },
-  'x-foo': 'bar',
-  'paths': {
-    '/': {
-      get: {
-        'x-internal': true,
-      },
-    },
-  },
-  'components': {
-    schemas: {
-      Foo: {
-        'type': 'object',
-        'x-internal': true,
-        'properties': {
-          name: {
-            type: 'string',
-          },
-        },
-      },
-    },
-  },
-}
