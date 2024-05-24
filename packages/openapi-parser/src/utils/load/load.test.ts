@@ -164,6 +164,50 @@ describe('load', async () => {
     })
   })
 
+  it.only('handles failed requests', async () => {
+    // Failed request
+    global.fetch = async () => {
+      throw new TypeError('fetch failed')
+    }
+
+    const filesystem = await load(
+      {
+        openapi: '3.1.0',
+        info: {
+          title: 'Hello World',
+          version: '1.0.0',
+        },
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                content: {
+                  'application/json': {
+                    schema: {
+                      $ref: 'https://DOES_NOT_EXIST',
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        plugins: [readFilesPlugin, fetchUrlsPlugin],
+      },
+    )
+
+    expect(getEntrypoint(filesystem).specification).toMatchObject({
+      openapi: '3.1.0',
+      info: {
+        title: 'Hello World',
+        version: '1.0.0',
+      },
+      paths: {},
+    })
+  })
+
   it('loads referenced urls', async () => {
     // @ts-expect-error only partially patched
     global.fetch = async (url: string) => {

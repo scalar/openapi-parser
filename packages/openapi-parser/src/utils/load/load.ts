@@ -31,6 +31,12 @@ export async function load(
   // Check whether the value is an URL or file path
   const plugin = options?.plugins?.find((plugin) => plugin.check(value))
   const content = normalize(plugin ? await plugin.get(value) : value)
+
+  // No content
+  if (content === undefined) {
+    return []
+  }
+
   let filesystem = makeFilesystem(content, {
     filename: options?.filename ?? null,
   })
