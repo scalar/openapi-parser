@@ -1,16 +1,16 @@
 import vue from '@vitejs/plugin-vue'
-import { builtinModules } from 'node:module'
+// import { builtinModules } from 'node:module'
 import path from 'node:path'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  build: {
-    rollupOptions: {
-      external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
-    },
-  },
+  // build: {
+  //   rollupOptions: {
+  //     external: [...builtinModules, ...builtinModules.map((m) => `node:${m}`)],
+  //   },
+  // },
   resolve: {
     alias: [
       // Resolve the uncompiled source code for all @scalar packages
