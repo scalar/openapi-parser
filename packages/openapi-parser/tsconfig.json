@@ -1,18 +1,27 @@
 {
   "compilerOptions": {
-    "tsBuildInfoFile": null,
-    "composite": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "moduleResolution": "Node",
-    "esModuleInterop": true,
-    "module": "esnext",
     "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
-    "sourceMap": false,
-    "lib": ["ESNext", "DOM"],
-    "target": "ESNext",
-    "types": []
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmitOnError": true,
+    "noUnusedParameters": true,
+    "pretty": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "target": "ES2022",
+    "useDefineForClassFields": false,
+    "paths": {
+      "rollup": ["./node_modules/rollup"]
+    }
   },
-  "include": ["src/**/*", "tests/**/*", "**/*.json", "**/*.yaml"]
+  "include": [
+    "src/**/*",
+    "tests/**/*",
+    "**/*.json",
+    "**/*.yaml",
+    "rollup.config.ts"
+  ],
+  "exclude": ["dist", "node_modules"]
 }

@@ -1,4 +1,4 @@
-import { Validator } from '../lib'
+import { Validator } from '../lib/Validator'
 import type { AnyObject, Filesystem, OpenAPI, ValidateResult } from '../types'
 import { makeFilesystem } from './makeFilesystem'
 

@@ -1,8 +1,8 @@
-import { resolveReferences } from '../lib'
 import type { AnyObject, Filesystem, ResolveResult } from '../types'
 import { details } from './details'
 import { getEntrypoint } from './getEntrypoint'
 import { makeFilesystem } from './makeFilesystem'
+import { resolveReferences } from './resolveReferences'
 
 /**
  * Validates an OpenAPI schema and resolves all references.
