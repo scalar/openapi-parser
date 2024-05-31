@@ -1,5 +1,11 @@
 # @scalar/openapi-parser
 
+## 0.5.0
+
+### Minor Changes
+
+- 10bd75c: chore: switch to rollup to make the library tree shakeable
+
 ## 0.4.1
 
 ### Patch Changes
