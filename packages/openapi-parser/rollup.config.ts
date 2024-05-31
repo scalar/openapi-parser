@@ -1,5 +1,4 @@
 import json from '@rollup/plugin-json'
-import typescript from '@rollup/plugin-typescript'
 import { rm } from 'node:fs/promises'
 import { builtinModules } from 'node:module'
 import type { RollupOptions } from 'rollup'
@@ -7,8 +6,10 @@ import type { Plugin } from 'rollup'
 import dts from 'rollup-plugin-dts'
 import type { Options as ESBuildOptions } from 'rollup-plugin-esbuild'
 import esbuild from 'rollup-plugin-esbuild'
+import { webpackStats } from 'rollup-plugin-webpack-stats'
 
-// import { PluginPure } from 'rollup-plugin-pure'
+const input = `./src/index.ts`
+const dir = 'dist'
 
 function cleanBeforeWrite(directory: string): Plugin {
   let removePromise: Promise<void>
@@ -21,6 +22,7 @@ function cleanBeforeWrite(directory: string): Plugin {
           force: true,
           recursive: true,
         })
+
         return removePromise
       }
     },
@@ -40,30 +42,24 @@ function esbuildMinifer(options: ESBuildOptions) {
 const config: RollupOptions[] = [
   // Code
   {
-    input: `./src/index.ts`,
+    input,
     output: [
       // ESM
       {
-        dir: 'dist',
+        dir,
         format: 'es',
         sourcemap: false,
         preserveModules: true,
       },
     ],
     plugins: [
-      cleanBeforeWrite('dist'),
+      cleanBeforeWrite(dir),
       json(),
       esbuild({
         exclude: /node_modules/,
       }),
-      // esbuildMinifer,
-      // typescript(),
-      // PluginPure({
-      //   functions: ['*'],
-      //   include: [/(?<!im)pure\.js$/],
-      //   // exclude: [],
-      //   // sourcemap: true,
-      // }),
+      esbuildMinifer,
+      webpackStats(),
     ],
     external: [
       ...builtinModules,
@@ -81,16 +77,9 @@ const config: RollupOptions[] = [
   },
   // Types
   {
-    input: './src/index.ts',
-    output: [
-      { dir: 'dist', format: 'es', sourcemap: false, preserveModules: true },
-    ],
+    input,
+    output: [{ dir, format: 'es', sourcemap: false, preserveModules: true }],
     plugins: [dts()],
-    // treeshake: {
-    //   moduleSideEffects: false,
-    //   propertyReadSideEffects: false,
-    //   tryCatchDeoptimization: false,
-    // },
   },
 ]
 
