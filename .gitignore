@@ -5,3 +5,4 @@ coverage
 .tmp
 **/vite.config.ts.timestamp-*.mjs
 *.cpuprofile
+.rollup.cache
