@@ -3,7 +3,7 @@ import {
   dereference,
   fetchUrlsPlugin,
   load,
-  toJson,
+  toJson, // validate,
 } from '@scalar/openapi-parser'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
@@ -55,6 +55,9 @@ watchDebounced(
     const content = await load(newValue, {
       plugins: [fetchUrlsPlugin()],
     })
+
+    // console.log(await validate(content))
+
     const { schema } = await dereference(content)
 
     if (schema) {

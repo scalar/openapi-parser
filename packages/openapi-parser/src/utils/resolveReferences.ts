@@ -99,7 +99,7 @@ export function resolveReferences(
     let result: ResolveResult | undefined
 
     // Iterate over the whole objecct
-    Object.entries(schema ?? {}).forEach(([key, value]) => {
+    Object.entries(schema ?? {}).forEach(([_, value]) => {
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content

@@ -9,7 +9,7 @@ import {
   OpenApiVersions,
 } from '../../configuration'
 import type { AnyObject, Filesystem, ValidateResult } from '../../types'
-import { details as getOpenApiVersion } from '../../utils'
+import { details as getOpenApiVersion } from '../../utils/details'
 import { resolveReferences } from '../../utils/resolveReferences'
 import { transformErrors } from '../../utils/transformErrors'
 

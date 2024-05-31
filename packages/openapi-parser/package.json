@@ -21,9 +21,10 @@
     "dist",
     "CHANGELOG.md"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.js",
   "types": "./dist/index.d.ts",
-  "module": "./dist/index.js",
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/scalar/openapi-parser.git",
@@ -31,18 +32,22 @@
   },
   "scripts": {
     "types:check": "tsc --noEmit --skipLibCheck",
-    "build": "pnpm types:check && vite build",
+    "build": "pnpm types:check && rollup -c --configPlugin typescript",
     "test": "vitest"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.1.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^20.12.12",
     "glob": "^10.3.16",
     "just-diff": "^6.0.2",
+    "rollup": "^4.18.0",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-esbuild": "^6.1.1",
     "rollup-plugin-webpack-stats": "^0.2.6",
     "tinybench": "^2.8.0",
-    "vite": "^5.2.11",
-    "vite-plugin-dts": "^3.9.1",
-    "@types/node": "^20.12.12"
+    "tslib": "^2.6.2"
   },
   "dependencies": {
     "ajv": "^8.13.0",
