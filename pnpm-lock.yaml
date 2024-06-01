@@ -58,14 +58,14 @@ importers:
   packages/openapi-parser:
     dependencies:
       ajv:
-        specifier: ^8.13.0
-        version: 8.13.0
+        specifier: ^8.14.0
+        version: 8.14.0
       ajv-draft-04:
         specifier: ^1.0.0
-        version: 1.0.0(ajv@8.13.0)
+        version: 1.0.0(ajv@8.14.0)
       ajv-formats:
         specifier: ^3.0.1
-        version: 3.0.1(ajv@8.13.0)
+        version: 3.0.1(ajv@8.14.0)
       jsonpointer:
         specifier: ^5.0.1
         version: 5.0.1
@@ -141,8 +141,8 @@ packages:
       '@apidevtools/openapi-schemas': 2.1.0
       '@apidevtools/swagger-methods': 3.0.2
       '@jsdevtools/ono': 7.1.3
-      ajv: 8.13.0
-      ajv-draft-04: 1.0.0(ajv@8.13.0)
+      ajv: 8.14.0
+      ajv-draft-04: 1.0.0(ajv@8.14.0)
       call-me-maybe: 1.0.2
       openapi-types: 12.1.3
     dev: true
@@ -1220,7 +1220,7 @@ packages:
     hasBin: true
     dev: true
 
-  /ajv-draft-04@1.0.0(ajv@8.13.0):
+  /ajv-draft-04@1.0.0(ajv@8.14.0):
     resolution: {integrity: sha512-mv00Te6nmYbRp5DCwclxtt7yV/joXJPGS7nM+97GdxvuttCOfgI3K4U25zboyeX0O+myI8ERluxQe5wljMmVIw==}
     peerDependencies:
       ajv: ^8.5.0
@@ -1228,9 +1228,9 @@ packages:
       ajv:
         optional: true
     dependencies:
-      ajv: 8.13.0
+      ajv: 8.14.0
 
-  /ajv-formats@3.0.1(ajv@8.13.0):
+  /ajv-formats@3.0.1(ajv@8.14.0):
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
     peerDependencies:
       ajv: ^8.0.0
@@ -1238,11 +1238,11 @@ packages:
       ajv:
         optional: true
     dependencies:
-      ajv: 8.13.0
+      ajv: 8.14.0
     dev: false
 
-  /ajv@8.13.0:
-    resolution: {integrity: sha512-PRA911Blj99jR5RMeTunVbNXMF6Lp4vZXnk5GQjcnUWUTsrXtekg/pnmFFI2u/I36Y/2bITGS30GZCXei6uNkA==}
+  /ajv@8.14.0:
+    resolution: {integrity: sha512-oYs1UUtO97ZO2lJ4bwnWeQW8/zvOIQLGKcvPTsWmvc2SYgBb+upuNS5NxoLaMU4h8Ju3Nbj6Cq8mD2LQoqVKFA==}
     dependencies:
       fast-deep-equal: 3.1.3
       json-schema-traverse: 1.0.0
