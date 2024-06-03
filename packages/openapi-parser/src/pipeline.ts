@@ -164,6 +164,18 @@ function filterAction(
 async function getAction(queue: Queue) {
   const filesystem = await workThroughQueue(queue)
 
+  /**
+   * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
+   * The dereference function returns a ResolveResult, but others return a Filesystem.
+   */
+  const isMoreThanJustTheSpecification = Object.keys(filesystem).includes(
+    'specificationVersion',
+  )
+
+  if (isMoreThanJustTheSpecification) {
+    return filesystem
+  }
+
   // TODO: Shouldn’t we return the schema or something here?
   // TODO: specification actually has errors and stuff, that’s wrong …
   return getEntrypoint(filesystem).specification
@@ -213,5 +225,15 @@ async function workThroughQueue(queue: Queue): Promise<Filesystem> {
     }
   }
 
-  return makeFilesystem(specification)
+  /**
+   * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
+   * The dereference function returns a ResolveResult, but others return a Filesystem.
+   */
+  const isMoreThanJustTheSpecification = Object.keys(specification).includes(
+    'specificationVersion',
+  )
+
+  return isMoreThanJustTheSpecification
+    ? (specification as any)
+    : makeFilesystem(specification as Filesystem)
 }
