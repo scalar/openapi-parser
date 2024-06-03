@@ -50,9 +50,6 @@ const ignoreFiles = [
   // Returns HTML?
   'packages/openapi-parser/tests/files/amazonawscombackup.yaml',
   'packages/openapi-parser/tests/files/amazonawscomappintegrations.yaml',
-  // Max call stack exceeded
-  'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
-  'packages/openapi-parser/tests/files/amazonawscomce.yaml',
 ]
 
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
