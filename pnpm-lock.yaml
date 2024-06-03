@@ -86,8 +86,8 @@ importers:
         specifier: ^11.1.6
         version: 11.1.6(rollup@4.18.0)(tslib@2.6.2)(typescript@5.4.5)
       '@types/node':
-        specifier: ^20.12.12
-        version: 20.12.12
+        specifier: ^20.14.0
+        version: 20.14.0
       glob:
         specifier: ^10.4.1
         version: 10.4.1
@@ -1026,8 +1026,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@20.12.12:
-    resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
+  /@types/node@20.14.0:
+    resolution: {integrity: sha512-5cHBxFGJx6L4s56Bubp4fglrEpmyJypsqI6RgzMfBHWUJQGWAAi8cWcgetEbZXHYXo9C2Fa4EEds/uSyS4cxmA==}
     dependencies:
       undici-types: 5.26.5
     dev: true
