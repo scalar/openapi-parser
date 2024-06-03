@@ -161,9 +161,9 @@ function filterAction(
   }
 }
 
-async function getAction(queue: Queue) {
+// TODO: This type is off (function wrong return, read below)
+async function getAction(queue: Queue): Promise<Record<string, any>> {
   const filesystem = await workThroughQueue(queue)
-
   /**
    * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
    * The dereference function returns a ResolveResult, but others return a Filesystem.
