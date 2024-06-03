@@ -11,6 +11,9 @@ import { webpackStats } from 'rollup-plugin-webpack-stats'
 const input = `./src/index.ts`
 const dir = 'dist'
 
+/**
+ * Remove the output directory.
+ */
 function cleanBeforeWrite(directory: string): Plugin {
   let removePromise: Promise<void>
 
@@ -30,6 +33,9 @@ function cleanBeforeWrite(directory: string): Plugin {
   }
 }
 
+/**
+ * Minimal ESBuild minifier.
+ */
 function esbuildMinifer(options: ESBuildOptions) {
   const { renderChunk } = esbuild(options)
 
@@ -39,6 +45,9 @@ function esbuildMinifer(options: ESBuildOptions) {
   }
 }
 
+/**
+ * Rollup configuration
+ */
 const config: RollupOptions[] = [
   // Code
   {
