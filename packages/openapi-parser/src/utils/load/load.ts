@@ -54,6 +54,11 @@ export async function load(
     // Find a matching plugin
     const plugin = options?.plugins?.find((plugin) => plugin.check(reference))
 
+    // Skip if no plugin is found (internal references don’t need a plugin for example)
+    if (!plugin) {
+      continue
+    }
+
     const target =
       plugin.check(reference) && plugin.resolvePath
         ? plugin.resolvePath(value, reference)
