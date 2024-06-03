@@ -1,5 +1,5 @@
-// import { relative } from '../../polyfills/path'
 import { Filesystem } from '../../types'
+import { getEntrypoint } from '../getEntrypoint'
 import { getListOfReferences } from '../getListOfReferences'
 import { makeFilesystem } from '../makeFilesystem'
 import { normalize } from '../normalize'
@@ -41,8 +41,12 @@ export async function load(
     filename: options?.filename ?? null,
   })
 
-  // External references
-  const listOfReferences = getListOfReferences(content)
+  // Get references from file system entry, or from the content
+  const newEntry = options?.filename
+    ? filesystem.find((entry) => entry.filename === options?.filename)
+    : getEntrypoint(filesystem)
+
+  const listOfReferences = newEntry.references ?? getListOfReferences(content)
 
   // No other references
   if (listOfReferences.length === 0) {
