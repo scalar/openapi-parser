@@ -19,7 +19,7 @@ const EXAMPLE_FILE = join(
   '../utils/examples/openapi.yaml',
 )
 
-describe('pipeline', () => {
+describe('openapi', () => {
   it('load object', async () => {
     const result = await openapi()
       .load({

@@ -1,4 +1,4 @@
-import { Filesystem } from '../../types'
+import type { Filesystem, LoadResult } from '../../types'
 import { getEntrypoint } from '../getEntrypoint'
 import { getListOfReferences } from '../getListOfReferences'
 import { makeFilesystem } from '../makeFilesystem'
@@ -19,7 +19,7 @@ export async function load(
     filename?: string
     filesystem?: Filesystem
   },
-) {
+): Promise<LoadResult> {
   // Don’t load a reference twice, check the filesystem before fetching something
   if (
     options?.filesystem &&

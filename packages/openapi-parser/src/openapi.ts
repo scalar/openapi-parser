@@ -1,4 +1,10 @@
-import type { AnyObject, Filesystem, OpenAPI } from './types'
+import type {
+  AnyObject,
+  DereferenceResult,
+  DetailsResult,
+  Filesystem,
+  OpenAPI,
+} from './types'
 import {
   dereference,
   details,
@@ -162,11 +168,12 @@ function filterAction(
 }
 
 // TODO: This type is off (function wrong return, read below)
-async function getAction(queue: Queue): Promise<Record<string, any>> {
+async function getAction(queue: Queue): // TODO: Remove `| Filesystem`
+Promise<Partial<DereferenceResult> | Filesystem> {
   const filesystem = await workThroughQueue(queue)
   /**
    * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
-   * The dereference function returns a ResolveResult, but others return a Filesystem.
+   * The dereference function returns a DereferenceResult, but others return a Filesystem.
    */
   const isMoreThanJustTheSpecification = Object.keys(filesystem).includes(
     'specificationVersion',
@@ -181,23 +188,23 @@ async function getAction(queue: Queue): Promise<Record<string, any>> {
   return getEntrypoint(filesystem).specification
 }
 
-async function filesAction(queue: Queue) {
+async function filesAction(queue: Queue): Promise<Filesystem> {
   return await workThroughQueue(queue)
 }
 
-async function detailsAction(queue: Queue) {
+async function detailsAction(queue: Queue): Promise<DetailsResult> {
   const filesystem = await workThroughQueue(queue)
 
   return details(getEntrypoint(filesystem).specification)
 }
 
-async function toJsonAction(queue: Queue) {
+async function toJsonAction(queue: Queue): Promise<string> {
   const filesystem = await workThroughQueue(queue)
 
   return toJson(getEntrypoint(filesystem).specification)
 }
 
-async function toYamlAction(queue: Queue) {
+async function toYamlAction(queue: Queue): Promise<string> {
   const filesystem = await workThroughQueue(queue)
 
   return toYaml(getEntrypoint(filesystem).specification)
@@ -227,7 +234,7 @@ async function workThroughQueue(queue: Queue): Promise<Filesystem> {
 
   /**
    * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
-   * The dereference function returns a ResolveResult, but others return a Filesystem.
+   * The dereference function returns a DereferenceResult, but others return a Filesystem.
    */
   const isMoreThanJustTheSpecification = Object.keys(specification).includes(
     'specificationVersion',
