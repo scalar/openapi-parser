@@ -2,8 +2,6 @@ import { AnyObject } from '../types'
 
 /**
  * Recursively traverses the specification and applies the transform function to each node.
- *
- * TODO: Use JSON.stringify? Is that faster?
  */
 export function traverse(
   specification: AnyObject,
