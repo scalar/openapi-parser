@@ -31,16 +31,25 @@ export namespace OpenAPI {
     | OpenAPIV3.OperationObject<T>
     | OpenAPIV3_1.OperationObject<T>
   export type Parameter =
-    | OpenAPIV3_1.ReferenceObject
     | OpenAPIV3_1.ParameterObject
-    | OpenAPIV3.ReferenceObject
     | OpenAPIV3.ParameterObject
-    | OpenAPIV2.ReferenceObject
-    | OpenAPIV2.Parameter
+    | (OpenAPIV2.Parameter & {
+        // any other attribute
+        [key: string]: any
+      })
   export type Parameters =
-    | (OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)[]
-    | (OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject)[]
-    | (OpenAPIV2.ReferenceObject | OpenAPIV2.Parameter)[]
+    | (OpenAPIV3_1.ParameterObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+    | (OpenAPIV3.ParameterObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+    | (OpenAPIV2.Parameter & {
+        // any other attribute
+        [key: string]: any
+      })[]
 
   export interface Request {
     body?: any
@@ -55,7 +64,13 @@ export namespace OpenAPIV3_1 {
 
   type PathsWebhooksComponents<T extends {} = {}> = {
     paths?: PathsObject<T>
-    webhooks?: Record<string, PathItemObject | ReferenceObject>
+    webhooks?: Record<
+      string,
+      PathItemObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    >
     components?: ComponentsObject
   }
 
@@ -119,7 +134,10 @@ export namespace OpenAPIV3_1 {
     OpenAPIV3.PathItemObject<T>,
     {
       servers?: ServerObject[]
-      parameters?: (ReferenceObject | ParameterObject)[]
+      parameters?: (ParameterObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
     }
   > & {
     [method in HttpMethods]?: OperationObject<T>
@@ -128,10 +146,22 @@ export namespace OpenAPIV3_1 {
   export type OperationObject<T extends {} = {}> = Modify<
     OpenAPIV3.OperationObject<T>,
     {
-      parameters?: (ReferenceObject | ParameterObject)[]
-      requestBody?: ReferenceObject | RequestBodyObject
+      parameters?: (ParameterObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+      requestBody?: RequestBodyObject & {
+        // any other attribute
+        [key: string]: any
+      }
       responses?: ResponsesObject
-      callbacks?: Record<string, ReferenceObject | CallbackObject>
+      callbacks?: Record<
+        string,
+        CallbackObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
       servers?: ServerObject[]
     }
   > &
@@ -165,7 +195,10 @@ export namespace OpenAPIV3_1 {
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
-    items?: ReferenceObject | SchemaObject
+    items?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
   }
 
   export interface NonArraySchemaObject extends BaseSchemaObject {
@@ -174,7 +207,10 @@ export namespace OpenAPIV3_1 {
 
   interface MixedSchemaObject extends BaseSchemaObject {
     type?: (ArraySchemaObjectType | NonArraySchemaObjectType)[]
-    items?: ReferenceObject | SchemaObject
+    items?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
   }
 
   export type BaseSchemaObject = Modify<
@@ -185,14 +221,34 @@ export namespace OpenAPIV3_1 {
       exclusiveMaximum?: boolean | number
       contentMediaType?: string
       $schema?: string
-      additionalProperties?: boolean | ReferenceObject | SchemaObject
+      additionalProperties?:
+        | boolean
+        | (SchemaObject & {
+            // any other attribute
+            [key: string]: any
+          })
       properties?: {
-        [name: string]: ReferenceObject | SchemaObject
+        [name: string]: SchemaObject & {
+          // any other attribute
+          [key: string]: any
+        }
       }
-      allOf?: (ReferenceObject | SchemaObject)[]
-      oneOf?: (ReferenceObject | SchemaObject)[]
-      anyOf?: (ReferenceObject | SchemaObject)[]
-      not?: ReferenceObject | SchemaObject
+      allOf?: (SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+      oneOf?: (SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+      anyOf?: (SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      })[]
+      not?: SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      }
       discriminator?: DiscriminatorObject
       externalDocs?: ExternalDocumentationObject
       xml?: XMLObject
@@ -204,21 +260,22 @@ export namespace OpenAPIV3_1 {
 
   export type XMLObject = OpenAPIV3.XMLObject
 
-  export type ReferenceObject = Modify<
-    OpenAPIV3.ReferenceObject,
-    {
-      summary?: string
-      description?: string
-    }
-  >
-
   export type ExampleObject = OpenAPIV3.ExampleObject
 
   export type MediaTypeObject = Modify<
     OpenAPIV3.MediaTypeObject,
     {
-      schema?: SchemaObject | ReferenceObject
-      examples?: Record<string, ReferenceObject | ExampleObject>
+      schema?: SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      }
+      examples?: Record<
+        string,
+        ExampleObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
     }
   >
 
@@ -231,14 +288,30 @@ export namespace OpenAPIV3_1 {
     }
   >
 
-  export type ResponsesObject = Record<string, ReferenceObject | ResponseObject>
+  export type ResponsesObject = Record<
+    string,
+    ResponseObject & {
+      // any other attribute
+      [key: string]: any
+    }
+  >
 
   export type ResponseObject = Modify<
     OpenAPIV3.ResponseObject,
     {
-      headers?: { [header: string]: ReferenceObject | HeaderObject }
+      headers?: {
+        [header: string]: HeaderObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      }
       content?: { [media: string]: MediaTypeObject }
-      links?: { [link: string]: ReferenceObject | LinkObject }
+      links?: {
+        [link: string]: LinkObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      }
     }
   >
 
@@ -249,7 +322,13 @@ export namespace OpenAPIV3_1 {
     }
   >
 
-  export type CallbackObject = Record<string, PathItemObject | ReferenceObject>
+  export type CallbackObject = Record<
+    string,
+    PathItemObject & {
+      // any other attribute
+      [key: string]: any
+    }
+  >
 
   export type SecurityRequirementObject = OpenAPIV3.SecurityRequirementObject
 
@@ -257,15 +336,69 @@ export namespace OpenAPIV3_1 {
     OpenAPIV3.ComponentsObject,
     {
       schemas?: Record<string, SchemaObject>
-      responses?: Record<string, ReferenceObject | ResponseObject>
-      parameters?: Record<string, ReferenceObject | ParameterObject>
-      examples?: Record<string, ReferenceObject | ExampleObject>
-      requestBodies?: Record<string, ReferenceObject | RequestBodyObject>
-      headers?: Record<string, ReferenceObject | HeaderObject>
-      securitySchemes?: Record<string, ReferenceObject | SecuritySchemeObject>
-      links?: Record<string, ReferenceObject | LinkObject>
-      callbacks?: Record<string, ReferenceObject | CallbackObject>
-      pathItems?: Record<string, ReferenceObject | PathItemObject>
+      responses?: Record<
+        string,
+        ResponseObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      parameters?: Record<
+        string,
+        ParameterObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      examples?: Record<
+        string,
+        ExampleObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      requestBodies?: Record<
+        string,
+        RequestBodyObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      headers?: Record<
+        string,
+        HeaderObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      securitySchemes?: Record<
+        string,
+        SecuritySchemeObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      links?: Record<
+        string,
+        LinkObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      callbacks?: Record<
+        string,
+        CallbackObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
+      pathItems?: Record<
+        string,
+        PathItemObject & {
+          // any other attribute
+          [key: string]: any
+        }
+      >
     }
   >
 
@@ -350,7 +483,10 @@ export namespace OpenAPIV3 {
     summary?: string
     description?: string
     servers?: ServerObject[]
-    parameters?: (ReferenceObject | ParameterObject)[]
+    parameters?: (ParameterObject & {
+      // any other attribute
+      [key: string]: any
+    })[]
   } & {
     [method in HttpMethods]?: OperationObject<T>
   }
@@ -362,10 +498,21 @@ export namespace OpenAPIV3 {
     description?: string
     externalDocs?: ExternalDocumentationObject
     operationId?: string
-    parameters?: (ReferenceObject | ParameterObject)[]
-    requestBody?: ReferenceObject | RequestBodyObject
+    parameters?: (ParameterObject & {
+      // any other attribute
+      [key: string]: any
+    })[]
+    requestBody?: RequestBodyObject & {
+      // any other attribute
+      [key: string]: any
+    }
     responses?: ResponsesObject
-    callbacks?: { [callback: string]: ReferenceObject | CallbackObject }
+    callbacks?: {
+      [callback: string]: CallbackObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     deprecated?: boolean
     security?: SecurityRequirementObject[]
     servers?: ServerObject[]
@@ -391,9 +538,17 @@ export namespace OpenAPIV3 {
     style?: string
     explode?: boolean
     allowReserved?: boolean
-    schema?: ReferenceObject | SchemaObject
+    schema?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
     example?: any
-    examples?: { [media: string]: ReferenceObject | ExampleObject }
+    examples?: {
+      [media: string]: ExampleObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     content?: { [media: string]: MediaTypeObject }
   }
   export type NonArraySchemaObjectType =
@@ -407,7 +562,10 @@ export namespace OpenAPIV3 {
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
-    items?: ReferenceObject | SchemaObject
+    items?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
   }
 
   export interface NonArraySchemaObject extends BaseSchemaObject {
@@ -428,7 +586,12 @@ export namespace OpenAPIV3 {
     maxLength?: number
     minLength?: number
     pattern?: string
-    additionalProperties?: boolean | ReferenceObject | SchemaObject
+    additionalProperties?:
+      | boolean
+      | (SchemaObject & {
+          // any other attribute
+          [key: string]: any
+        })
     maxItems?: number
     minItems?: number
     uniqueItems?: boolean
@@ -437,12 +600,27 @@ export namespace OpenAPIV3 {
     required?: string[]
     enum?: any[]
     properties?: {
-      [name: string]: ReferenceObject | SchemaObject
+      [name: string]: SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      }
     }
-    allOf?: (ReferenceObject | SchemaObject)[]
-    oneOf?: (ReferenceObject | SchemaObject)[]
-    anyOf?: (ReferenceObject | SchemaObject)[]
-    not?: ReferenceObject | SchemaObject
+    allOf?: (SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    })[]
+    oneOf?: (SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    })[]
+    anyOf?: (SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    })[]
+    not?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
 
     // OpenAPI-specific properties
     nullable?: boolean
@@ -468,11 +646,6 @@ export namespace OpenAPIV3 {
     wrapped?: boolean
   }
 
-  export interface ReferenceObject {
-    $ref?: string
-    [key: string]: any
-  }
-
   export interface ExampleObject {
     summary?: string
     description?: string
@@ -481,15 +654,28 @@ export namespace OpenAPIV3 {
   }
 
   export interface MediaTypeObject {
-    schema?: ReferenceObject | SchemaObject
+    schema?: SchemaObject & {
+      // any other attribute
+      [key: string]: any
+    }
     example?: any
-    examples?: { [media: string]: ReferenceObject | ExampleObject }
+    examples?: {
+      [media: string]: ExampleObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     encoding?: { [media: string]: EncodingObject }
   }
 
   export interface EncodingObject {
     contentType?: string
-    headers?: { [header: string]: ReferenceObject | HeaderObject }
+    headers?: {
+      [header: string]: HeaderObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     style?: string
     explode?: boolean
     allowReserved?: boolean
@@ -502,14 +688,27 @@ export namespace OpenAPIV3 {
   }
 
   export interface ResponsesObject {
-    [code: string]: ReferenceObject | ResponseObject
+    [code: string]: ResponseObject & {
+      // any other attribute
+      [key: string]: any
+    }
   }
 
   export interface ResponseObject {
     description?: string
-    headers?: { [header: string]: ReferenceObject | HeaderObject }
+    headers?: {
+      [header: string]: HeaderObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     content?: { [media: string]: MediaTypeObject }
-    links?: { [link: string]: ReferenceObject | LinkObject }
+    links?: {
+      [link: string]: LinkObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
     [key: string]: any
   }
 
@@ -531,15 +730,60 @@ export namespace OpenAPIV3 {
   }
 
   export interface ComponentsObject {
-    schemas?: { [key: string]: ReferenceObject | SchemaObject }
-    responses?: { [key: string]: ReferenceObject | ResponseObject }
-    parameters?: { [key: string]: ReferenceObject | ParameterObject }
-    examples?: { [key: string]: ReferenceObject | ExampleObject }
-    requestBodies?: { [key: string]: ReferenceObject | RequestBodyObject }
-    headers?: { [key: string]: ReferenceObject | HeaderObject }
-    securitySchemes?: { [key: string]: ReferenceObject | SecuritySchemeObject }
-    links?: { [key: string]: ReferenceObject | LinkObject }
-    callbacks?: { [key: string]: ReferenceObject | CallbackObject }
+    schemas?: {
+      [key: string]: SchemaObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    responses?: {
+      [key: string]: ResponseObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    parameters?: {
+      [key: string]: ParameterObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    examples?: {
+      [key: string]: ExampleObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    requestBodies?: {
+      [key: string]: RequestBodyObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    headers?: {
+      [key: string]: HeaderObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    securitySchemes?: {
+      [key: string]: SecuritySchemeObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    links?: {
+      [key: string]: LinkObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
+    callbacks?: {
+      [key: string]: CallbackObject & {
+        // any other attribute
+        [key: string]: any
+      }
+    }
   }
 
   export type SecuritySchemeObject =
@@ -699,18 +943,19 @@ export namespace OpenAPIV2 {
     [index: string]: string[]
   }
 
-  export interface ReferenceObject {
-    $ref: string
+  export type Response = ResponseObject & {
+    // any other attribute
     [key: string]: any
   }
-
-  export type Response = ResponseObject | ReferenceObject
 
   export interface ResponsesDefinitionsObject {
     [index: string]: ResponseObject
   }
 
-  export type Schema = SchemaObject | ReferenceObject
+  export type Schema = SchemaObject & {
+    // any other attribute
+    [key: string]: any
+  }
 
   export interface ResponseObject {
     description?: string
@@ -753,7 +998,10 @@ export namespace OpenAPIV2 {
     default?: Response
   }
 
-  export type Parameters = (ReferenceObject | Parameter)[]
+  export type Parameters = (Parameter & {
+    // any other attribute
+    [key: string]: any
+  })[]
 
   export type Parameter = InBodyParameterObject | GeneralParameterObject
 
@@ -816,7 +1064,10 @@ export namespace OpenAPIV2 {
     externalDocs?: ExternalDocumentationObject
     example?: any
     default?: any
-    items?: ItemsObject | ReferenceObject
+    items?: ItemsObject & {
+      // any other attribute
+      [key: string]: any
+    }
     properties?: {
       [name: string]: SchemaObject
     }
@@ -831,7 +1082,10 @@ export namespace OpenAPIV2 {
   export interface ItemsObject {
     type?: string
     format?: string
-    items?: ItemsObject | ReferenceObject
+    items?: ItemsObject & {
+      // any other attribute
+      [key: string]: any
+    }
     collectionFormat?: string
     default?: any
     maximum?: number
