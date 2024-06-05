@@ -1,4 +1,4 @@
-import { ERRORS } from '../configuration'
+import { ERRORS, OpenApiVersion } from '../configuration'
 import type { OpenAPI } from './openapi-types'
 
 export type {
@@ -32,7 +32,7 @@ export type FilterResult = {
 }
 
 export type DetailsResult = {
-  version: string
+  version: OpenApiVersion
   specificationType: string
   specificationVersion: string
 }

@@ -11,7 +11,7 @@ export function details(specification: AnyObject): DetailsResult {
 
     if (typeof value === 'string' && value.startsWith(version)) {
       return {
-        version: version as OpenApiVersion,
+        version: version,
         specificationType,
         specificationVersion: value,
       }

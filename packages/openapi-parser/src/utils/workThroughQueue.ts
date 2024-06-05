@@ -1,21 +1,30 @@
 import type { Queue } from '../pipeline'
-import type { DereferenceResult, Filesystem } from '../types'
-import { makeFilesystem } from './makeFilesystem'
+import type {
+  DereferenceResult,
+  Filesystem,
+  FilterResult,
+  LoadResult,
+  UpgradeResult,
+  ValidateResult,
+} from '../types'
+
+type WorkThroughQueueResult = Partial<
+  LoadResult &
+    DereferenceResult &
+    ValidateResult &
+    UpgradeResult &
+    FilterResult & {
+      filesystem: Filesystem
+    }
+>
 
 /**
  * Run through a queue of tasks
  */
 export async function workThroughQueue(queue: Queue): // TODO: Better type
-Promise<
-  Partial<
-    DereferenceResult & {
-      filesystem: Filesystem
-    }
-  >
-> {
+Promise<WorkThroughQueueResult> {
   let specification = queue.specification
 
-  // TODO: Be more specific
   let result: any
 
   // Run through all tasks in the queue
@@ -40,16 +49,5 @@ Promise<
     }
   }
 
-  /**
-   * TODO: This is a terrible hack. All functions should return the same format, but they don’t.
-   * The dereference function returns a DereferenceResult, but others return a Filesystem.
-   */
-  // const isMoreThanJustTheSpecification = Object.keys(specification).includes(
-  //   'specificationVersion',
-  // )
-
   return result
-  // return isMoreThanJustTheSpecification
-  //   ? (specification as any)
-  //   : makeFilesystem(specification as Filesystem)
 }

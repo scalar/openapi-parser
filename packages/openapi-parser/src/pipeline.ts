@@ -1,10 +1,4 @@
-import type {
-  AnyObject,
-  DereferenceResult,
-  DetailsResult,
-  Filesystem,
-  OpenAPI,
-} from './types'
+import type { AnyObject, DetailsResult, Filesystem } from './types'
 import {
   dereference,
   details,
