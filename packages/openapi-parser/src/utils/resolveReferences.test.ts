@@ -641,7 +641,7 @@ describe('resolveReferences', () => {
   })
 
   it('resolves from filesystem', async () => {
-    const filesystem = await load(EXAMPLE_FILE, {
+    const { filesystem } = await load(EXAMPLE_FILE, {
       plugins: [readFilesPlugin()],
     })
 

@@ -10,7 +10,9 @@ export type {
 
 export type AnyObject = Record<string, any>
 
-export type LoadResult = Filesystem
+export type LoadResult = {
+  filesystem: Filesystem
+}
 
 export type ValidateResult = {
   valid: boolean
@@ -18,6 +20,15 @@ export type ValidateResult = {
   version?: string
   errors?: ErrorObject[]
   schema?: OpenAPI.Document
+}
+
+export type UpgradeResult = {
+  specification: OpenAPI.Document
+  version: string
+}
+
+export type FilterResult = {
+  specification: OpenAPI.Document
 }
 
 export type DetailsResult = {

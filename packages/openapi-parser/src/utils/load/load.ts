@@ -25,7 +25,9 @@ export async function load(
     options?.filesystem &&
     options?.filesystem.find((entry) => entry.filename === value)
   ) {
-    return options.filesystem
+    return {
+      filesystem: options.filesystem,
+    }
   }
 
   // Check whether the value is an URL or file path
@@ -34,7 +36,9 @@ export async function load(
 
   // No content
   if (content === undefined) {
-    return []
+    return {
+      filesystem: [],
+    }
   }
 
   let filesystem = makeFilesystem(content, {
@@ -50,7 +54,9 @@ export async function load(
 
   // No other references
   if (listOfReferences.length === 0) {
-    return filesystem
+    return {
+      filesystem,
+    }
   }
 
   // Load other external references
@@ -73,7 +79,7 @@ export async function load(
       continue
     }
 
-    const referencedFiles = await load(target, {
+    const { filesystem: referencedFiles } = await load(target, {
       ...options,
       // Make the filename the exact same value as the $ref
       // TODO: This leads to problems, if there are multiple references with the same file name but in different folders
@@ -91,5 +97,7 @@ export async function load(
     ]
   }
 
-  return filesystem
+  return {
+    filesystem,
+  }
 }

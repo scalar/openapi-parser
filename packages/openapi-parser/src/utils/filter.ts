@@ -1,4 +1,4 @@
-import type { AnyObject } from '../types'
+import type { AnyObject, FilterResult } from '../types'
 import { getEntrypoint } from './getEntrypoint'
 import { makeFilesystem } from './makeFilesystem'
 import { traverse } from './traverse'
@@ -9,10 +9,15 @@ import { traverse } from './traverse'
 export function filter(
   specification: AnyObject,
   callback: (schema: AnyObject) => boolean,
-): AnyObject {
+): FilterResult {
   const filesystem = makeFilesystem(specification)
 
-  return traverse(getEntrypoint(filesystem).specification, (schema) => {
-    return callback(schema) ? schema : undefined
-  })
+  return {
+    specification: traverse(
+      getEntrypoint(filesystem).specification,
+      (schema) => {
+        return callback(schema) ? schema : undefined
+      },
+    ),
+  }
 }

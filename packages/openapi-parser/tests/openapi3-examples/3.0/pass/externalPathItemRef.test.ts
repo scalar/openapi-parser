@@ -10,14 +10,14 @@ const EXAMPLE_FILE = path.join(
 
 describe('externalPathItemRef', () => {
   it('passes', async () => {
-    const filesystem = await load(EXAMPLE_FILE, {
+    const { filesystem } = await load(EXAMPLE_FILE, {
       plugins: [readFilesPlugin()],
     })
 
-    const result = await validate(filesystem)
+    const { schema } = await validate(filesystem)
 
-    expect(result.schema.paths['/test'].get).not.toBeUndefined()
-    expect(result.schema.paths['/test'].get).toMatchObject({
+    expect(schema.paths['/test'].get).not.toBeUndefined()
+    expect(schema.paths['/test'].get).toMatchObject({
       responses: {
         '200': {
           description: 'OK',

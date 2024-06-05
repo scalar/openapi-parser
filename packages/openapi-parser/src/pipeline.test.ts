@@ -2,10 +2,10 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { stringify } from 'yaml'
 
-import { openapi } from '.'
+import { openapi } from './pipeline'
 import { readFilesPlugin } from './utils/load/plugins/readFilesPlugin'
 
-const specification = {
+const example = {
   openapi: '3.1.0',
   info: {
     title: 'Hello World',
@@ -19,47 +19,29 @@ const EXAMPLE_FILE = join(
   '../utils/examples/openapi.yaml',
 )
 
-describe('openapi', () => {
+describe('pipeline', () => {
   it('load object', async () => {
-    const result = await openapi()
-      .load({
-        openapi: '3.1.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
-      })
-      .get()
+    const { specification } = await openapi().load(example).get()
 
-    expect(result.openapi).toBe('3.1.0')
+    expect(specification.openapi).toBe('3.1.0')
   })
 
   it('load string', async () => {
-    const result = await openapi()
-      .load(
-        JSON.stringify({
-          openapi: '3.1.0',
-          info: {
-            title: 'Hello World',
-            version: '1.0.0',
-          },
-          paths: {},
-        }),
-      )
+    const { specification } = await openapi()
+      .load(JSON.stringify(example))
       .get()
 
-    expect(result.openapi).toBe('3.1.0')
+    expect(specification.openapi).toBe('3.1.0')
   })
 
   it('load file', async () => {
-    const result = await openapi()
+    const { specification } = await openapi()
       .load(EXAMPLE_FILE, {
         plugins: [readFilesPlugin()],
       })
       .get()
 
-    expect(result.openapi).toBe('3.1.0')
+    expect(specification.openapi).toBe('3.1.0')
   })
 
   it('files', async () => {
@@ -87,55 +69,43 @@ describe('openapi', () => {
   })
 
   it('upgrade from 3.0 to 3.1', async () => {
-    const result = await openapi()
+    const { specification } = await openapi()
       .load({
+        ...example,
         openapi: '3.0.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
       })
       .upgrade()
       .get()
 
-    expect(result.openapi).toBe('3.1.0')
+    expect(specification.openapi).toBe('3.1.0')
   })
 
   it('details', async () => {
-    const result = await openapi()
+    const { version } = await openapi()
       .load({
+        ...example,
         openapi: '3.0.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
       })
       .details()
 
-    expect(result.version).toBe('3.0')
+    expect(version).toBe('3.0')
   })
 
   it('upgrade > dereference', async () => {
-    const result = await openapi()
+    const { version } = await openapi()
       .load({
+        ...example,
         openapi: '3.0.0',
-        info: {
-          title: 'Hello World',
-          version: '1.0.0',
-        },
-        paths: {},
       })
       .upgrade()
       .dereference()
       .get()
 
-    expect(result.version).toBe('3.1')
+    expect(version).toBe('3.1')
   })
 
   it('filter x-internal', async () => {
-    const specification = {
+    const example = {
       openapi: '3.1.0',
       info: {
         title: 'Hello World',
@@ -164,17 +134,17 @@ describe('openapi', () => {
       },
     }
 
-    const result = await openapi()
-      .load(specification)
+    const { specification } = await openapi()
+      .load(example)
       .filter((schema) => !schema?.['x-internal'])
       .get()
 
-    expect(result.paths['/'].get).toBeUndefined()
-    expect(result.paths['/foobar'].get).not.toBeUndefined()
+    expect(specification.paths['/'].get).toBeUndefined()
+    expect(specification.paths['/foobar'].get).not.toBeUndefined()
   })
 
   it('filter tags', async () => {
-    const specification = {
+    const example = {
       openapi: '3.1.0',
       info: {
         title: 'Hello World',
@@ -203,17 +173,17 @@ describe('openapi', () => {
       },
     }
 
-    const result = await openapi()
-      .load(specification)
+    const { specification } = await openapi()
+      .load(example)
       .filter((schema) => !schema?.tags?.includes('Beta'))
       .get()
 
-    expect(result.paths['/'].get).toBeUndefined()
-    expect(result.paths['/foobar'].get).not.toBeUndefined()
+    expect(specification.paths['/'].get).toBeUndefined()
+    expect(specification.paths['/foobar'].get).not.toBeUndefined()
   })
 
   it('upgrade > filter', async () => {
-    const specification = {
+    const example = {
       openapi: '3.0.0',
       info: {
         title: 'Hello World',
@@ -242,19 +212,19 @@ describe('openapi', () => {
       },
     }
 
-    const result = await openapi()
-      .load(specification)
+    const { specification } = await openapi()
+      .load(example)
       .upgrade()
       .filter((schema) => !schema?.tags?.includes('Beta'))
       .get()
 
-    expect(result.openapi).toBe('3.1.0')
-    expect(result.paths['/'].get).toBeUndefined()
-    expect(result.paths['/foobar'].get).not.toBeUndefined()
+    expect(specification.openapi).toBe('3.1.0')
+    expect(specification.paths['/'].get).toBeUndefined()
+    expect(specification.paths['/foobar'].get).not.toBeUndefined()
   })
 
   it('validate', async () => {
-    const result = await openapi().load(specification).validate()
+    const result = await openapi().load(example).validate().get()
 
     expect(result).toMatchObject({
       valid: true,
@@ -263,28 +233,27 @@ describe('openapi', () => {
   })
 
   it('toJson', async () => {
-    const result = await openapi().load(specification).toJson()
+    const result = await openapi().load(example).toJson()
 
-    expect(result).toBe(JSON.stringify(specification, null, 2))
+    expect(result).toBe(JSON.stringify(example, null, 2))
   })
 
   it('toYaml', async () => {
-    const result = await openapi().load(specification).toYaml()
+    const result = await openapi().load(example).toYaml()
 
-    expect(result).toBe(stringify(specification))
+    expect(result).toBe(stringify(example))
   })
 
   it('dereference', async () => {
-    const result = await openapi().load(specification).dereference().get()
+    const result = await openapi().load(example).dereference().get()
 
     expect(result.schema.info.title).toBe('Hello World')
   })
 
   it('validate > dereference', async () => {
-    const validation = await openapi().load(specification).validate()
-    expect(validation.valid).toBe(true)
+    const result = await openapi().load(example).validate().dereference().get()
 
-    const result = await validation.dereference().get()
+    expect(result.valid).toBe(true)
     expect(result.errors).toStrictEqual([])
     expect(result.schema.info.title).toBe('Hello World')
   })

@@ -9,7 +9,7 @@ import { readFilesPlugin } from './plugins/readFilesPlugin'
 
 describe('load', async () => {
   it('loads JS object', async () => {
-    const filesystem = await load(
+    const { filesystem } = await load(
       {
         openapi: '3.1.0',
         info: {
@@ -34,7 +34,7 @@ describe('load', async () => {
   })
 
   it('loads JSON string', async () => {
-    const filesystem = await load(
+    const { filesystem } = await load(
       JSON.stringify({
         openapi: '3.1.0',
         info: {
@@ -59,7 +59,7 @@ describe('load', async () => {
   })
 
   it('loads YAML string', async () => {
-    const filesystem = await load(
+    const { filesystem } = await load(
       stringify({
         openapi: '3.1.0',
         info: {
@@ -89,7 +89,7 @@ describe('load', async () => {
       '../../examples/openapi.yaml',
     )
 
-    const filesystem = await load(EXAMPLE_FILE, {
+    const { filesystem } = await load(EXAMPLE_FILE, {
       plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
@@ -109,7 +109,7 @@ describe('load', async () => {
       '../../../../tests/filesystem/api/openapi.yaml',
     )
 
-    const filesystem = await load(EXAMPLE_FILE, {
+    const { filesystem } = await load(EXAMPLE_FILE, {
       plugins: [readFilesPlugin()],
     })
 
@@ -150,7 +150,7 @@ describe('load', async () => {
         }),
     })
 
-    const filesystem = await load('https://example.com/openapi.yaml', {
+    const { filesystem } = await load('https://example.com/openapi.yaml', {
       plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
@@ -170,7 +170,7 @@ describe('load', async () => {
       throw new TypeError('fetch failed')
     }
 
-    const filesystem = await load(
+    const { filesystem } = await load(
       {
         openapi: '3.1.0',
         info: {
@@ -216,7 +216,7 @@ describe('load', async () => {
       }
     }
 
-    const filesystem = await load(
+    const { filesystem } = await load(
       {
         openapi: '3.1.0',
         info: {
@@ -293,7 +293,7 @@ describe('load', async () => {
       }
     }
 
-    const filesystem = await load('https://example.com/openapi.yaml', {
+    const { filesystem } = await load('https://example.com/openapi.yaml', {
       plugins: [readFilesPlugin(), fetchUrlsPlugin()],
     })
 
@@ -344,7 +344,7 @@ describe('load', async () => {
       }
     }
 
-    const filesystem = await load(
+    const { filesystem } = await load(
       stringify({
         openapi: '3.1.0',
         info: {
