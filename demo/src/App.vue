@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import {
-  dereference,
-  fetchUrlsPlugin,
-  load,
-  toJson, // validate,
-} from '@scalar/openapi-parser'
+import { dereference, fetchUrlsPlugin, load } from '@scalar/openapi-parser'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
+// @ts-ignore
 import JsonViewer from 'vue-json-viewer'
 
 const value = ref(
