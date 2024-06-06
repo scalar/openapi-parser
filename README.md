@@ -44,12 +44,12 @@ const file = `{
   "paths": {}
 }`
 
-const result = await validate(file)
+const { valid, errors } = await validate(file)
 
-console.log(result.valid)
+console.log(valid)
 
-if (!result.valid) {
-  console.log(result.errors)
+if (!valid) {
+  console.log(errors)
 }
 ```
 
@@ -67,7 +67,7 @@ const specification = `{
   "paths": {}
 }`
 
-const result = await dereference(specification)
+const { schema, errors } = await dereference(specification)
 ```
 
 ### Modify an OpenAPI specification
@@ -84,7 +84,7 @@ const specification = `{
   "paths": {}
 }`
 
-const result = filter(specification, (schema) => !schema?.['x-internal'])
+const { specification } = filter(specification, (schema) => !schema?.['x-internal'])
 ```
 
 ### Upgrade your OpenAPI specification
@@ -96,7 +96,7 @@ There’s an `upgrade` command to upgrade all your OpenAPI specifications to the
 ```ts
 import { upgrade } from '@scalar/openapi-parser'
 
-const result = upgrade({
+const { specification } = upgrade({
   openapi: '3.0.0',
   info: {
     title: 'Hello World',
@@ -105,7 +105,7 @@ const result = upgrade({
   paths: {},
 })
 
-console.log(result.openapi)
+console.log(specification.openapi)
 // Output: 3.1.0
 ```
 
@@ -141,7 +141,7 @@ import {
 } from '@scalar/openapi-parser'
 
 // Load a file and all referenced files
-const filesystem = await load('./openapi.yaml', {
+const { filesystem } = await load('./openapi.yaml', {
   plugins: [readFilesPlugin(), fetchUrlsPlugin()],
 })
 

@@ -50,7 +50,7 @@ describe('single reference', () => {
 
   bench('@scalar/openapi-parser', async () => {
     // Action!
-    const schema = await resolveNew(specification)
+    const { schema } = await resolveNew(specification)
 
     // Check whether the reference was resolved
     expect(

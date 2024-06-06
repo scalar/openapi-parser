@@ -7,10 +7,12 @@ export function isYaml(value: string) {
   }
 
   try {
-    parse(value)
+    parse(value, {
+      maxAliasCount: 10000,
+    })
+
     return true
   } catch (error) {
-    console.log('ADSAS', error)
     return false
   }
 }

@@ -47,12 +47,12 @@ const file = `{
   "paths": {}
 }`
 
-const result = await validate(file)
+const { valid, errors } = await validate(file)
 
-console.log(result.valid)
+console.log(valid)
 
-if (!result.valid) {
-  console.log(result.errors)
+if (!valid) {
+  console.log(errors)
 }
 ```
 
@@ -70,7 +70,7 @@ const file = `{
   "paths": {}
 }`
 
-const result = await dereference(file)
+const { version } = await dereference(file)
 
-console.log(result.version)
+console.log(version)
 ```

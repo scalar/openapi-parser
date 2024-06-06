@@ -27,7 +27,7 @@ export type ResolveReferencesResult = {
 }
 
 // TODO: Exists already, clean up
-type ResolveResult = {
+type DereferenceResult = {
   errors: ErrorObject[]
 }
 
@@ -95,8 +95,8 @@ export function resolveReferences(
     schema: AnyObject,
     filesystem: Filesystem,
     file: FilesystemEntry,
-  ): ResolveResult {
-    let result: ResolveResult | undefined
+  ): DereferenceResult {
+    let result: DereferenceResult | undefined
 
     // Iterate over the whole objecct
     Object.entries(schema ?? {}).forEach(([_, value]) => {

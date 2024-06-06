@@ -1,5 +1,5 @@
-// import { relative } from '../../polyfills/path'
-import { Filesystem } from '../../types'
+import type { Filesystem, LoadResult } from '../../types'
+import { getEntrypoint } from '../getEntrypoint'
 import { getListOfReferences } from '../getListOfReferences'
 import { makeFilesystem } from '../makeFilesystem'
 import { normalize } from '../normalize'
@@ -19,13 +19,15 @@ export async function load(
     filename?: string
     filesystem?: Filesystem
   },
-) {
+): Promise<LoadResult> {
   // Don’t load a reference twice, check the filesystem before fetching something
   if (
     options?.filesystem &&
     options?.filesystem.find((entry) => entry.filename === value)
   ) {
-    return options.filesystem
+    return {
+      filesystem: options.filesystem,
+    }
   }
 
   // Check whether the value is an URL or file path
@@ -34,25 +36,38 @@ export async function load(
 
   // No content
   if (content === undefined) {
-    return []
+    return {
+      filesystem: [],
+    }
   }
 
   let filesystem = makeFilesystem(content, {
     filename: options?.filename ?? null,
   })
 
-  // External references
-  const listOfReferences = getListOfReferences(content)
+  // Get references from file system entry, or from the content
+  const newEntry = options?.filename
+    ? filesystem.find((entry) => entry.filename === options?.filename)
+    : getEntrypoint(filesystem)
+
+  const listOfReferences = newEntry.references ?? getListOfReferences(content)
 
   // No other references
   if (listOfReferences.length === 0) {
-    return filesystem
+    return {
+      filesystem,
+    }
   }
 
   // Load other external references
   for (const reference of listOfReferences) {
     // Find a matching plugin
     const plugin = options?.plugins?.find((plugin) => plugin.check(reference))
+
+    // Skip if no plugin is found (internal references don’t need a plugin for example)
+    if (!plugin) {
+      continue
+    }
 
     const target =
       plugin.check(reference) && plugin.resolvePath
@@ -64,7 +79,7 @@ export async function load(
       continue
     }
 
-    const referencedFiles = await load(target, {
+    const { filesystem: referencedFiles } = await load(target, {
       ...options,
       // Make the filename the exact same value as the $ref
       // TODO: This leads to problems, if there are multiple references with the same file name but in different folders
@@ -82,5 +97,7 @@ export async function load(
     ]
   }
 
-  return filesystem
+  return {
+    filesystem,
+  }
 }

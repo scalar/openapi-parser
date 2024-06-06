@@ -1,6 +1,5 @@
-import { AnyObject, Filesystem } from '../types'
+import type { AnyObject, Filesystem, UpgradeResult } from '../types'
 import { getEntrypoint } from './getEntrypoint'
-import { isFilesystem } from './isFilesystem'
 import { makeFilesystem } from './makeFilesystem'
 import { upgradeFromThreeToThreeOne } from './upgradeFromThreeToThreeOne'
 import { upgradeFromTwoToThree } from './upgradeFromTwoToThree'
@@ -11,10 +10,8 @@ import { upgradeFromTwoToThree } from './upgradeFromTwoToThree'
 export function upgrade(
   specification: AnyObject | Filesystem,
   _options?: AnyObject,
-) {
+): UpgradeResult {
   const upgraders = [upgradeFromTwoToThree, upgradeFromThreeToThreeOne]
-
-  const wasFilesystem = isFilesystem(specification)
 
   // TODO: Run upgrade over the whole filesystem
   const result = upgraders.reduce(
@@ -22,5 +19,9 @@ export function upgrade(
     getEntrypoint(makeFilesystem(specification)).specification,
   )
 
-  return wasFilesystem ? makeFilesystem(result) : result
+  return {
+    specification: result,
+    // TODO: Make dynamic
+    version: '3.1',
+  }
 }

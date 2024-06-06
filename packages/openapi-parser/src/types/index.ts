@@ -1,9 +1,18 @@
-import { ERRORS } from '../configuration'
-import type { OpenAPI } from './openapi'
+import { ERRORS, OpenApiVersion } from '../configuration'
+import type { OpenAPI } from './openapi-types'
 
-export type { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from './openapi'
+export type {
+  OpenAPI,
+  OpenAPIV2,
+  OpenAPIV3,
+  OpenAPIV3_1,
+} from './openapi-types'
 
 export type AnyObject = Record<string, any>
+
+export type LoadResult = {
+  filesystem: Filesystem
+}
 
 export type ValidateResult = {
   valid: boolean
@@ -13,16 +22,31 @@ export type ValidateResult = {
   schema?: OpenAPI.Document
 }
 
-export type ErrorObject = {
-  message: string
-  code?: keyof typeof ERRORS | string
+export type UpgradeResult = {
+  specification: OpenAPI.Document
+  version: string
 }
 
-export type ResolveResult = {
+export type FilterResult = {
+  specification: OpenAPI.Document
+}
+
+export type DetailsResult = {
+  version: OpenApiVersion
+  specificationType: string
+  specificationVersion: string
+}
+
+export type DereferenceResult = {
   version: string | undefined
   specification?: OpenAPI.Document
   schema?: OpenAPI.Document
   errors?: ErrorObject[]
+}
+
+export type ErrorObject = {
+  message: string
+  code?: keyof typeof ERRORS | string
 }
 
 export type AjvOptions = {

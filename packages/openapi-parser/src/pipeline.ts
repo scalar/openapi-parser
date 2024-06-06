@@ -1,4 +1,4 @@
-import type { AnyObject, Filesystem, OpenAPI } from './types'
+import type { AnyObject, DetailsResult, Filesystem } from './types'
 import {
   dereference,
   details,
@@ -11,13 +11,18 @@ import {
   validate,
 } from './utils'
 import { type LoadPlugin } from './utils/load/load'
-import { makeFilesystem } from './utils/makeFilesystem'
+import { workThroughQueue } from './utils/workThroughQueue'
 
 /**
  * A queuable action for the pipeline
  */
 export type Action = {
-  action: typeof load | typeof upgrade | typeof filter
+  action:
+    | typeof load
+    | typeof upgrade
+    | typeof filter
+    | typeof dereference
+    | typeof validate
   options?: AnyObject
 }
 
@@ -102,11 +107,12 @@ function upgradeAction(queue: Queue) {
 /**
  * Validate an OpenAPI specification.
  */
-async function validateAction(queue: Queue) {
-  const filesystem = await workThroughQueue(queue)
+function validateAction(queue: Queue) {
+  queue.tasks.push({
+    action: validate,
+  })
 
   return {
-    ...(await validate(filesystem)),
     filter: (callback: (Specification: AnyObject) => boolean) =>
       filterAction(queue, callback),
     get: () => getAction(queue),
@@ -161,57 +167,38 @@ function filterAction(
   }
 }
 
+// TODO: This type is off (function wrong return, read below)
 async function getAction(queue: Queue) {
-  const filesystem = await workThroughQueue(queue)
+  const result = await workThroughQueue(queue)
 
-  // TODO: Shouldn’t we return the schema or something here?
-  // TODO: specification actually has errors and stuff, that’s wrong …
-  return getEntrypoint(filesystem).specification
+  // If specification is not defined, return the entrypoint specification
+  if (result.specification === undefined) {
+    result.specification = getEntrypoint(result.filesystem).specification
+  }
+
+  return result
 }
 
-async function filesAction(queue: Queue) {
-  return await workThroughQueue(queue)
+async function filesAction(queue: Queue): Promise<Filesystem> {
+  const { filesystem } = await workThroughQueue(queue)
+
+  return filesystem
 }
 
-async function detailsAction(queue: Queue) {
-  const filesystem = await workThroughQueue(queue)
+async function detailsAction(queue: Queue): Promise<DetailsResult> {
+  const { filesystem } = await workThroughQueue(queue)
 
   return details(getEntrypoint(filesystem).specification)
 }
 
-async function toJsonAction(queue: Queue) {
-  const filesystem = await workThroughQueue(queue)
+async function toJsonAction(queue: Queue): Promise<string> {
+  const { filesystem } = await workThroughQueue(queue)
 
   return toJson(getEntrypoint(filesystem).specification)
 }
 
-async function toYamlAction(queue: Queue) {
-  const filesystem = await workThroughQueue(queue)
+async function toYamlAction(queue: Queue): Promise<string> {
+  const { filesystem } = await workThroughQueue(queue)
 
   return toYaml(getEntrypoint(filesystem).specification)
-}
-
-/**
- * Run through a queue of tasks
- */
-async function workThroughQueue(queue: Queue): Promise<Filesystem> {
-  let specification = queue.specification
-
-  // Run through all tasks in the queue
-  for (const { action, options } of queue.tasks) {
-    // Check if action is a function
-    if (typeof action !== 'function') {
-      console.warn('[queue] The given action is not a function:', action)
-      continue
-    }
-
-    // Check if the action is an async function
-    if (action.constructor.name === 'AsyncFunction') {
-      specification = await action(specification, options as any)
-    } else {
-      specification = action(specification, options as any)
-    }
-  }
-
-  return makeFilesystem(specification)
 }
