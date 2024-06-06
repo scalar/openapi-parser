@@ -13,6 +13,6 @@ export default defineConfig({
       ],
     },
     reporters: ['default', 'json'],
-    outputFile: './results.json',
+    outputFile: './coverage/coverage-summary.json',
   },
 })
