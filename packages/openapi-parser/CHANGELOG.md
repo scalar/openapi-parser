@@ -1,5 +1,16 @@
 # @scalar/openapi-parser
 
+## 0.6.0
+
+### Minor Changes
+
+- 61252ab: refactor!: most functions return an object now
+
+### Patch Changes
+
+- c9dd499: feat: intercept fetch requests
+- 61252ab: fix: max call stack exceeded error
+
 ## 0.5.0
 
 ### Minor Changes
