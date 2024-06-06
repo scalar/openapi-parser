@@ -1,1 +1,97 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - description: Use Heruko deployment for testing/development
+    url: https://exude-api.herokuapp.com
+  - description: Use docker container and deploy on the production environment or locally developmenet
+    url: http://localhost:8080
+info:
+  description: Exude API is an Open Source project, It is used for the primary ways for filtering the stopping, stemming words from the text data. This API is in a very basic level of development need to work on for later changes.
+  termsOfService: http://uttesh.com/apis/terms/
+  title: Exude API Service
+  version: 1.0.0
+  x-apisguru-categories:
+    - text
+  x-origin:
+    - format: openapi
+      url: http://uttesh.com/exude-api/exude-service-open-api.json
+      version: "3.0"
+  x-providerName: exude-api.herokuapp.com
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+paths:
+  "/exude/{type}/data":
+    post:
+      operationId: filterStoppings
+      parameters:
+        - description: provide the type of filtering required stopping/swear
+          examples:
+            type:
+              summary: provide the type of filtering required stopping/swear
+              value: stopping
+          in: path
+          name: type
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ExudeBean"
+        description: Filter the stopping words from the provided input data or links
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExudeResponseBean"
+          description: Exude response
+      summary: Filter the stopping words from the provided input data or links
+      tags:
+        - exude
+  "/exude/{type}/file":
+    post:
+      operationId: filterFileDataStoppings
+      parameters:
+        - description: provide the type of filtering required stopping/swear
+          in: path
+          name: type
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  format: binary
+                  type: string
+              type: object
+        description: Filter the stopping words from the provided input file
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExudeResponseBean"
+          description: model response
+      summary: Filter the stopping words from the provided input file
+      tags:
+        - exude
+components:
+  schemas:
+    ExudeBean:
+      properties:
+        data:
+          type: string
+        links:
+          items:
+            type: string
+          type: array
+    ExudeResponseBean:
+      properties:
+        data:
+          type: string

@@ -1,1 +1,160 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: trips.furkot.com
+basePath: /pub/api
+info:
+  contact:
+    email: trips@furkot.com
+  description: |
+    Furkot provides Rest API to access user trip data.
+    Using Furkot API an application can list user trips and display stops for a specific trip.
+    Furkot API uses OAuth2 protocol to authorize applications to access data on behalf of users.
+  title: Furkot Trips
+  version: 1.0.0
+  x-apisguru-categories:
+    - location
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_cdn.furkot.com_img_furkot-banner-black-4x1.svg
+  x-origin:
+    - format: swagger
+      url: https://help.furkot.com/widgets/furkot-api.yaml
+      version: "2.0"
+  x-providerName: furkot.com
+externalDocs:
+  description: Furkot API description
+  url: https://help.furkot.com/widgets/furkot-api.html
+securityDefinitions:
+  furkot_auth_access_code:
+    authorizationUrl: https://trips.furkot.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      read:trips: list trips and stops info
+    tokenUrl: https://trips.furkot.com/pub/api/access_token
+    type: oauth2
+  furkot_auth_implicit:
+    authorizationUrl: https://trips.furkot.com/oauth/authorize
+    flow: implicit
+    scopes:
+      read:trips: list users trips info
+    type: oauth2
+security:
+  - furkot_auth_access_code:
+      - read:trips
+  - furkot_auth_implicit:
+      - read:trips
+paths:
+  /trip:
+    get:
+      description: list user's trips
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            items:
+              $ref: "#/definitions/Trip"
+            type: array
+  "/trip/{trip_id}/stop":
+    get:
+      description: list stops for a trip identified by {trip_id}
+      parameters:
+        - description: id of the trip
+          in: path
+          name: trip_id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            items:
+              $ref: "#/definitions/Step"
+            type: array
+definitions:
+  Step:
+    properties:
+      address:
+        description: address of the stop
+        type: string
+      arrival:
+        description: arrival at the stop in its local timezone as YYYY-MM-DDThh:mm
+        format: date-time
+        type: string
+      coordinates:
+        description: geographical coordinates of the stop
+        properties:
+          lat:
+            description: latitude
+            format: float
+            type: number
+          lon:
+            description: longitude
+            format: float
+            type: number
+        type: object
+      departure:
+        description: departure from the stop in its local timezone as YYYY-MM-DDThh:mm
+        format: date-time
+        type: string
+      name:
+        description: name of the stop
+        type: string
+      nights:
+        description: number of nights
+        format: int64
+        type: integer
+      passthru:
+        description: true for pass-through points anchoring route
+        type: boolean
+      route:
+        description: route leading to the stop
+        properties:
+          distance:
+            description: route distance in meters
+            format: int64
+            type: integer
+          duration:
+            description: route duration in seconds
+            format: int64
+            type: integer
+          mode:
+            description: travel mode
+            enum:
+              - car
+              - motorcycle
+              - bicycle
+              - walk
+              - other
+            type: string
+          polyline:
+            description: route path compatible with Google polyline encoding algorithm
+            type: string
+        type: object
+      url:
+        description: url of the page with more information about the stop
+        type: string
+    type: object
+  Trip:
+    properties:
+      begin:
+        description: begin of the trip in its local timezone as YYYY-MM-DDThh:mm
+        format: date-time
+        type: string
+      description:
+        description: description of the trip (truncated to 200 characters)
+        type: string
+      end:
+        description: end of the trip in its local timezone as YYYY-MM-DDThh:mm
+        format: date-time
+        type: string
+      id:
+        description: Unique ID of the trip
+        type: string
+      name:
+        description: name of the trip
+        type: string
+    type: object

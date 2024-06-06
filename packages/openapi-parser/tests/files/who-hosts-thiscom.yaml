@@ -1,1 +1,57 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: www.who-hosts-this.com
+basePath: /APIEndpoint
+info:
+  contact:
+    name: Who Hosts This
+    url: https://www.who-hosts-this.com/Contact
+  description: Discover the hosting provider for any web site
+  title: Who Hosts This API
+  version: 0.0.1
+  x-apisguru-categories:
+    - hosting
+    - iot
+    - tools
+  x-logo:
+    backgroundColor: "#2c3e50"
+    url: https://api.apis.guru/v2/cache/logo/https_www.who-hosts-this.com_data__uploaded_image_logo-who-hosts-padded.png
+  x-origin:
+    - format: swagger
+      url: https://www.who-hosts-this.com/APISpecification
+      version: "2.0"
+  x-providerName: who-hosts-this.com
+externalDocs:
+  url: https://www.who-hosts-this.com/Documentation
+produces:
+  - application/json
+securityDefinitions:
+  QueryKey:
+    description: Simple api key authentication. API Keys available at https://www.who-hosts-this.com/API
+    in: query
+    name: key
+    type: apiKey
+security:
+  - QueryKey: []
+paths:
+  /Detect:
+    get:
+      parameters:
+        - description: The url of the page to check
+          in: query
+          name: url
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Status of the detection and list of any found hosting providers
+      summary: Discover the hosting provider for a web site
+      tags:
+        - hosting
+  /Status:
+    get:
+      responses:
+        "200":
+          description: Status of the detection and list of any found hosting providers
+      summary: View usage details for the current billing period

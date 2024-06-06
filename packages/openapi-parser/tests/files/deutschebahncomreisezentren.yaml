@@ -1,1 +1,215 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://api.deutschebahn.com/reisezentren/v1
+  - url: http://api.deutschebahn.com/reisezentren/v1
+info:
+  contact:
+    email: Joachim.Schirrmacher@deutschebahn.com
+    name: DB Systel GmbH
+  description: This REST-API enables you to query information about travel centers in Germany.
+  termsOfService: https://developer.deutschebahn.com/store/
+  title: Reisezentren-API
+  version: v1
+  x-apisguru-categories:
+    - transport
+    - open_data
+  x-logo:
+    backgroundColor: "#FFFFFF"
+    url: https://api.apis.guru/v2/cache/logo/https_pbs.twimg.com_profile_images_591140150413025280_Cjcqjl2J.png
+  x-origin:
+    - format: openapi
+      url: https://developer.deutschebahn.com/store/api-docs/DBOpenData/Reisezentren/v1
+      version: "3.0"
+  x-providerName: deutschebahn.com
+  x-serviceName: reisezentren
+tags:
+  - name: API
+paths:
+  /reisezentren:
+    get:
+      description: Get all station infos
+      parameters:
+        - description: A station name or part of it
+          in: query
+          name: name
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TravelCenterList"
+          description: List has been created
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: No travel centers could be found matching the given name
+        "416":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Filtering required - specify a name fragment of at least 3 characters
+      summary: Get all station infos
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  "/reisezentren/loc/{lat}/{lon}":
+    get:
+      description: Get information about a station near a location
+      operationId: ""
+      parameters:
+        - description: Latitude
+          in: path
+          name: lat
+          required: true
+          schema:
+            format: float
+            type: number
+        - description: Longitude
+          in: path
+          name: lon
+          required: true
+          schema:
+            format: float
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TravelCenter"
+          description: A station was found
+      summary: Get information about a station near a location
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  "/reisezentren/loc/{lat}/{lon}/{dist}":
+    get:
+      description: Get stations in a given radius
+      parameters:
+        - description: Latitude
+          in: path
+          name: lat
+          required: true
+          schema:
+            format: float
+            type: number
+        - description: Longitude
+          in: path
+          name: lon
+          required: true
+          schema:
+            format: float
+            type: number
+        - description: Radius
+          in: path
+          name: dist
+          required: true
+          schema:
+            format: float
+            type: number
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TravelCenter"
+          description: A station was found
+      summary: Get stations in a given radius
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+  "/reisezentren/{id}":
+    get:
+      description: Get information about a specific station
+      parameters:
+        - description: Station id
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/TravelCenter"
+          description: The travel center was found
+        "404":
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: No travel center found
+      summary: Get information about a specific station
+      x-auth-type: Application & Application User
+      x-throttling-tier: Unlimited
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    OpeningTime:
+      items:
+        type: string
+      type: array
+    TravelCenter:
+      properties:
+        address:
+          description: Street address of travel center
+          type: string
+        city:
+          description: City of travel center
+          type: string
+        id:
+          description: Identifying number
+          type: integer
+        lat:
+          description: Latitude of travel center location
+          type: number
+        lon:
+          description: Longitude of travel center location
+          type: number
+        name:
+          description: Name of travel center
+          type: string
+        openingTimes:
+          description: Opening times of the travel center, ordered by week day
+          properties:
+            fri:
+              $ref: "#/components/schemas/OpeningTime"
+            mon:
+              $ref: "#/components/schemas/OpeningTime"
+            sat:
+              $ref: "#/components/schemas/OpeningTime"
+            sun:
+              $ref: "#/components/schemas/OpeningTime"
+            thu:
+              $ref: "#/components/schemas/OpeningTime"
+            tue:
+              $ref: "#/components/schemas/OpeningTime"
+            wed:
+              $ref: "#/components/schemas/OpeningTime"
+          type: object
+        postCode:
+          description: Post code of travel center
+          type: string
+        type:
+          description: Type of travel center
+          enum:
+            - Reisezentrum
+            - Mobility Center
+          type: string
+      type: object
+    TravelCenterList:
+      items:
+        $ref: "#/components/schemas/TravelCenter"
+      type: array

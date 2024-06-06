@@ -1,1 +1,218 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+basePath: /
+info:
+  description: CyCAT - The Cybersecurity Resource Catalogue public API services.
+  license:
+    name: CC-BY
+  title: CyCAT.org API
+  version: "0.9"
+  x-apisguru-categories:
+    - security
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_cycat.org_images_illustrations_pointing.svg
+  x-origin:
+    - format: swagger
+      url: https://api.cycat.org/swagger.json
+      version: "2.0"
+  x-providerName: cycat.org
+consumes:
+  - application/json
+produces:
+  - application/json
+responses:
+  MaskError:
+    description: When any error occurs on mask
+  ParseError:
+    description: When a mask can't be parsed
+tags:
+  - description: Default namespace
+    name: default
+paths:
+  "/child/{uuid}":
+    get:
+      description: Get child UUID(s) from a specified project or publisher UUID.
+      operationId: get_child
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+  /generate/uuid:
+    get:
+      description: Generate an UUID version 4 RFC4122-compliant.
+      operationId: get_generate_uuid
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+  /info:
+    get:
+      description: Get information about the CyCAT backend services including status, overall statistics and version.
+      operationId: get_info
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+  "/list/project/{start}/{end}":
+    get:
+      description: List projects registered in CyCAT by pagination (start,end).
+      operationId: get_list_project
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: start
+        required: true
+        type: integer
+      - in: path
+        name: end
+        required: true
+        type: integer
+  "/list/publisher/{start}/{end}":
+    get:
+      description: List publishers registered in CyCAT by pagination (start,end).
+      operationId: get_list_publisher
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: start
+        required: true
+        type: integer
+      - in: path
+        name: end
+        required: true
+        type: integer
+  "/lookup/{uuid}":
+    get:
+      description: Lookup UUID registered in CyCAT.
+      operationId: get_lookup
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+  "/namespace/finduuid/{namespace}/{namespaceid}":
+    get:
+      description: Get all known UUID for a given namespace id.
+      operationId: get_namespacefinduuid
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: namespace
+        required: true
+        type: string
+      - in: path
+        name: namespaceid
+        required: true
+        type: string
+  /namespace/getall:
+    get:
+      description: List all known namespaces.
+      operationId: get_namespacegetall
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+  "/namespace/getid/{namespace}":
+    get:
+      description: Get all ID from a given namespace.
+      operationId: get_namespacegetid
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: namespace
+        required: true
+        type: string
+  "/parent/{uuid}":
+    get:
+      description: Get parent UUID(s) from a specified project or item UUID.
+      operationId: get_parent
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+  /propose:
+    post:
+      description: Propose new resource to CyCAT.
+      operationId: post_propose
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+  "/relationships/expanded/{uuid}":
+    get:
+      description: Get relationship(s) UUID from a specified UUID including the relationships meta information.
+      operationId: get_relationshipsexpanded
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+  "/relationships/{uuid}":
+    get:
+      description: Get relationship(s) UUID from a specified UUID.
+      operationId: get_relationships
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        type: string
+  "/search/{searchquery}":
+    get:
+      description: Full-text search in CyCAT and return matching UUID.
+      operationId: get_search
+      responses:
+        "200":
+          description: Success
+      tags:
+        - default
+    parameters:
+      - in: path
+        name: searchquery
+        required: true
+        type: string

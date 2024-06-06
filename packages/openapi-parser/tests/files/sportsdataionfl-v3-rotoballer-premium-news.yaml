@@ -1,1 +1,209 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: http://azure-api.sportsdata.io/v3/nfl/news-rotoballer
+  - url: https://azure-api.sportsdata.io/v3/nfl/news-rotoballer
+info:
+  contact:
+    x-twitter: nfldata
+  title: NFL v3 RotoBaller Premium News
+  version: "1.0"
+  x-apisguru-categories:
+    - entertainment
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_twitter.com_nfldata_profile_image.jpeg
+  x-origin:
+    - format: swagger
+      url: https://fantasydata.com/downloads/swagger/nfl-v3-rotoballer-premium-news.json
+      version: "2.0"
+  x-providerName: sportsdata.io
+  x-serviceName: nfl-v3-rotoballer-premium-news
+security:
+  - apiKeyHeader: []
+  - apiKeyQuery: []
+tags: []
+paths:
+  "/{format}/RotoBallerPremiumNews":
+    get:
+      operationId: PremiumNews
+      parameters:
+        - description: Desired response format. Valid entries are <code>XML</code> or <code>JSON</code>.
+          in: path
+          name: format
+          required: true
+          schema:
+            default: xml
+            enum:
+              - xml
+              - json
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/News"
+                type: array
+          description: ""
+      summary: Premium News
+  "/{format}/RotoBallerPremiumNewsByDate/{date}":
+    get:
+      operationId: PremiumNewsByDate
+      parameters:
+        - description: Desired response format. Valid entries are <code>XML</code> or <code>JSON</code>.
+          in: path
+          name: format
+          required: true
+          schema:
+            default: xml
+            enum:
+              - xml
+              - json
+            type: string
+        - description: |-
+            The date of the news.
+            <br>Examples: <code>2017-JUL-31</code>, <code>2017-SEP-01</code>.
+          in: path
+          name: date
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/News"
+                type: array
+          description: ""
+      summary: Premium News by Date
+  "/{format}/RotoBallerPremiumNewsByPlayerID/{playerid}":
+    get:
+      operationId: PremiumNewsByPlayer
+      parameters:
+        - description: Desired response format. Valid entries are <code>XML</code> or <code>JSON</code>.
+          in: path
+          name: format
+          required: true
+          schema:
+            default: xml
+            enum:
+              - xml
+              - json
+            type: string
+        - description: |-
+            Unique FantasyData Player ID.
+            Example:<code>10000507</code>.
+          in: path
+          name: playerid
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/News"
+                type: array
+          description: ""
+      summary: Premium News by Player
+  "/{format}/RotoBallerPremiumNewsByTeam/{team}":
+    get:
+      operationId: PremiumNewsByTeam
+      parameters:
+        - description: Desired response format. Valid entries are <code>XML</code> or <code>JSON</code>.
+          in: path
+          name: format
+          required: true
+          schema:
+            default: xml
+            enum:
+              - xml
+              - json
+            type: string
+        - description: "Abbreviation of the team. Example: <code>WAS</code>."
+          in: path
+          name: team
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/News"
+                type: array
+          description: ""
+      summary: Premium News by Team
+components:
+  schemas:
+    News:
+      properties:
+        Author:
+          nullable: true
+          type: string
+        Categories:
+          nullable: true
+          type: string
+        Content:
+          nullable: true
+          type: string
+        NewsID:
+          nullable: false
+          type: integer
+        OriginalSource:
+          nullable: true
+          type: string
+        OriginalSourceUrl:
+          nullable: true
+          type: string
+        PlayerID:
+          nullable: true
+          type: integer
+        PlayerID2:
+          nullable: true
+          type: integer
+        Source:
+          nullable: true
+          type: string
+        Team:
+          nullable: true
+          type: string
+        Team2:
+          nullable: true
+          type: string
+        TeamID:
+          nullable: true
+          type: integer
+        TeamID2:
+          nullable: true
+          type: integer
+        TermsOfUse:
+          nullable: true
+          type: string
+        TimeAgo:
+          nullable: true
+          type: string
+        Title:
+          nullable: true
+          type: string
+        Updated:
+          nullable: true
+          type: string
+        Url:
+          nullable: true
+          type: string
+  securitySchemes:
+    apiKeyHeader:
+      in: header
+      name: Ocp-Apim-Subscription-Key
+      type: apiKey
+    apiKeyQuery:
+      in: query
+      name: key
+      type: apiKey

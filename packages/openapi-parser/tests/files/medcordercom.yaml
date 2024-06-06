@@ -1,1 +1,110 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: api.medcorder.com
+info:
+  contact:
+    email: api@medcorder.com
+    name: Medcorder API Support
+  description: Returns doctors near a client given a lat/lon and autocomplete text.
+  termsOfService: https://medcorder.com/terms
+  title: Medcorder Nearby Doctor API
+  version: 1.0.0
+  x-apisguru-categories:
+    - open_data
+  x-origin:
+    - format: swagger
+      url: https://static.medcorder.com/openapi.yaml
+      version: "2.0"
+  x-providerName: medcorder.com
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+produces:
+  - application/json
+paths:
+  /doctors:
+    get:
+      operationId: doctors
+      parameters:
+        - description: The search text so far for autocomplete
+          in: query
+          name: search
+          required: false
+          type: string
+        - description: The latitude of the client, around which to search
+          format: double
+          in: query
+          maximum: 90
+          minimum: -90
+          name: latitude
+          required: false
+          type: number
+        - description: The longitude of the client, around which to search
+          format: double
+          in: query
+          maximum: 180
+          minimum: -180
+          name: longitude
+          required: false
+          type: number
+        - default: 50
+          description: The number of results desired
+          in: query
+          maximum: 50
+          minimum: 1
+          name: limit
+          required: false
+          type: integer
+      responses:
+        "200":
+          description: A list of doctors
+          schema:
+            items:
+              $ref: "#/definitions/doctor"
+            type: array
+      summary: Fetch a list of nearby medical providers
+definitions:
+  doctor:
+    properties:
+      address:
+        type: string
+      address2:
+        type: string
+      city:
+        type: string
+      county:
+        type: string
+      distance:
+        format: float
+        type: number
+      email:
+        type: string
+      first_name:
+        type: string
+      full_name:
+        type: string
+      gender:
+        type: string
+      last_name:
+        type: string
+      latitude:
+        format: float
+        type: number
+      longitude:
+        format: float
+        type: number
+      specialty:
+        type: string
+      state:
+        type: string
+      title:
+        type: string
+      website:
+        type: string
+      zip:
+        type: string
+    type: object
+x-google-backend:
+  address: https://medcorder-api-production.uc.r.appspot.com/
+  jwt_audience: 369549039786-08mij7ihsqfoe0ehi5u08kao9kc774mo.apps.googleusercontent.com
+  protocol: h2

@@ -1,1 +1,113 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: management.azure.com
+info:
+  description: Subscription client provides an interface to create and manage Azure subscriptions programmatically.
+  title: SubscriptionClient
+  version: 2018-03-01-preview
+  x-apisguru-categories:
+    - cloud
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_assets.onestore.ms_cdnfiles_onestorerolling-1606-01000_shell_v3_images_logo_microsoft.png
+  x-origin:
+    - format: swagger
+      url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/master/specification/subscription/resource-manager/Microsoft.Subscription/preview/2018-03-01-preview/operations.json
+      version: "2.0"
+  x-providerName: azure.com
+  x-serviceName: subscription-operations
+  x-tags:
+    - Azure
+    - Microsoft
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  azure_auth:
+    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+    description: Azure Active Directory OAuth2 Flow
+    flow: implicit
+    scopes:
+      user_impersonation: impersonate your user account
+    type: oauth2
+security:
+  - azure_auth:
+      - user_impersonation
+parameters:
+  apiVersionParameter:
+    description: Version of the API to be used with the client request. Current version is 2015-06-01
+    in: query
+    name: api-version
+    required: true
+    type: string
+paths:
+  /providers/Microsoft.Subscription/operations:
+    get:
+      description: Lists all of the available Microsoft.Subscription API operations.
+      operationId: Operations_List
+      parameters:
+        - $ref: "#/parameters/apiVersionParameter"
+      responses:
+        "200":
+          description: OK. The request has succeeded.
+          schema:
+            $ref: "#/definitions/OperationListResult"
+        default:
+          description: Error response describing why the operation failed.
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+      x-ms-examples:
+        getOperations:
+          parameters:
+            api-version: 2018-03-01-preview
+          responses:
+            "200":
+              body:
+                value:
+                  - display:
+                      operation: Create a subscription
+                      provider: Microsoft Subscription
+                      resource: Resources
+                    name: Microsoft.Subscription/createOperation/action
+definitions:
+  ErrorResponse:
+    description: Describes the format of Error response.
+    properties:
+      code:
+        description: Error code
+        type: string
+      message:
+        description: Error message indicating why the operation failed.
+        type: string
+    type: object
+  Operation:
+    description: REST API operation
+    properties:
+      display:
+        description: The object that represents the operation.
+        properties:
+          operation:
+            description: "Operation type: Read, write, delete, etc."
+            type: string
+          provider:
+            description: "Service provider: Microsoft.Subscription"
+            type: string
+          resource:
+            description: "Resource on which the operation is performed: Profile, endpoint, etc."
+            type: string
+      name:
+        description: "Operation name: {provider}/{resource}/{operation}"
+        type: string
+    type: object
+  OperationListResult:
+    description: Result of the request to list operations. It contains a list of operations and a URL link to get the next set of results.
+    properties:
+      nextLink:
+        description: URL to get the next set of operation list results if there are any.
+        type: string
+      value:
+        description: List of operations.
+        items:
+          $ref: "#/definitions/Operation"
+        type: array

@@ -1,1 +1,173 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: management.azure.com
+info:
+  title: Dynamics Telemetry
+  version: 2019-01-24
+  x-apisguru-categories:
+    - cloud
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_assets.onestore.ms_cdnfiles_onestorerolling-1606-01000_shell_v3_images_logo_microsoft.png
+  x-origin:
+    - format: swagger
+      url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/master/specification/dynamicstelemetry/resource-manager/Microsoft.DynamicsTelemetry/preview/2019-01-24/dynamicstelemetry.json
+      version: "2.0"
+  x-providerName: azure.com
+  x-serviceName: dynamicstelemetry
+  x-tags:
+    - Azure
+    - Microsoft
+produces:
+  - application/json
+securityDefinitions:
+  azure_auth:
+    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+    description: Azure Active Directory OAuth2 Flow
+    flow: implicit
+    scopes:
+      user_impersonation: impersonate your user account
+    type: oauth2
+paths:
+  /providers/Microsoft.DynamicsTelemetry/operations:
+    get:
+      operationId: Operations_List
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: "#/definitions/OperationList"
+        "204":
+          description: No Content
+      tags:
+        - Operations
+      x-ms-examples:
+        List Operations:
+          parameters:
+            api-version: 2019-01-24
+          responses:
+            "200":
+              body:
+                - display:
+                    description: Gets the available logs for tenants
+                    operation: Read tenants log definitions
+                    provider: Microsoft Dynamics Telemetry
+                    resource: Log definition
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/tenants/providers/Microsoft.Insights/logDefinitions/read
+                  origin: system
+                  properties: {}
+                - display:
+                    description: Gets the diagnostic setting for the resource
+                    operation: Read diagnostic setting
+                    provider: Microsoft Dynamics Telemetry
+                    resource: tenants
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/tenants/providers/Microsoft.Insights/diagnosticSettings/read
+                  origin: system
+                - display:
+                    description: Creates or updates the diagnostic setting for the resource
+                    operation: Write diagnostic setting
+                    provider: Microsoft Dynamics Telemetry
+                    resource: tenants
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/tenants/providers/Microsoft.Insights/diagnosticSettings/write
+                  origin: system
+                - display:
+                    description: Writing a diagnostic setting
+                    operation: Diagnostic settings write
+                    provider: Microsoft Monitoring Insights
+                    publisher: Microsoft
+                    resource: Diagnostic settings
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/diagnosticsettings/write
+                  properties: {}
+                - display:
+                    description: Reading a diagnostic setting
+                    operation: Diagnostic settings read
+                    provider: Microsoft Monitoring Insights
+                    publisher: Microsoft
+                    resource: Diagnostic settings
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/diagnosticsettings/read
+                  properties: {}
+                - display:
+                    description: Deleting a diagnostic setting
+                    operation: Diagnostic settings delete
+                    provider: Microsoft Monitoring Insights
+                    publisher: Microsoft
+                    resource: Diagnostic settings
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/diagnosticsettings/delete
+                  properties: {}
+                - display:
+                    description: Reading a diagnostic setting categories
+                    operation: Diagnostic settings categories read
+                    provider: Microsoft Monitoring Insights
+                    publisher: Microsoft
+                    resource: Diagnostic settings categories
+                  isDataAction: false
+                  name: microsoft.dynamicstelemetry/diagnosticsettingscategories/read
+                  properties: {}
+            "204": {}
+definitions:
+  Display:
+    additionalProperties: false
+    properties:
+      description:
+        type: string
+      operation:
+        type: string
+      provider:
+        type: string
+      publisher:
+        type: string
+      resource:
+        type: string
+    type: object
+  LogSpecification:
+    additionalProperties: false
+    properties:
+      blobDuration:
+        format: duration
+        type: string
+      displayName:
+        type: string
+      name:
+        type: string
+    type: object
+  Operation:
+    additionalProperties: false
+    properties:
+      display:
+        $ref: "#/definitions/Display"
+      isDataAction:
+        type: boolean
+      name:
+        type: string
+      origin:
+        type: string
+      properties:
+        $ref: "#/definitions/Properties"
+    required:
+      - isDataAction
+    type: object
+  OperationList:
+    description: List of supported operations.
+    items:
+      $ref: "#/definitions/Operation"
+    type: array
+  Properties:
+    additionalProperties: false
+    properties:
+      serviceSpecification:
+        $ref: "#/definitions/ServiceSpecification"
+    type: object
+  ServiceSpecification:
+    additionalProperties: false
+    properties:
+      logSpecifications:
+        items:
+          $ref: "#/definitions/LogSpecification"
+        type: array
+    type: object

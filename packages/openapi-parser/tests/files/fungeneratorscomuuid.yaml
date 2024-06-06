@@ -1,1 +1,244 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://api.fungenerators.com
+info:
+  contact:
+    name: Fun Generators
+    url: https://fungenerators.com/
+  description: |
+    A full featured, REST based UUID generator with json/xml/jsonp result support. You can try them out right here. [Click here to subscribe](http://fungenerators.com/api/uuid/)
+  termsOfService: https://fungenerators.com/terms
+  title: UUID Generation API
+  version: "1.5"
+  x-apisguru-categories:
+    - text
+  x-origin:
+    - format: openapi
+      url: https://fungenerators.com/yaml/uuid.yaml
+      version: "3.0"
+  x-providerName: fungenerators.com
+  x-serviceName: uuid
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+tags:
+  - description: Generate different versions of UUID easily.
+    externalDocs:
+      description: Find out more
+      url: https://fungenerators.com/api/uuid/
+    name: UUID Generation
+  - description: Parse UUID string and check for its validity and return version details
+    externalDocs:
+      description: Find out more
+      url: https://fungenerators.com/api/uuid/
+    name: UUID Parsing
+paths:
+  /uuid:
+    get:
+      description: Generate a random UUID (v4).
+      parameters:
+        - description: Number of UUID's to generate (defaults to 1)
+          in: query
+          name: count
+          required: false
+          schema:
+            format: integer
+            type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                      "success": {
+                        "total": 4
+                      },
+                      "contents": {
+                        "uuid": [
+                          {
+                            "uuid": "b201b88e-b0d2-4e82-9ea8-d2d1e25b3bd0",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "75becbbb-ae68-4e1a-95b1-c2dfc7a5891a",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "3cffa9ad-00a9-4d7a-87f3-85626808444f",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "d2c477c2-a2e3-463a-a3c5-0f131c9826c2",
+                            "version": 4
+                          }
+                        ],
+                        "copyright": {
+                            "year": "2020",
+                            "url": "  https://fungenerators.com/random/uuid"
+                        }
+                      }
+                    }
+          description: 200  response
+        "401":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                        "error": {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        }
+                    }
+          description: 401  response
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - UUID Generation
+    post:
+      description: Parse a UUID string and return its version and check whether it is valid.
+      parameters:
+        - description: UUID String to parse
+          in: query
+          name: uuidstr
+          required: true
+          schema:
+            format: string
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                      "success": {
+                        "total": 1
+                      },
+                      "contents": {
+                        "uuid": [
+                          {
+                            "is_valid": true,
+                            "uuid": "14cdb9b4-de01-3faa-aff5-65bc2f771745",
+                            "version": 3
+                          }
+                        ],
+                        "copyright": {
+                          "year": "2020",
+                          "url": "  https://fungenerators.com/random/uuid"
+                        }
+                      }
+                    }
+          description: 200  response
+        "401":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                        "error": {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        }
+                    }
+          description: 401  response
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - UUID Parsing
+  "/uuid/version/{version}":
+    get:
+      description: Generate a random UUID (v4).
+      parameters:
+        - description: Number of UUID's to generate (defaults to 1)
+          in: query
+          name: count
+          required: false
+          schema:
+            format: integer
+            type: integer
+        - description: Version of the UUID spec to use. (0-5), Use '0' for nil (00000000-0000-0000-0000-000000000000) UUID.
+          in: path
+          name: version
+          required: true
+          schema:
+            format: integer
+            type: integer
+        - description: For v3 and v5 of UUID Spec you can supply the type (dns/url/oid/x500/nil).
+          in: query
+          name: type
+          required: false
+          schema:
+            format: string
+            type: string
+        - description: For v3 and v5 of UUID Spec supply the text value for the type specified dns/url/oid/x500/nil. For example specify a dns/domain string if the type is "dns"
+          in: query
+          name: text
+          required: false
+          schema:
+            format: string
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                      "success": {
+                        "total": 4
+                      },
+                      "contents": {
+                        "uuid": [
+                          {
+                            "uuid": "b201b88e-b0d2-4e82-9ea8-d2d1e25b3bd0",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "75becbbb-ae68-4e1a-95b1-c2dfc7a5891a",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "3cffa9ad-00a9-4d7a-87f3-85626808444f",
+                            "version": 4
+                          },
+                          {
+                            "uuid": "d2c477c2-a2e3-463a-a3c5-0f131c9826c2",
+                            "version": 4
+                          }
+                        ],
+                        "copyright": {
+                            "year": "2020",
+                            "url": "  https://fungenerators.com/random/uuid"
+                        }
+                      }
+                    }
+          description: 200  response
+        "401":
+          content:
+            application/json:
+              examples:
+                response:
+                  value: |-
+                    {
+                        "error": {
+                            "code": 401,
+                            "message": "Unauthorized"
+                        }
+                    }
+          description: 401  response
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - UUID Generation
+components:
+  securitySchemes:
+    X-Fungenerators-Api-Secret:
+      in: header
+      name: X-Fungenerators-Api-Secret
+      type: apiKey

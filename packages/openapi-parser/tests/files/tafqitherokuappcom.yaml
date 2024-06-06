@@ -1,1 +1,70 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - description: Base URL
+    url: /
+info:
+  contact:
+    email: info@tafqit.com
+    name: Sami Morcos
+    url: https://tafqit.com
+  description: Convert numbers to their Arabic text representation
+  title: Tafqit
+  version: v1
+  x-apisguru-categories:
+    - text
+  x-category: Education
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_tafqit.com_assets_logo-69c6f503c54101a8a05bfceb9a7d6f1a96f22bd4aa3a4f72d9ad5a8ab0a2a951.png
+  x-long-description: |-
+    Based on the notoriously difficult rules for numbers in Arabic, Tafqit API converts Arabic numerals into written Arabic text
+    تحويل الأعداد العربية إلى ما يقابلها كتابة، مع مراعات التذكير والتأنيث. تحويل الارقام إلى حروف.
+  x-origin:
+    - format: openapi
+      url: https://tafqit.herokuapp.com/open_api/TafqitOpenAPI.json
+      version: "3.0"
+  x-providerName: tafqit.herokuapp.com
+  x-public: true
+  x-thumbnail: https://rapidapi-prod-apis.s3.amazonaws.com/6d8ff169-b82c-4fc0-bebc-b0c8f2ee79d4.png
+  x-version-lifecycle: current
+  x-website: tafqit.com
+tags: []
+paths:
+  /convert:
+    post:
+      description: |-
+        Convert the number into its Arabic text representation
+        حول العدد إلى ما يقابله كتابة
+      externalDocs:
+        description: ""
+        url: ""
+      operationId: convert
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                hundreds_form:
+                  description: "Some use مائة others use مئة , both works in Arabic. If left empty the default is مائة "
+                  example: مائة
+                  format: string
+                  type: string
+                the_number:
+                  description: Put the number here. Decimal is supported by most units.
+                  example: "2519.50"
+                  format: string
+                  type: string
+                unit:
+                  description: |-
+                    The counted subject, be it a currency like درهم إماراتي  or a size unit like متر مربع
+                    If the unit does not appear in the text result, it may not be supported. Please contact us to add it.
+                  example: " ريال سعودي"
+                  format: string
+                  type: string
+              type: object
+      responses:
+        "200":
+          description: number converted to text successfully, تمت عملية التفقيط بنجاح
+x-badges: []
+x-rapidapi-info:
+  apiId: api_1076b9b3-3ca0-4001-a63e-9b643b36b466
+  apiVersionId: apiversion_327f55e8-a89c-4f50-8f2c-425ca927c0c0

@@ -1,1 +1,69 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://api.nasa.gov/planetary
+  - url: http://api.nasa.gov/planetary
+info:
+  contact:
+    email: evan.t.yates@nasa.gov
+  description: This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds; but generally help with discoverability of relevant imagery
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: APOD
+  version: 1.0.0
+  x-apisguru-categories:
+    - media
+    - open_data
+  x-origin:
+    - format: swagger
+      url: https://raw.githubusercontent.com/nasa/api-docs/gh-pages/assets/json/APOD
+      version: "2.0"
+  x-providerName: nasa.gov
+  x-serviceName: apod
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+tags:
+  - description: An example tag
+    externalDocs:
+      description: Here's a link
+      url: https://example.com
+    name: request tag
+paths:
+  /apod:
+    get:
+      description: Returns the picture of the day
+      parameters:
+        - description: The date of the APOD image to retrieve
+          in: query
+          name: date
+          required: false
+          schema:
+            type: string
+        - description: Retrieve the URL for the high resolution image
+          in: query
+          name: hd
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  x-thing: ok
+                type: array
+          description: successful operation
+        "400":
+          description: Date must be between Jun 16, 1995 and Mar 28, 2019.
+      security:
+        - api_key: []
+      summary: Returns images
+      tags:
+        - request tag
+components:
+  securitySchemes:
+    api_key:
+      in: query
+      name: api_key
+      type: apiKey

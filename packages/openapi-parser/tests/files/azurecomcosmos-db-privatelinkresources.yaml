@@ -1,1 +1,215 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: management.azure.com
+info:
+  description: Azure Cosmos DB Database Service Resource Provider REST API
+  title: Cosmos DB
+  version: 2019-08-01-preview
+  x-apisguru-categories:
+    - cloud
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_assets.onestore.ms_cdnfiles_onestorerolling-1606-01000_shell_v3_images_logo_microsoft.png
+  x-origin:
+    - format: swagger
+      url: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/master/specification/cosmos-db/resource-manager/Microsoft.DocumentDB/preview/2019-08-01-preview/privateLinkResources.json
+      version: "2.0"
+  x-providerName: azure.com
+  x-serviceName: cosmos-db-privateLinkResources
+  x-tags:
+    - Azure
+    - Microsoft
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  azure_auth:
+    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+    description: Azure Active Directory OAuth2 Flow
+    flow: implicit
+    scopes:
+      user_impersonation: Impersonate your user account
+    type: oauth2
+security:
+  - azure_auth:
+      - user_impersonation
+parameters:
+  GroupNameParameter:
+    description: The name of the private link resource.
+    in: path
+    name: groupName
+    required: true
+    type: string
+    x-ms-parameter-location: method
+paths:
+  "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/privateLinkResources":
+    get:
+      description: Gets the private link resources that need to be created for a Cosmos DB account.
+      operationId: PrivateLinkResources_ListByDatabaseAccount
+      parameters:
+        - description: Azure subscription ID.
+          in: path
+          name: subscriptionId
+          required: true
+          type: string
+        - description: Name of an Azure resource group.
+          in: path
+          maxLength: 90
+          minLength: 1
+          name: resourceGroupName
+          pattern: ^[-\w\._\(\)]+$
+          required: true
+          type: string
+          x-ms-parameter-location: method
+        - description: Version of the API to be used with the client request. The current version is 2019-08-01.
+          in: query
+          name: api-version
+          required: true
+          type: string
+        - description: Cosmos DB database account name.
+          in: path
+          maxLength: 50
+          minLength: 3
+          name: accountName
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*
+          required: true
+          type: string
+          x-ms-parameter-location: method
+      responses:
+        "200":
+          description: Successfully retrieved private link resources.
+          schema:
+            $ref: "#/definitions/PrivateLinkResourceListResult"
+      tags:
+        - PrivateLinkResources
+      x-ms-examples:
+        Gets private endpoint connection.:
+          parameters:
+            accountName: ddb1
+            api-version: 2015-04-08
+            resourceGroupName: rg1
+            subscriptionId: 00000000-1111-2222-3333-444444444444
+          responses:
+            "200":
+              body:
+                value:
+                  - id: subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/Default/providers/Microsoft.DocumentDb/databaseAccounts/ddb1/privateLinkResources/sql
+                    name: sql
+                    properties:
+                      groupId: sql
+                      requiredMembers:
+                        - ddb1
+                        - ddb1-westus
+                    type: Microsoft.DocumentDB/databaseAccounts/privateLinkResources
+      x-ms-pageable:
+        nextLinkName: null
+  "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/privateLinkResources/{groupName}":
+    get:
+      description: Gets the private link resources that need to be created for a Cosmos DB account.
+      operationId: PrivateLinkResources_Get
+      parameters:
+        - description: Azure subscription ID.
+          in: path
+          name: subscriptionId
+          required: true
+          type: string
+        - description: Name of an Azure resource group.
+          in: path
+          maxLength: 90
+          minLength: 1
+          name: resourceGroupName
+          pattern: ^[-\w\._\(\)]+$
+          required: true
+          type: string
+          x-ms-parameter-location: method
+        - description: Version of the API to be used with the client request. The current version is 2019-08-01.
+          in: query
+          name: api-version
+          required: true
+          type: string
+        - description: Cosmos DB database account name.
+          in: path
+          maxLength: 50
+          minLength: 3
+          name: accountName
+          pattern: ^[a-z0-9]+(-[a-z0-9]+)*
+          required: true
+          type: string
+          x-ms-parameter-location: method
+        - $ref: "#/parameters/GroupNameParameter"
+      responses:
+        "200":
+          description: Successfully retrieved a specified private link resource.
+          schema:
+            $ref: "#/definitions/PrivateLinkResource"
+      tags:
+        - PrivateLinkResources
+      x-ms-examples:
+        Gets private endpoint connection.:
+          parameters:
+            accountName: ddb1
+            api-version: 2015-04-08
+            groupName: sql
+            resourceGroupName: rg1
+            subscriptionId: 00000000-1111-2222-3333-444444444444
+          responses:
+            "200":
+              body:
+                id: subscriptions/00000000-1111-2222-3333-444444444444/resourceGroups/Default/providers/Microsoft.DocumentDb/databaseAccounts/ddb1/privateLinkResources/sql
+                name: sql
+                properties:
+                  groupId: sql
+                  requiredMembers:
+                    - ddb1
+                    - ddb1-westus
+                type: Microsoft.DocumentDB/databaseAccounts/privateLinkResources
+definitions:
+  PrivateLinkResource:
+    allOf:
+      - description: The resource model definition for a ARM proxy resource. It will have everything other than required location and tags
+        properties:
+          id:
+            description: The unique resource identifier of the database account.
+            readOnly: true
+            type: string
+          name:
+            description: The name of the database account.
+            readOnly: true
+            type: string
+          type:
+            description: The type of Azure resource.
+            readOnly: true
+            type: string
+        type: object
+        x-ms-azure-resource: true
+    description: A private link resource
+    properties:
+      properties:
+        $ref: "#/definitions/PrivateLinkResourceProperties"
+        description: Resource properties.
+        x-ms-client-flatten: true
+    type: object
+  PrivateLinkResourceListResult:
+    description: A list of private link resources
+    properties:
+      value:
+        description: Array of private link resources
+        items:
+          $ref: "#/definitions/PrivateLinkResource"
+        type: array
+    type: object
+  PrivateLinkResourceProperties:
+    description: Properties of a private link resource.
+    properties:
+      groupId:
+        description: The private link resource group id.
+        readOnly: true
+        type: string
+      requiredMembers:
+        description: The private link resource required member names.
+        items:
+          type: string
+        readOnly: true
+        type: array
+    type: object

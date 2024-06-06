@@ -1,1 +1,73 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.1
+servers:
+  - url: https://staging2.freetv-app.com
+info:
+  description: A plugin that allows the user to obtain and summary latest news using ChatGPT. If you do not know the user's username, ask them first before making queries to the plugin. Otherwise, use the username "global".
+  title: News Plugin
+  version: v1
+  x-apisguru-categories:
+    - media
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_s3.amazonaws.com_acps-iaa_freetv_tv-landing_tv-logo.png
+  x-origin:
+    - format: openapi
+      url: https://www.freetv-app.com/openapi.json
+      version: "3.0"
+  x-providerName: freetv-app.com
+paths:
+  /services:
+    get:
+      description: Get the current latest news to user
+      operationId: getLatestNews
+      parameters:
+        - in: query
+          name: mobile
+          required: true
+          schema:
+            enum:
+              - 1
+            type: integer
+        - in: query
+          name: funcs
+          required: true
+          schema:
+            enum:
+              - getLatestNewsForChatGPT
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: OK
+      summary: Query the latest news
+components:
+  schemas:
+    ApiResponse:
+      properties:
+        getLatestNewsForChatGPT:
+          description: The list of latest news.
+          items:
+            $ref: "#/components/schemas/NewsItem"
+          title: Result of Latest News
+          type: array
+      required:
+        - getLatestNewsForChatGPT
+      title: ApiResponse
+      type: object
+    NewsItem:
+      properties:
+        created:
+          title: News Published Time
+          type: string
+        ref:
+          title: News Url
+          type: string
+        thumbnail:
+          title: News Thumbnail
+          type: string
+        title:
+          title: News Title
+          type: string
+      type: object
