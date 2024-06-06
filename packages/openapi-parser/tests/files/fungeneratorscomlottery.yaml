@@ -1,1 +1,178 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+  - http
+host: api.fungenerators.com
+info:
+  description: |
+    Below is the documentation for the API calls. You can try them out right here. 
+  title: Random Lottery Number generator API
+  version: "1.5"
+  x-apisguru-categories:
+    - text
+  x-origin:
+    - format: swagger
+      url: https://fungenerators.com/yaml/lottery.yaml
+      version: "2.0"
+  x-providerName: fungenerators.com
+  x-serviceName: lottery
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+consumes:
+  - application/json
+produces:
+  - application/json
+  - application/xml
+  - application/js
+securityDefinitions:
+  X-Fungenerators-Api-Secret:
+    in: header
+    name: X-Fungenerators-Api-Secret
+    type: apiKey
+tags:
+  - description: Random Lottery number generation API
+    externalDocs:
+      description: Find out more
+      url: http://fungenerators.com/api/lottery
+    name: Lottery
+paths:
+  /lottery/countries:
+    get:
+      description: Get the complete list of countries supported in the number generation API.
+      produces:
+        - application/json
+        - application/xml
+        - application/js
+      responses:
+        "200":
+          description: 200  response
+          examples:
+            application/json: |-
+              { 
+                "success":
+                  {"total":76},
+                "contents": {
+                   "countries":
+                      [
+                        "Anguilla",
+                        "Antigua and Barbuda",
+                        "Australia",
+                        "Austria",
+                        "..."
+                      ]
+                }
+              }
+        "401":
+          description: 401  response
+          examples:
+            application/json: |-
+              {
+                  "error": {
+                      "code": 401,
+                      "message": "Unauthorized"
+                  }
+              }
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - Lottery
+  /lottery/draw:
+    get:
+      description: Generate random draw for a given lottery game.
+      parameters:
+        - description: Lottery Game Name
+          format: string
+          in: query
+          name: game
+          required: true
+          type: string
+        - description: Number of draws (max 5 per request)
+          format: integer
+          in: query
+          name: count
+          required: false
+          type: integer
+      produces:
+        - application/json
+        - application/xml
+        - application/js
+      responses:
+        "200":
+          description: 200  response
+          examples:
+            application/json: |-
+              {
+                  "success": {
+                      "total": 1
+                  },
+                  "contents": 
+                      {
+                        "numbers":
+                          [
+                            {"draw":[[21,10,6,44,17,5]]}
+                          ]
+                      }
+              }
+        "401":
+          description: 401  response
+          examples:
+            application/json: |-
+              {
+                  "error": {
+                      "code": 401,
+                      "message": "Unauthorized"
+                  }
+              }
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - Lottery
+  /lottery/supported:
+    get:
+      description: Get the list of supported lottery games supported in the given country.
+      parameters:
+        - description: Country Name
+          format: string
+          in: query
+          name: country
+          required: true
+          type: string
+      produces:
+        - application/json
+        - application/xml
+        - application/js
+      responses:
+        "200":
+          description: 200  response
+          examples:
+            application/json: |-
+              {
+                  "success": {
+                      "total":4
+                    
+                  },
+                  "contents": {
+                      "country" : "India",
+                      "games" :
+                      [
+                        "india-playwin-easy-lotto",
+                        "india-playwin-fast-digit-lottery",
+                        "india-playwin-super-lotto",
+                        "india-playwin-thunderball"
+                      ]
+                  }
+              }            
+        "401":
+          description: 401  response
+          examples:
+            application/json: |-
+              {
+                  "error": {
+                      "code": 401,
+                      "message": "Unauthorized"
+                  }
+              }
+      security:
+        - X-Fungenerators-Api-Secret: []
+      tags:
+        - Lottery

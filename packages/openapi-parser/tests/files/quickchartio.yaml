@@ -1,1 +1,191 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://quickchart.io
+info:
+  description: An API to generate charts and QR codes using QuickChart services.
+  title: QuickChart API
+  version: 1.0.0
+  x-apisguru-categories:
+    - developer_tools
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_quickchart.io_android-chrome-512x512.png
+  x-origin:
+    - format: openapi
+      url: https://quickchart.io/openapi.yaml
+      version: "3.0"
+  x-providerName: quickchart.io
+paths:
+  /chart:
+    get:
+      description: Generate a chart based on the provided parameters.
+      parameters:
+        - description: The chart configuration in Chart.js format (JSON or Javascript).
+          in: query
+          name: chart
+          schema:
+            type: string
+        - description: The width of the chart in pixels.
+          in: query
+          name: width
+          schema:
+            type: integer
+        - description: The height of the chart in pixels.
+          in: query
+          name: height
+          schema:
+            type: integer
+        - description: The output format of the chart, e.g., 'png', 'jpg', 'svg', or 'webp'.
+          in: query
+          name: format
+          schema:
+            type: string
+        - description: The background color of the chart.
+          in: query
+          name: backgroundColor
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            image/jpeg:
+              schema:
+                format: binary
+                type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
+            image/svg+xml:
+              schema:
+                format: binary
+                type: string
+            image/webp:
+              schema:
+                format: binary
+                type: string
+          description: A generated chart image.
+      summary: Generate a chart (GET)
+    post:
+      description: Generate a chart based on the provided configuration in the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                backgroundColor:
+                  description: The background color of the chart.
+                  type: string
+                chart:
+                  description: The chart configuration in JSON format.
+                  type: object
+                format:
+                  description: The output format of the chart, e.g., 'png', 'jpg', 'svg', or 'webp'.
+                  type: string
+                height:
+                  description: The height of the chart in pixels.
+                  type: integer
+                width:
+                  description: The width of the chart in pixels.
+                  type: integer
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            image/jpeg:
+              schema:
+                format: binary
+                type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
+            image/svg+xml:
+              schema:
+                format: binary
+                type: string
+            image/webp:
+              schema:
+                format: binary
+                type: string
+          description: A generated chart image.
+      summary: Generate a chart (POST)
+  /qr:
+    get:
+      description: Generate a QR code based on the provided parameters.
+      parameters:
+        - description: The text to be encoded in the QR code.
+          in: query
+          name: text
+          schema:
+            type: string
+        - description: The width of the QR code in pixels.
+          in: query
+          name: width
+          schema:
+            type: integer
+        - description: The height of the QR code in pixels.
+          in: query
+          name: height
+          schema:
+            type: integer
+        - description: The output format of the QR code, e.g., 'png' or 'svg'.
+          in: query
+          name: format
+          schema:
+            type: string
+        - description: The margin around the QR code in pixels.
+          in: query
+          name: margin
+          schema:
+            type: integer
+      responses:
+        "200":
+          content:
+            image/png:
+              schema:
+                format: binary
+                type: string
+            image/svg+xml:
+              schema:
+                format: binary
+                type: string
+          description: A generated QR code image.
+      summary: Generate a QR code (GET)
+    post:
+      description: Generate a QR code based on the provided configuration in the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                format:
+                  description: The output format of the QR code, e.g., 'png' or 'svg'.
+                  type: string
+                height:
+                  description: The height of the QR code in pixels.
+                  type: integer
+                margin:
+                  description: The margin around the QR code in pixels.
+                  type: integer
+                text:
+                  description: The text to be encoded in the QR code.
+                  type: string
+                width:
+                  description: The width of the QR code in pixels.
+                  type: integer
+              type: object
+        required: true
+      responses:
+        "200":
+          content:
+            image/png:
+              schema:
+                format: binary
+                type: string
+            image/svg+xml:
+              schema:
+                format: binary
+                type: string
+          description: A generated QR code image.
+      summary: Generate a QR code (POST)

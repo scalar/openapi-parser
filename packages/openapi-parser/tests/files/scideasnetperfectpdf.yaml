@@ -1,1 +1,66 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://services.scideas.net
+info:
+  contact:
+    email: software@scideas.net
+    name: scideas software
+    url: https://scideas.net
+  description: "The perfectpdf api does one thing, perfectly: it converts html to pdf. The perfectpdf api uses headless Google Chrome to provide a low cost, high quality, simple to use service."
+  termsOfService: https://scideas.net/terms
+  title: perfectpdf api
+  version: "1.0"
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_scideas.net_media_logos_favicon_apple-touch-icon-57x57.png
+  x-origin:
+    - format: openapi
+      url: https://services.scideas.net/perfectpdf/resources/openapi3.0.0-perfectpdf-1.0.json
+      version: "3.0"
+  x-providerName: scideas.net
+  x-serviceName: perfectpdf
+externalDocs:
+  url: https://services.scideas.net/perfectpdf
+paths:
+  /perfectpdf/api:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/perfectpdf_api_body"
+        required: true
+      responses:
+        "200":
+          content:
+            text/html:
+              schema:
+                $ref: "#/components/schemas/inline_response_200"
+          description: Either a PDF document or an error message
+      summary: Returns PDF document.
+components:
+  schemas:
+    error:
+      description: an error message
+      example: "Error: html empty"
+      type: string
+    inline_response_200:
+      oneOf:
+        - $ref: "#/components/schemas/error"
+        - $ref: "#/components/schemas/result"
+    perfectpdf_api_body:
+      properties:
+        api_key:
+          description: api key
+          example: abc123
+          type: string
+        html:
+          description: html/css markup
+          example: <!doctype html><html><head><meta charset="UTF-8"><title>my title</title><script src="script.js"></script></head><body><div>My PDF</div></body></html>
+          type: string
+      required:
+        - api_key
+        - html
+      type: object
+    result:
+      description: PDF document
+      type: string

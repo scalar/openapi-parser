@@ -1,1 +1,95 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.1
+servers:
+  - url: https://flex-api.twilio.com
+info:
+  contact:
+    email: support@twilio.com
+    name: Twilio Support
+    url: https://support.twilio.com
+  description: This is the public Twilio REST API.
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://www.twilio.com/legal/tos
+  title: Twilio - Flex
+  version: 1.42.0
+  x-apisguru-categories:
+    - telecom
+    - messaging
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_static1.twilio.com_marketing_bundles_marketing_img_logos_wordmark-red.svg
+  x-origin:
+    - format: openapi
+      url: https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_flex_v2.json
+      version: "3.0"
+  x-providerName: twilio.com
+  x-serviceName: twilio_flex_v2
+paths:
+  /v2/WebChats:
+    description: "TODO: Resource-level docs"
+    post:
+      description: ""
+      operationId: CreateWebChannel
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                AddressSid:
+                  description: The SID of the Conversations Address. See [Address Configuration Resource](https://www.twilio.com/docs/conversations/api/address-configuration-resource) for configuration details. When a conversation is created on the Flex backend, the callback URL will be set to the corresponding Studio Flow SID or webhook URL in your address configuration.
+                  type: string
+                ChatFriendlyName:
+                  description: The Conversation's friendly name. See the [Conversation resource](https://www.twilio.com/docs/conversations/api/conversation-resource) for an example.
+                  type: string
+                CustomerFriendlyName:
+                  description: The Conversation participant's friendly name. See the [Conversation Participant Resource](https://www.twilio.com/docs/conversations/api/conversation-participant-resource) for an example.
+                  type: string
+                PreEngagementData:
+                  description: The pre-engagement data.
+                  type: string
+              required:
+                - AddressSid
+              title: CreateWebChannelRequest
+              type: object
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/flex.v2.web_channel"
+          description: Created
+      security:
+        - accountSid_authToken: []
+      x-maturity:
+        - GA
+    servers:
+      - url: https://flex-api.twilio.com
+    x-twilio:
+      className: web_channels
+      defaultOutputProperties:
+        - conversation_sid
+      mountName: web_channels
+      pathType: list
+components:
+  schemas:
+    flex.v2.web_channel:
+      properties:
+        conversation_sid:
+          description: The unique string representing the [Conversation resource](https://www.twilio.com/docs/conversations/api/conversation-resource) created.
+          maxLength: 34
+          minLength: 34
+          nullable: true
+          pattern: ^CH[0-9a-fA-F]{32}$
+          type: string
+        identity:
+          description: The unique string representing the User created and should be authorized to participate in the Conversation. For more details, see [User Identity & Access Tokens](https://www.twilio.com/docs/conversations/identity).
+          nullable: true
+          type: string
+      type: object
+  securitySchemes:
+    accountSid_authToken:
+      scheme: basic
+      type: http
+x-maturity:
+  - description: This product is Generally Available.
+    name: GA

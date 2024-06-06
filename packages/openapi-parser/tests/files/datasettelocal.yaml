@@ -1,1 +1,51 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.1
+servers:
+  - url: http://datasette.local
+  - url: https://datasette.io
+info:
+  description: Execute SQL queries against a Datasette database and return the results as JSON
+  title: Datasette API
+  version: v1
+  x-apisguru-categories:
+    - developer_tools
+  x-origin:
+    - format: openapi
+      url: https://datasette.io/-/chatgpt-openapi-schema.yml
+      version: "3.0"
+  x-providerName: datasette.local
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+paths:
+  /content.json:
+    get:
+      description: Accepts SQLite SQL query, returns JSON. Does not allow PRAGMA statements.
+      operationId: query
+      parameters:
+        - description: The SQL query to be executed
+          in: query
+          name: sql
+          required: true
+          schema:
+            type: string
+        - description: The shape of the response data. Must be "array"
+          in: query
+          name: _shape
+          required: true
+          schema:
+            enum:
+              - array
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  type: object
+                type: array
+          description: Successful SQL results
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      summary: Execute a SQLite SQL query against the content database

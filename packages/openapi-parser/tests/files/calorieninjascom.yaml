@@ -1,1 +1,61 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - description: CalorieNinjas API server
+    url: api.calorieninjas.com
+info:
+  contact:
+    email: info@calorieninjas.com
+    name: CalorieNinjas team
+    url: www.calorieninjas.com
+  description: Natural language nutrition API to extract nutrition data from any text.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: www.calorieninjas.com/tos
+  title: CalorieNinjas
+  version: 1.0.0
+  x-apisguru-categories:
+    - text
+  x-origin:
+    - format: openapi
+      url: https://www.calorieninjas.com/openapi.json
+      version: "3.0"
+  x-providerName: calorieninjas.com
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+externalDocs:
+  description: See www.calorieninjas.com/api.
+  url: www.calorieninjas.com/api
+security:
+  - x-api-key: []
+tags: []
+paths:
+  /v1/nutrition:
+    get:
+      description: "Returns a list of food item nutrition facts extracted from an input string containing food and beverage words. "
+      externalDocs:
+        url: www.calorieninjas.com/api
+      operationId: ""
+      parameters:
+        - description: Input query containing food and/or beverage words.
+          in: query
+          name: query
+          required: true
+          schema:
+            maxLength: 1500
+            minLength: 0
+            type: string
+      responses:
+        default:
+          description: Default response
+      summary: Get nutrition text for an input string containing food and beverage words.
+components:
+  callbacks: {}
+  links: {}
+  requestBodies: {}
+  schemas: {}
+  securitySchemes:
+    x-api-key:
+      in: header
+      name: api_key
+      type: apiKey

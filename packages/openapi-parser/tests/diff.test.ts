@@ -7,11 +7,6 @@ import { describe, expect, test } from 'vitest'
 import { AnyObject, normalize, openapi } from '../src'
 
 const expectedErrors = {
-  // 'packages/openapi-parser/tests/files/airport-webappspotcom.yaml': [
-  //   {
-  //     message: "must have required property 'tokenUrl'",
-  //   },
-  // ],
   'packages/openapi-parser/tests/files/opensuseorgobs.yaml': [
     {
       message: "must have required property '$ref'",
@@ -45,33 +40,18 @@ const circularReferences = [
 
 // Just skip some files. If it’s not empty, we’ve got some work to do. :)
 const ignoreFiles = [
-  // Cannot find supported OpenAPI version?
-  'packages/openapi-parser/tests/files/amadeuscomamadeus-flight-check-in-links.yaml',
-  // Returns HTML?
-  'packages/openapi-parser/tests/files/amazonawscombackup.yaml',
-  'packages/openapi-parser/tests/files/amazonawscomappintegrations.yaml',
+  // Very slow files
+  'packages/openapi-parser/tests/files/amazonawscomdynamodb.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomelasticmapreduce.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomemr-containers.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomec2.yaml',
+  'packages/openapi-parser/tests/files/amazonawscomdynamodb.yaml',
 ]
 
 const files = (await glob('./packages/openapi-parser/tests/files/*.yaml'))
   .filter((file) => !ignoreFiles.includes(file))
   // Aphabetic
   .sort()
-// Random
-// .sort(() => Math.random() - 0.5)
-
-// Just test a few files specifically:
-// const files = [
-//   'packages/openapi-parser/tests/files/xerocomxero_accounting.yaml',
-//   'packages/openapi-parser/tests/files/xtrfeu.yaml',
-//   'packages/openapi-parser/tests/files/webflowcom.yaml',
-//   'packages/openapi-parser/tests/files/amazonawscomathena.yaml',
-//   'packages/openapi-parser/tests/files/amazonawscomce.yaml',
-//   'packages/openapi-parser/tests/files/amazonawscomconnect.yaml',
-//   'packages/openapi-parser/tests/files/opentrialslocal.yaml',
-//   'packages/openapi-parser/tests/files/bbccouk.yaml',
-//   'packages/openapi-parser/tests/files/ote-godaddycomdomains.yaml',
-//   'packages/openapi-parser/tests/files/googleapiscomfirebaserules.yaml',
-// ]
 
 /**
  * This test suite parses a large number of real-world OpenAPI files

@@ -1,1 +1,57 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.1
+servers:
+  - url: https://api.mailboxvalidator.com/
+info:
+  contact:
+    x-twitter: MailBoxV
+  description: The MailboxValidator Free Email Checker checks if a single email address is from a free email provider and returns the results in either JSON or XML format. Refer to https://www.mailboxvalidator.com/api-email-freem for further information.
+  title: MailboxValidator Free Email Checker
+  version: 1.0.0
+  x-apisguru-categories:
+    - email
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_twitter.com_MailBoxV_profile_image.png
+  x-origin:
+    - converter:
+        url: https://github.com/mermade/oas-kit
+        version: 7.0.4
+      format: openapi
+      url: https://api.swaggerhub.com/apis/mailboxvalidator/MailboxValidator-Free-Email-Checker/1.0.0
+      version: "3.0"
+  x-providerName: mailboxvalidator.com
+  x-serviceName: checker
+paths:
+  /v1/email/free:
+    get:
+      description: The Free Email Checker API does validation on a single email address and returns if it is from a free email provider in either JSON or XML format.
+      parameters:
+        - description: Return the result in json (default) or xml format.
+          in: query
+          name: format
+          schema:
+            enum:
+              - json
+              - xml
+            type: string
+        - description: The email address to check if is from a free email provider.
+          in: query
+          name: email
+          required: true
+          schema:
+            type: string
+        - description: API key.
+          in: query
+          name: key
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json; charset=utf-8:
+              examples:
+                "0":
+                  value: '{"email_address":"","is_free":"","credits_available":"","error_code":"","error_message":""}'
+              schema:
+                type: string
+          description: free email checker response

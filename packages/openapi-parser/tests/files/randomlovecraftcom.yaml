@@ -1,1 +1,150 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+openapi: 3.0.0
+servers:
+  - url: https://randomlovecraft.com/api
+info:
+  description: Random sentences from the complete works of H.P. Lovecraft. CORS-enabled.
+  title: Random Lovecraft
+  version: "1.0"
+  x-apisguru-categories:
+    - text
+  x-origin:
+    - format: openapi
+      url: https://raw.githubusercontent.com/dekadans/randomlovecraft.com/master/public/openapi.yaml
+      version: "3.0"
+  x-providerName: randomlovecraft.com
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+tags:
+  - name: Sentences
+  - name: Books
+paths:
+  /books:
+    get:
+      description: ""
+      operationId: get-books
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: "#/components/schemas/book"
+                    type: array
+                type: object
+          description: ""
+      summary: List all books
+      tags:
+        - Books
+    summary: ""
+  "/books/{id}/sentences":
+    get:
+      description: ""
+      operationId: get-sentences-from-book
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: "#/components/schemas/sentence"
+                    type: array
+                type: object
+          description: ""
+      summary: Random sentences from a specific book
+      tags:
+        - Sentences
+    parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: limit
+        schema:
+          default: 1
+          maximum: 100
+          type: integer
+    summary: ""
+  /sentences:
+    get:
+      description: ""
+      operationId: get-sentences
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      $ref: "#/components/schemas/sentence"
+                    type: array
+                type: object
+          description: ""
+      summary: A random sentence
+      tags:
+        - Sentences
+    parameters:
+      - in: query
+        name: limit
+        schema:
+          default: 1
+          maximum: 100
+          type: integer
+    summary: ""
+  "/sentences/{id}":
+    get:
+      description: ""
+      operationId: get-specific-sentence
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    $ref: "#/components/schemas/sentence"
+                type: object
+          description: ""
+      summary: A specific sentence
+      tags:
+        - Sentences
+    parameters:
+      - description: Sentence ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+    summary: ""
+components:
+  schemas:
+    book:
+      properties:
+        id:
+          example: afd6
+          type: string
+        name:
+          example: The Shadow Out of Time
+          type: string
+        year:
+          example: "1934"
+          type: string
+      type: object
+    sentence:
+      properties:
+        book:
+          $ref: "#/components/schemas/book"
+        id:
+          example: d75b3350
+          type: string
+        sentence:
+          example: Around the first week in July I developed an unaccountable set of mixed emotions about that general northeasterly region.
+          type: string
+      type: object

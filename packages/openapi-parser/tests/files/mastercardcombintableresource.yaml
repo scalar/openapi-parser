@@ -1,1 +1,84 @@
-<!doctype html><html data-color-mode=auto data-light-theme=light data-dark-theme=dark_dimmed><head><title>Rate limit exceeded</title><link href=https://github.github.com/pages-staticassets/primer-tiny.css rel=stylesheet><style>@media (prefers-color-scheme:dark){.gh{filter:brightness(0) saturate(100%) invert(78%) sepia(12%) saturate(315%) hue-rotate(169deg) brightness(95%) contrast(86%)}}</style><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1"></head><body><div><div class="color-bg-primary width-full d-flex flex-column flex-items-center p-6 text-center" style=min-height:100vh><img src=https://github.github.com/pages-staticassets/gh.svg width=48 height=48 class="color-icon-primary octicon gh"><h1 class="f2-light mt-4">Rate limit exceeded</h1><p class=mt-2>Please wait a few minutes before retrying your request.</p><dl class="width-full border color-border-muted color-bg-subtle rounded-2 d-flex flex-column flex-items-center p-3 mt-4" style=max-width:480px><dt class=text-semibold>URL:<dd class=wb-break-all>api.apis.guru<dt class="text-semibold mt-2">IP address:<dd class=wb-break-all>213.187.82.137</dl><footer class="mt-4 d-flex flex-justify-center flex-items-center flex-wrap text-small color-fg-muted"><img src=https://github.github.com/pages-staticassets/lock.svg width=16 height=16 class=flex-shrink-0> <span class=ml-2>Protected by&nbsp;<a href=https://pages.github.com/ class=Link target=_blank>GitHub Pages</a></span></footer></div></div></body></html>
+swagger: "2.0"
+schemes:
+  - https
+host: api.mastercard.com
+basePath: /fraud/mtf/bintable/v1
+info:
+  contact:
+    email: mastercard@mastercard.com
+    name: Mastercard
+  description: MasterCard Bin Table Listing API
+  license:
+    name: mastercard
+    url: http://www.mastercard.com
+  title: MasterCard Bin Table Listing
+  version: "1.0"
+  x-artifactId: bintable
+  x-origin:
+    - format: swagger
+      url: https://developer.mastercard.com/devzone/api/portal/swagger/bin-table-resource
+      version: "2.0"
+  x-providerName: mastercard.com
+  x-serviceName: BINTableResource
+  x-test-on-environment:
+    environment: SANDBOX_MTF
+  x-logo:
+    url: https://api.apis.guru/v2/cache/logo/https_apis.guru_assets_images_no-logo.svg
+produces:
+  - application/json
+paths:
+  /binlisting:
+    get:
+      description: REST service will retrieve and return the BIN Table file to Merchants.
+      responses:
+        "200":
+          description: Successfully retrieved the BIN Table Listing file and available to Merchants
+          schema:
+            $ref: "#/definitions/BinTableResponse"
+        "404":
+          description: Resource Not Found
+          schema:
+            $ref: "#/definitions/NoResource"
+      summary: BIN Table Listing file
+      tags:
+        - BIN Table Listing Service
+      x-samples:
+        - keyId: default2
+          name: example_BinTAble_Getrequest
+          request:
+            application/json: |-
+              {
+               }     
+          response:
+            application/json: |-
+              {
+                 "data":"04241000000000000000424109999999999999MSI0000004782FIFTH"
+
+               }
+definitions:
+  BinTableResponse:
+    properties:
+      data:
+        description: BIN Table Listing file.
+        example: "001234"
+        type: string
+    required:
+      - data
+    type: object
+  NoResource:
+    properties:
+      ReasonCode:
+        description: RESOURCE_UNKOWN
+        example: RESOURCE_UNKOWN
+        type: string
+      Source:
+        description: System.
+        example: System
+        type: string
+      description:
+        description: Resource not found
+        example: Resource not found
+        type: string
+      recoverable:
+        example: false
+        type: boolean
