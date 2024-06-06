@@ -3,10 +3,12 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.5",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "github-slugger": "^2.0.0",
     "lefthook": "^1.6.15",
     "prettier": "^3.3.0",
     "turbo": "^1.13.3",
     "typescript": "^5.4.5",
+    "vite-node": "^1.6.0",
     "vitest": "^1.6.0"
   },
   "private": true,

@@ -16,27 +16,30 @@ console.log(`✓ Received a list of ${apis.length} APIs from apis.guru.`)
 console.log()
 console.log('Start downloading …')
 
-apis.forEach((api) => {
-  console.log(`Fetch ${api.swaggerYamlUrl}`)
+// Fetch files one after the other
+for (const api of apis) {
+  console.log()
+  console.log(`Fetching ${api.swaggerYamlUrl}`)
 
-  fetch(api.swaggerYamlUrl)
-    .then(async (response) => {
-      const content = await response.text()
+  const response = await fetch(api.swaggerYamlUrl)
 
-      const filename = `${slugger.slug(api.name)}.yaml`
-      const file = `./packages/openapi-parser/tests/files/${filename}`
+  if (!response.ok) {
+    console.error(`❌ [ERROR] Failed to fetch ${api.swaggerYamlUrl}`)
+    continue
+  }
 
-      console.log('Write', file)
-      fs.writeFile(file, content, (err) => {
-        if (err) {
-          throw err
-        }
-      })
-    })
-    .catch((err) => {
-      console.error(`[ERROR] Failed to fetch ${api.swaggerYamlUrl}`, err)
-    })
-})
+  const content = await response.text()
+
+  const filename = `${slugger.slug(api.name)}.yaml`
+  const file = `./packages/openapi-parser/tests/files/${filename}`
+
+  console.log('✅ [OK] Writing to ', file)
+  fs.writeFile(file, content, (err) => {
+    if (err) {
+      throw err
+    }
+  })
+}
 
 export async function fetchApiList() {
   const response = await fetch('https://api.apis.guru/v2/list.json')

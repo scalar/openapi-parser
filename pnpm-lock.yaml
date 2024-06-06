@@ -14,6 +14,9 @@ importers:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.2.0
         version: 4.3.0(prettier@3.3.0)
+      github-slugger:
+        specifier: ^2.0.0
+        version: 2.0.0
       lefthook:
         specifier: ^1.6.15
         version: 1.6.15
@@ -26,6 +29,9 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
+      vite-node:
+        specifier: ^1.6.0
+        version: 1.6.0
       vitest:
         specifier: ^1.6.0
         version: 1.6.0
@@ -2038,6 +2044,10 @@ packages:
     resolution: {integrity: sha512-ZCuZCnlqNzjb4QprAzXKdpp/gh6KTxSJuw3IBsPnV/7fV4NxC9ckB+vPTt8w7fJA0TaSD7c55BR47JD6MEDyDw==}
     dependencies:
       resolve-pkg-maps: 1.0.0
+    dev: true
+
+  /github-slugger@2.0.0:
+    resolution: {integrity: sha512-IaOQ9puYtjrkq7Y0Ygl9KDZnrf/aiUJYUpVf89y8kyaxbRG7Y1SrX/jaumrv81vc61+kiMempujsM3Yw7w5qcw==}
     dev: true
 
   /glob-parent@5.1.2:
