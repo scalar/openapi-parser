@@ -5,7 +5,14 @@ export const fetchUrlsPluginDefaultConfiguration = {
 }
 
 export const fetchUrlsPlugin: (customConfiguration?: {
+  /**
+   * Limit the number of requests. Set to `false` to disable the limit.
+   */
   limit?: number | false
+  /**
+   * Fetch function to use instead of the global fetch. Use this to intercept requests.
+   */
+  fetch?: (url: string) => Promise<Response>
 }) => LoadPlugin = (customConfiguration) => {
   // State
   let numberOfRequests = 0
@@ -44,7 +51,10 @@ export const fetchUrlsPlugin: (customConfiguration?: {
 
       try {
         numberOfRequests++
-        const response = await fetch(value)
+
+        const response = await (configuration?.fetch
+          ? configuration.fetch(value)
+          : fetch(value))
 
         return await response.text()
       } catch (error) {
