@@ -7,6 +7,7 @@ import {
 } from '@scalar/openapi-parser'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
+import JsonViewer from 'vue-json-viewer'
 
 const value = ref(
   JSON.stringify(
@@ -35,7 +36,7 @@ const value = ref(
   ),
 )
 
-const result = ref('')
+const result = ref({})
 
 onMounted(() => {
   const savedValue = window.localStorage.getItem('value')
@@ -52,16 +53,14 @@ watch(value, async (newValue) => {
 watchDebounced(
   value,
   async (newValue) => {
-    const content = await load(newValue, {
+    const { filesystem } = await load(newValue, {
       plugins: [fetchUrlsPlugin()],
     })
 
-    // console.log(await validate(content))
-
-    const { schema } = await dereference(content)
+    const { schema } = await dereference(filesystem)
 
     if (schema) {
-      result.value = toJson(schema)
+      result.value = schema
     }
   },
   {
@@ -84,7 +83,9 @@ watchDebounced(
         v-model="value" />
     </div>
     <div class="preview-right">
-      <pre id="output">{{ result }}</pre>
+      <json-viewer
+        :value="result"
+        :expand-depth="3"></json-viewer>
     </div>
   </div>
 </template>
@@ -110,11 +111,9 @@ watchDebounced(
   width: 50%;
   height: 100%;
   font-size: 1rem;
-  padding: 20px;
   border-radius: 5px;
-  background: #000;
-  color: #fff;
   overflow: auto;
+  border: 1px solid #ccc;
 }
 
 textarea {
@@ -125,11 +124,16 @@ textarea {
   resize: none;
   padding: 0;
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
   font-family: monospace;
   border: 1px solid #ccc;
-  padding: 20px;
+  padding: 15px 20px;
   border-radius: 5px;
+}
+
+.jv-container .jv-code {
+  padding: 20px;
 }
 
 pre {
