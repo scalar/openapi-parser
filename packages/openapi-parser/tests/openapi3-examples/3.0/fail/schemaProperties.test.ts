@@ -11,7 +11,6 @@ describe('schemaProperties', () => {
 
     expect(errors).not.toBe(undefined)
     expect(errors).not.toStrictEqual([])
-    // @ts-ignore
     expect(errors[0]?.message).toBe(
       'Can’t resolve external reference: ../resources/myobject.yml',
     )
