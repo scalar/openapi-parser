@@ -46,10 +46,9 @@ describe('cyclical', () => {
     )
     const category =
       result.schema.components.schemas.top.properties.cat.properties
-    expect(
-      // @ts-ignore
-      category.subcategories.items.properties.subcategories.type,
-    ).toEqual('array')
+    expect(category.subcategories.items.properties.subcategories.type).toEqual(
+      'array',
+    )
   })
 
   it.todo('resolves circular dependencies in referenced files', async () => {

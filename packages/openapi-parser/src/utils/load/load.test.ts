@@ -137,18 +137,18 @@ describe('load', async () => {
   })
 
   it('loads url', async () => {
-    // @ts-expect-error only partially patched
-    global.fetch = async () => ({
-      text: async () =>
-        stringify({
-          openapi: '3.1.0',
-          info: {
-            title: 'Hello World',
-            version: '1.0.0',
-          },
-          paths: {},
-        }),
-    })
+    global.fetch = async () =>
+      ({
+        text: async () =>
+          stringify({
+            openapi: '3.1.0',
+            info: {
+              title: 'Hello World',
+              version: '1.0.0',
+            },
+            paths: {},
+          }),
+      }) as Response
 
     const { filesystem } = await load('https://example.com/openapi.yaml', {
       plugins: [readFilesPlugin(), fetchUrlsPlugin()],
@@ -209,12 +209,10 @@ describe('load', async () => {
   })
 
   it('limits the number of requests', async () => {
-    // @ts-expect-error only partially patched
-    global.fetch = async () => {
-      return {
+    global.fetch = async () =>
+      ({
         text: async () => 'FOOBAR',
-      }
-    }
+      }) as unknown as Response
 
     const { filesystem } = await load(
       {
@@ -252,7 +250,6 @@ describe('load', async () => {
   })
 
   it('loads referenced urls', async () => {
-    // @ts-expect-error only partially patched
     global.fetch = async (url: string) => {
       if (url === 'https://example.com/openapi.yaml') {
         return {
@@ -273,7 +270,7 @@ describe('load', async () => {
                 },
               },
             }),
-        }
+        } as Response
       }
 
       if (url === 'https://example.com/foobar.json') {
@@ -289,7 +286,7 @@ describe('load', async () => {
                 },
               },
             }),
-        }
+        } as Response
       }
     }
 
@@ -327,8 +324,7 @@ describe('load', async () => {
   })
 
   it('loads string with url reference', async () => {
-    // @ts-expect-error only partially patched
-    global.fetch = async (url: string) => {
+    global.fetch = async () => {
       return {
         text: async () =>
           JSON.stringify({
@@ -341,7 +337,7 @@ describe('load', async () => {
               },
             },
           }),
-      }
+      } as Response
     }
 
     const { filesystem } = await load(

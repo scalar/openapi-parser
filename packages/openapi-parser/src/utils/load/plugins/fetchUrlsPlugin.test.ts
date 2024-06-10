@@ -26,16 +26,16 @@ describe('fetchUrlsPlugin', async () => {
   })
 
   it('fetches the URL', async () => {
-    // @ts-expect-error only partially patched
-    global.fetch = async (url: string) => ({
-      text: async () => {
-        if (url === 'http://example.com/specification/openapi.yaml') {
-          return 'OK'
-        }
+    global.fetch = async (url: string) =>
+      ({
+        text: async () => {
+          if (url === 'http://example.com/specification/openapi.yaml') {
+            return 'OK'
+          }
 
-        throw new Error('Not found')
-      },
-    })
+          throw new Error('Not found')
+        },
+      }) as Response
 
     expect(
       await fetchUrlsPlugin().get(
@@ -45,16 +45,16 @@ describe('fetchUrlsPlugin', async () => {
   })
 
   it('rewrites the URL', async () => {
-    // @ts-expect-error only partially patched
-    global.fetch = async (url: string) => ({
-      text: async () => {
-        if (url === 'http://foobar.com/specification/openapi.yaml') {
-          return 'OK'
-        }
+    global.fetch = async (url: string) =>
+      ({
+        text: async () => {
+          if (url === 'http://foobar.com/specification/openapi.yaml') {
+            return 'OK'
+          }
 
-        throw new Error('Not found')
-      },
-    })
+          throw new Error('Not found')
+        },
+      }) as Response
 
     expect(
       await fetchUrlsPlugin({

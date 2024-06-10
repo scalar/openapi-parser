@@ -2,7 +2,7 @@
 import { dereference, fetchUrlsPlugin, load } from '@scalar/openapi-parser'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
-// @ts-ignore
+// @ts-expect-error Package doesn’t come with types
 import JsonViewer from 'vue-json-viewer'
 
 const value = ref(
