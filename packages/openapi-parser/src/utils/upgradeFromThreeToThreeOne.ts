@@ -77,6 +77,15 @@ export function upgradeFromThreeToThreeOne(specification: AnyObject) {
     return schema
   })
 
+  // Uploading a binary file in a POST request
+  specification = traverse(specification, (schema) => {
+    if (schema.type === 'string' && schema.format === 'binary') {
+      return undefined
+    }
+
+    return schema
+  })
+
   // Uploading an image with base64 encoding
   specification = traverse(specification, (schema) => {
     if (schema.type === 'string' && schema.format === 'base64') {
