@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+import fs from 'fs'
 
 import { ERRORS } from '../../../configuration'
 import { dirname, join } from '../../../polyfills/path'
