@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { dereference, fetchUrlsPlugin, load } from '@scalar/openapi-parser'
+import { dereference, load } from '@scalar/openapi-parser'
+import { fetchUrls } from '@scalar/openapi-parser/plugins/fetch-urls'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
 // @ts-expect-error Package doesn’t come with types
@@ -50,7 +51,7 @@ watchDebounced(
   value,
   async (newValue) => {
     const { filesystem } = await load(newValue, {
-      plugins: [fetchUrlsPlugin()],
+      plugins: [fetchUrls()],
     })
 
     const { schema } = await dereference(filesystem)

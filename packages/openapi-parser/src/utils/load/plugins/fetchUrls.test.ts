@@ -1,28 +1,28 @@
 import { describe, expect, it } from 'vitest'
 
-import { fetchUrlsPlugin } from './fetchUrlsPlugin'
+import { fetchUrls } from './fetchUrls'
 
-describe('fetchUrlsPlugin', async () => {
+describe('fetchUrls', async () => {
   it('returns true for an url', async () => {
     expect(
-      fetchUrlsPlugin().check('http://example.com/specification/openapi.yaml'),
+      fetchUrls().check('http://example.com/specification/openapi.yaml'),
     ).toBe(true)
   })
 
   it('returns false for a filename', async () => {
-    expect(fetchUrlsPlugin().check('openapi.yaml')).toBe(false)
+    expect(fetchUrls().check('openapi.yaml')).toBe(false)
   })
 
   it('returns false for a path', async () => {
-    expect(fetchUrlsPlugin().check('specification/openapi.yaml')).toBe(false)
+    expect(fetchUrls().check('specification/openapi.yaml')).toBe(false)
   })
 
   it('returns false for an object', async () => {
-    expect(fetchUrlsPlugin().check({})).toBe(false)
+    expect(fetchUrls().check({})).toBe(false)
   })
 
   it('returns false for undefinded', async () => {
-    expect(fetchUrlsPlugin().check()).toBe(false)
+    expect(fetchUrls().check()).toBe(false)
   })
 
   it('fetches the URL', async () => {
@@ -38,9 +38,7 @@ describe('fetchUrlsPlugin', async () => {
       }) as Response
 
     expect(
-      await fetchUrlsPlugin().get(
-        'http://example.com/specification/openapi.yaml',
-      ),
+      await fetchUrls().get('http://example.com/specification/openapi.yaml'),
     ).toBe('OK')
   })
 
@@ -57,7 +55,7 @@ describe('fetchUrlsPlugin', async () => {
       }) as Response
 
     expect(
-      await fetchUrlsPlugin({
+      await fetchUrls({
         fetch: (url) => fetch(url.replace('example', 'foobar')),
       }).get('http://foobar.com/specification/openapi.yaml'),
     ).toBe('OK')

@@ -6,8 +6,9 @@ import SwaggerParser from '@apidevtools/swagger-parser'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { load, readFilesPlugin } from '.'
+import { load } from '.'
 import type { AnyObject } from '../types'
+import { readFiles } from './load/plugins/readFiles'
 import { resolveReferences } from './resolveReferences'
 
 const EXAMPLE_FILE = path.join(
@@ -638,7 +639,7 @@ describe('resolveReferences', () => {
 
   it('resolves from filesystem', async () => {
     const { filesystem } = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin()],
+      plugins: [readFiles()],
     })
 
     const { schema } = resolveReferences(filesystem)

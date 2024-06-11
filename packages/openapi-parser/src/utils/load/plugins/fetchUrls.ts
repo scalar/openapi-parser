@@ -1,10 +1,10 @@
 import { LoadPlugin } from '../load'
 
-export const fetchUrlsPluginDefaultConfiguration = {
+export const fetchUrlsDefaultConfiguration = {
   limit: 20,
 }
 
-export const fetchUrlsPlugin: (customConfiguration?: {
+export const fetchUrls: (customConfiguration?: {
   /**
    * Limit the number of requests. Set to `false` to disable the limit.
    */
@@ -19,7 +19,7 @@ export const fetchUrlsPlugin: (customConfiguration?: {
 
   // Configuration
   const configuration = {
-    ...fetchUrlsPluginDefaultConfiguration,
+    ...fetchUrlsDefaultConfiguration,
     ...customConfiguration,
   }
 
@@ -44,7 +44,7 @@ export const fetchUrlsPlugin: (customConfiguration?: {
         numberOfRequests >= configuration?.limit
       ) {
         console.warn(
-          `[fetchUrlsPlugin] Maximum number of requests reeached (${configuration?.limit}), skipping request`,
+          `[fetchUrls] Maximum number of requests reeached (${configuration?.limit}), skipping request`,
         )
         return undefined
       }
@@ -58,7 +58,7 @@ export const fetchUrlsPlugin: (customConfiguration?: {
 
         return await response.text()
       } catch (error) {
-        console.error('[fetchUrlsPlugin]', error.message, `(${value})`)
+        console.error('[fetchUrls]', error.message, `(${value})`)
       }
     },
   }

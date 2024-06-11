@@ -1,7 +1,8 @@
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { load, readFilesPlugin, validate } from '../../../../src'
+import { load, validate } from '../../../../src'
+import { readFiles } from '../../../../src/utils/load/plugins/readFiles'
 
 const EXAMPLE_FILE = path.join(
   new URL(import.meta.url).pathname,
@@ -11,7 +12,7 @@ const EXAMPLE_FILE = path.join(
 describe('externalPathItemRef', () => {
   it('passes', async () => {
     const { filesystem } = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin()],
+      plugins: [readFiles()],
     })
 
     const { schema } = await validate(filesystem)

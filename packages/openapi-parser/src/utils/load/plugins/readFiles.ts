@@ -6,7 +6,7 @@ import { isJson } from '../../isJson'
 import { isYaml } from '../../isYaml'
 import { LoadPlugin } from '../load'
 
-export const readFilesPlugin: () => LoadPlugin = () => {
+export const readFiles: () => LoadPlugin = () => {
   return {
     check(value?: any) {
       // Not a string
@@ -44,7 +44,7 @@ export const readFilesPlugin: () => LoadPlugin = () => {
       try {
         return fs.readFileSync(value, 'utf-8')
       } catch (error) {
-        console.error('[readFilesPlugin]', error)
+        console.error('[readFiles]', error)
       }
     },
     resolvePath(value: any, reference: string) {

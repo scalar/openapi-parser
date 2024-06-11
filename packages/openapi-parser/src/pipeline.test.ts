@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { stringify } from 'yaml'
 
 import { openapi } from './pipeline'
-import { readFilesPlugin } from './utils/load/plugins/readFilesPlugin'
+import { readFiles } from './utils/load/plugins/readFiles'
 
 const example = {
   openapi: '3.1.0',
@@ -37,7 +37,7 @@ describe('pipeline', () => {
   it('load file', async () => {
     const { specification } = await openapi()
       .load(EXAMPLE_FILE, {
-        plugins: [readFilesPlugin()],
+        plugins: [readFiles()],
       })
       .get()
 
@@ -47,7 +47,7 @@ describe('pipeline', () => {
   it('files', async () => {
     const filesystem = await openapi()
       .load(EXAMPLE_FILE, {
-        plugins: [readFilesPlugin()],
+        plugins: [readFiles()],
       })
       .files()
 
