@@ -4,8 +4,8 @@ import { stringify } from 'yaml'
 
 import { getEntrypoint } from '../getEntrypoint'
 import { load } from './load'
-import { fetchUrlsPlugin } from './plugins/fetchUrlsPlugin'
-import { readFilesPlugin } from './plugins/readFilesPlugin'
+import { fetchUrls } from './plugins/fetchUrls'
+import { readFiles } from './plugins/readFiles'
 
 describe('load', async () => {
   it('loads JS object', async () => {
@@ -19,7 +19,7 @@ describe('load', async () => {
         paths: {},
       },
       {
-        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+        plugins: [readFiles(), fetchUrls()],
       },
     )
 
@@ -44,7 +44,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+        plugins: [readFiles(), fetchUrls()],
       },
     )
 
@@ -69,7 +69,7 @@ describe('load', async () => {
         paths: {},
       }),
       {
-        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+        plugins: [readFiles(), fetchUrls()],
       },
     )
 
@@ -90,7 +90,7 @@ describe('load', async () => {
     )
 
     const { filesystem } = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+      plugins: [readFiles(), fetchUrls()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -110,7 +110,7 @@ describe('load', async () => {
     )
 
     const { filesystem } = await load(EXAMPLE_FILE, {
-      plugins: [readFilesPlugin()],
+      plugins: [readFiles()],
     })
 
     // filenames
@@ -151,7 +151,7 @@ describe('load', async () => {
       }) as Response
 
     const { filesystem } = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+      plugins: [readFiles(), fetchUrls()],
     })
 
     expect(getEntrypoint(filesystem).specification).toMatchObject({
@@ -194,7 +194,7 @@ describe('load', async () => {
         },
       },
       {
-        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+        plugins: [readFiles(), fetchUrls()],
       },
     )
 
@@ -239,7 +239,7 @@ describe('load', async () => {
       },
       {
         plugins: [
-          fetchUrlsPlugin({
+          fetchUrls({
             limit: 0,
           }),
         ],
@@ -291,7 +291,7 @@ describe('load', async () => {
     }
 
     const { filesystem } = await load('https://example.com/openapi.yaml', {
-      plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+      plugins: [readFiles(), fetchUrls()],
     })
 
     expect(filesystem[0].specification).toMatchObject({
@@ -358,7 +358,7 @@ describe('load', async () => {
         },
       }),
       {
-        plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+        plugins: [readFiles(), fetchUrls()],
       },
     )
 

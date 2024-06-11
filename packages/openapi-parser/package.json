@@ -28,11 +28,11 @@
     ".": {
       "import": "./dist/src/index.js"
     },
-    "./plugins/fetchUrlsPlugin": {
-      "import": "./dist/src/utils/load/plugins/fetchUrlsPlugin.js"
+    "./plugins/fetchUrls": {
+      "import": "./dist/src/utils/load/plugins/fetchUrls.js"
     },
-    "./plugins/readFilesPlugin": {
-      "import": "./dist/src/utils/load/plugins/fetchUrlsPlugin.js"
+    "./plugins/readFiles": {
+      "import": "./dist/src/utils/load/plugins/fetchUrls.js"
     }
   },
   "sideEffects": false,

@@ -134,19 +134,24 @@ You can reference other files, too. To do that, the parser needs to know what fi
 
 ```ts
 import { dereference, load } from '@scalar/openapi-parser'
-import { fetchUrlsPlugin } from '@scalar/openapi-parser/plugins/fetchUrlsPlugin'
-import { readFilesPlugin } from '@scalar/openapi-parser/plugins/readFilesPlugin'
+import { fetchUrls } from '@scalar/openapi-parser/plugins/fetchUrls'
+import { readFiles } from '@scalar/openapi-parser/plugins/readFiles'
 
 // Load a file and all referenced files
 const { filesystem } = await load('./openapi.yaml', {
-  plugins: [readFilesPlugin(), fetchUrlsPlugin()],
+  plugins: [
+    readFiles(),
+    fetchUrls({
+      limit: 5,
+    }),
+  ],
 })
 
 // Instead of just passing a single specification, pass the whole “filesystem”
 const result = await dereference(filesystem)
 ```
 
-As you see, `load()` supports plugin. You can write your own plugin, if you’d like to fetch API defintions from another data source, for example your database. Look at the source code of the `readFilesPlugin` to learn how this could look like.
+As you see, `load()` supports plugin. You can write your own plugin, if you’d like to fetch API defintions from another data source, for example your database. Look at the source code of the `readFiles` to learn how this could look like.
 
 ## Community
 

@@ -10,8 +10,8 @@ import { webpackStats } from 'rollup-plugin-webpack-stats'
 
 const input = [
   './src/index.ts',
-  './src/utils/load/plugins/fetchUrlsPlugin.ts',
-  './src/utils/load/plugins/readFilesPlugin.ts',
+  './src/utils/load/plugins/fetchUrls.ts',
+  './src/utils/load/plugins/readFiles.ts',
 ]
 const dir = 'dist'
 
