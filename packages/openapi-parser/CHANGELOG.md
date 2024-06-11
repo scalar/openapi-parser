@@ -1,5 +1,15 @@
 # @scalar/openapi-parser
 
+## 0.7.0
+
+### Minor Changes
+
+- ec01324: refactor!: use dedicated entrypoints for the plugins
+
+### Patch Changes
+
+- c6944f2: fix: ajv import broken in CJS environments
+
 ## 0.6.0
 
 ### Minor Changes
