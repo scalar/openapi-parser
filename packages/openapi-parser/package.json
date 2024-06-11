@@ -24,6 +24,17 @@
   "main": "./dist/src/index.js",
   "module": "./dist/src/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js"
+    },
+    "./plugins/fetchUrlsPlugin": {
+      "import": "./dist/src/utils/load/plugins/fetchUrlsPlugin.js"
+    },
+    "./plugins/readFilesPlugin": {
+      "import": "./dist/src/utils/load/plugins/fetchUrlsPlugin.js"
+    }
+  },
   "sideEffects": false,
   "repository": {
     "type": "git",

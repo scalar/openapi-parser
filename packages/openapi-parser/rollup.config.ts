@@ -8,7 +8,11 @@ import type { Options as ESBuildOptions } from 'rollup-plugin-esbuild'
 import esbuild from 'rollup-plugin-esbuild'
 import { webpackStats } from 'rollup-plugin-webpack-stats'
 
-const input = `./src/index.ts`
+const input = [
+  './src/index.ts',
+  './src/utils/load/plugins/fetchUrlsPlugin.ts',
+  './src/utils/load/plugins/readFilesPlugin.ts',
+]
 const dir = 'dist'
 
 /**

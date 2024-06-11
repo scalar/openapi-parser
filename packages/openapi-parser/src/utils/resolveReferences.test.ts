@@ -6,8 +6,9 @@ import SwaggerParser from '@apidevtools/swagger-parser'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { load, readFilesPlugin } from '.'
+import { load } from '.'
 import type { AnyObject } from '../types'
+import { readFilesPlugin } from './load/plugins/readFilesPlugin'
 import { resolveReferences } from './resolveReferences'
 
 const EXAMPLE_FILE = path.join(

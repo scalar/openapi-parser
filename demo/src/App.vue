@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { dereference, fetchUrlsPlugin, load } from '@scalar/openapi-parser'
+import { dereference, load } from '@scalar/openapi-parser'
+import { fetchUrlsPlugin } from '@scalar/openapi-parser/plugins/fetchUrlsPlugin'
 import { watchDebounced } from '@vueuse/core'
 import { onMounted, ref, watch } from 'vue'
 // @ts-expect-error Package doesn’t come with types
