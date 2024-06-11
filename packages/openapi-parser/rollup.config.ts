@@ -59,10 +59,9 @@ const config: RollupOptions[] = [
     output: [
       // ESM
       {
-        dir,
-        format: 'es',
-        sourcemap: false,
+        format: 'esm',
         preserveModules: true,
+        dir,
       },
     ],
     plugins: [
@@ -83,15 +82,20 @@ const config: RollupOptions[] = [
       'yaml',
     ],
     treeshake: {
-      moduleSideEffects: false,
-      propertyReadSideEffects: false,
-      tryCatchDeoptimization: false,
+      annotations: true,
+      preset: 'recommended',
     },
   },
   // Types
   {
     input,
-    output: [{ dir, format: 'es', sourcemap: false, preserveModules: true }],
+    output: [
+      {
+        dir,
+        format: 'esm',
+        preserveModules: true,
+      },
+    ],
     plugins: [dts()],
   },
 ]
