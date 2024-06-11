@@ -134,8 +134,8 @@ You can reference other files, too. To do that, the parser needs to know what fi
 
 ```ts
 import { dereference, load } from '@scalar/openapi-parser'
-import { fetchUrls } from '@scalar/openapi-parser/plugins/fetchUrls'
-import { readFiles } from '@scalar/openapi-parser/plugins/readFiles'
+import { fetchUrls } from '@scalar/openapi-parser/plugins/fetch-urls'
+import { readFiles } from '@scalar/openapi-parser/plugins/read-files'
 
 // Load a file and all referenced files
 const { filesystem } = await load('./openapi.yaml', {

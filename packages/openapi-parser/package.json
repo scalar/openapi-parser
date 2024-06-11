@@ -28,10 +28,10 @@
     ".": {
       "import": "./dist/src/index.js"
     },
-    "./plugins/fetchUrls": {
+    "./plugins/fetch-urls": {
       "import": "./dist/src/utils/load/plugins/fetchUrls.js"
     },
-    "./plugins/readFiles": {
+    "./plugins/read-files": {
       "import": "./dist/src/utils/load/plugins/fetchUrls.js"
     }
   },
