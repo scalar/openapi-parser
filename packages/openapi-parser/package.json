@@ -32,7 +32,7 @@
       "import": "./dist/src/utils/load/plugins/fetchUrls.js"
     },
     "./plugins/read-files": {
-      "import": "./dist/src/utils/load/plugins/fetchUrls.js"
+      "import": "./dist/src/utils/load/plugins/readFiles.js"
     }
   },
   "sideEffects": false,
