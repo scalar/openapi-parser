@@ -4,6 +4,16 @@
 
 ### Minor Changes
 
+- 5a5a118: refactor!: use dedicated entrypoints for the plugins
+
+### Patch Changes
+
+- 5a5a118: fix: ajv import broken in CJS environments
+
+## 0.7.0
+
+### Minor Changes
+
 - ec01324: refactor!: use dedicated entrypoints for the plugins
 
 ### Patch Changes
