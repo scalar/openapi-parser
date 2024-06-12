@@ -1,5 +1,11 @@
 # @scalar/openapi-parser
 
+## 0.7.1
+
+### Patch Changes
+
+- 5e2c2d1: fix: read files export is wrong
+
 ## 0.7.0
 
 ### Minor Changes
