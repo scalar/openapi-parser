@@ -16,7 +16,7 @@ import {
   PatternValidationError,
   RequiredValidationError,
   UnevaluatedPropValidationError,
-} from './validation-errors'
+} from './validation-errors/index'
 
 // eslint-disable-next-line unicorn/no-unsafe-regex
 const JSON_POINTERS_REGEX = /\/[\w_-]+(\/\d+)?/g
