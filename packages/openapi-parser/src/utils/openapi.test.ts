@@ -16,7 +16,7 @@ const example = {
 
 const EXAMPLE_FILE = join(
   new URL(import.meta.url).pathname,
-  '../utils/examples/openapi.yaml',
+  '../examples/openapi.yaml',
 )
 
 describe('pipeline', () => {
