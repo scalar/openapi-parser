@@ -361,4 +361,39 @@ describe('pipeline', () => {
       'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
     )
   })
+
+  it('works with then & catch', async () => {
+    return new Promise((resolve, reject) => {
+      openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate({
+          throwOnError: true,
+        })
+        .get()
+        .then(() => {
+          reject()
+        })
+        .catch((error) => {
+          expect(error.message).toBe(
+            'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+          )
+
+          resolve(null)
+        })
+    })
+  })
 })
