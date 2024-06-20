@@ -19,6 +19,7 @@
   "type": "module",
   "files": [
     "dist",
+    "!dist/webpack-stats.json",
     "CHANGELOG.md"
   ],
   "main": "./dist/index.js",
