@@ -35,6 +35,11 @@ export type Queue = {
 }
 
 /**
+ * If `true`, the function will throw an error if the document is invalid.
+ */
+export type ThrowOnErrorOption = { throwOnError?: boolean }
+
+/**
  * JSON, YAML or object representation of an OpenAPI API definition
  */
 export type AnyApiDefinitionFormat = string | AnyObject
@@ -42,7 +47,7 @@ export type AnyApiDefinitionFormat = string | AnyObject
 /**
  * Creates a new pipeline
  */
-export function openapi(globalOptions?: { throwOnError?: boolean }) {
+export function openapi(globalOptions?: ThrowOnErrorOption) {
   return {
     load: (
       specification: AnyApiDefinitionFormat,
@@ -51,8 +56,8 @@ export function openapi(globalOptions?: { throwOnError?: boolean }) {
       },
     ) =>
       loadAction(specification, {
-        ...globalOptions,
-        ...options,
+        ...(globalOptions ?? {}),
+        ...(options ?? {}),
       }),
   }
 }
@@ -93,13 +98,14 @@ function loadAction(
       upgradeAction(queue, {
         throwOnError: options?.throwOnError,
       }),
-    validate: () =>
+    validate: (validateOptions?: ThrowOnErrorOption) =>
       validateAction(queue, {
-        throwOnError: options?.throwOnError,
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
       }),
-    dereference: () =>
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
       dereferenceAction(queue, {
-        throwOnError: options?.throwOnError,
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
       }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
@@ -109,7 +115,7 @@ function loadAction(
 /**
  * Upgrade an OpenAPI specification.
  */
-function upgradeAction(queue: Queue, options?: { throwOnError?: boolean }) {
+function upgradeAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: upgrade,
   })
@@ -122,13 +128,14 @@ function upgradeAction(queue: Queue, options?: { throwOnError?: boolean }) {
       filterAction(queue, callback, {
         throwOnError: options?.throwOnError,
       }),
-    validate: () =>
+    validate: (validateOptions?: ThrowOnErrorOption) =>
       validateAction(queue, {
-        throwOnError: options?.throwOnError,
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
       }),
-    dereference: () =>
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
       dereferenceAction(queue, {
-        throwOnError: options?.throwOnError,
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
       }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
@@ -138,7 +145,7 @@ function upgradeAction(queue: Queue, options?: { throwOnError?: boolean }) {
 /**
  * Validate an OpenAPI specification.
  */
-function validateAction(queue: Queue, options?: { throwOnError?: boolean }) {
+function validateAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: validate,
     options: {
@@ -154,9 +161,10 @@ function validateAction(queue: Queue, options?: { throwOnError?: boolean }) {
     get: () => getAction(queue),
     files: () => filesAction(queue),
     details: () => detailsAction(queue),
-    dereference: () =>
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
       dereferenceAction(queue, {
-        throwOnError: options?.throwOnError,
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
       }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
@@ -166,7 +174,7 @@ function validateAction(queue: Queue, options?: { throwOnError?: boolean }) {
 /**
  * Resolve references in an OpenAPI specification.
  */
-function dereferenceAction(queue: Queue, options?: { throwOnError?: boolean }) {
+function dereferenceAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: dereference,
     options: {
@@ -192,7 +200,7 @@ function dereferenceAction(queue: Queue, options?: { throwOnError?: boolean }) {
 function filterAction(
   queue: Queue,
   callback: (specification: AnyApiDefinitionFormat) => boolean,
-  options?: { throwOnError?: boolean },
+  options?: ThrowOnErrorOption,
 ) {
   queue.tasks.push({
     action: filter,
@@ -205,8 +213,15 @@ function filterAction(
     details: () => detailsAction(queue),
     filter: () => filterAction(queue, callback, options),
     upgrade: () => upgradeAction(queue, options),
-    validate: () => validateAction(queue, options),
-    dereference: () => dereferenceAction(queue, options),
+    validate: (validateOptions?: ThrowOnErrorOption) =>
+      validateAction(queue, {
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
+      }),
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
+      dereferenceAction(queue, {
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }

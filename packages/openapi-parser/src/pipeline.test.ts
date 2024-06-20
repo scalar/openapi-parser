@@ -258,7 +258,7 @@ describe('pipeline', () => {
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('throws an error when dereference fails', async () => {
+  it('throws an error when dereference fails (global)', async () => {
     expect(async () => {
       await openapi({
         throwOnError: true,
@@ -283,7 +283,32 @@ describe('pipeline', () => {
     )
   })
 
-  it('throws an error when validate fails', async () => {
+  it('throws an error when dereference fails (only dereference)', async () => {
+    expect(async () => {
+      await openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .dereference({
+          throwOnError: true,
+        })
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when validate fails (global)', async () => {
     expect(async () => {
       await openapi({
         throwOnError: true,
@@ -304,6 +329,33 @@ describe('pipeline', () => {
           },
         })
         .validate()
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when validate fails (only validate)', async () => {
+    expect(async () => {
+      await openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate({
+          throwOnError: true,
+        })
         .get()
     }).rejects.toThrowError(
       'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
