@@ -45,7 +45,10 @@ export class Validator {
   /**
    * Checks whether a specification is valid and all references can be resolved.
    */
-  async validate(filesystem: Filesystem): Promise<ValidateResult> {
+  async validate(
+    filesystem: Filesystem,
+    options?: { throwOnError?: boolean },
+  ): Promise<ValidateResult> {
     const entrypoint = filesystem.find((file) => file.isEntrypoint)
     const specification = entrypoint?.specification
 
@@ -61,6 +64,10 @@ export class Validator {
     try {
       // AnyObject is empty or invalid
       if (specification === undefined || specification === null) {
+        if (options?.throwOnError) {
+          throw new Error(ERRORS.EMPTY_OR_INVALID)
+        }
+
         return {
           valid: false,
           errors: transformErrors(entrypoint, ERRORS.EMPTY_OR_INVALID),
@@ -110,6 +117,10 @@ export class Validator {
       }
     } catch (error) {
       // Something went horribly wrong!
+      if (options?.throwOnError) {
+        throw error
+      }
+
       return {
         valid: false,
         errors: transformErrors(entrypoint, error.message ?? error),

@@ -9,7 +9,7 @@ describe('validate', async () => {
     expect(result.valid).toBe(false)
     expect(result.errors).toMatchObject([
       {
-        message: 'Cannot find JSON, YAML or filename in data',
+        message: 'Can’t find JSON, YAML or filename in data',
       },
     ])
   })
@@ -37,7 +37,7 @@ describe('validate', async () => {
 
     expect(result.errors).toHaveLength(1)
     expect(result.errors[0].message).toBe(
-      'Cannot find supported Swagger/OpenAPI version in specification, version must be a string.',
+      'Can’t find supported Swagger/OpenAPI version in specification, version must be a string.',
     )
   })
 
@@ -64,7 +64,15 @@ paths: {}
 
     expect(result.errors).toHaveLength(1)
     expect(result.errors[0].message).toContain(
-      'Cannot find supported Swagger/OpenAPI version in specification',
+      'Can’t find supported Swagger/OpenAPI version in specification',
     )
+  })
+
+  it('throws an error', async () => {
+    expect(async () => {
+      await validate(undefined, {
+        throwOnError: true,
+      })
+    }).rejects.toThrowError('Can’t find JSON, YAML or filename in data')
   })
 })

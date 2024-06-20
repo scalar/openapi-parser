@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 
 import { dereference } from './dereference'
 
-describe('resolve', async () => {
-  it('resolves an OpenAPI 3.1.0 file', async () => {
+describe('dereference', async () => {
+  it('dereferences an OpenAPI 3.1.0 file', async () => {
     const result = await dereference(`{
       "openapi": "3.1.0",
       "info": {
@@ -17,7 +17,7 @@ describe('resolve', async () => {
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('resolves an OpenAPI 3.0.0 file', async () => {
+  it('dereferences an OpenAPI 3.0.0 file', async () => {
     const result = await dereference(`{
       "openapi": "3.0.0",
       "info": {
@@ -31,7 +31,7 @@ describe('resolve', async () => {
     expect(result.schema.info.title).toBe('Hello World')
   })
 
-  it('resolves an Swagger 2.0 file', async () => {
+  it('dereferences an Swagger 2.0 file', async () => {
     const result = await dereference(`{
       "swagger": "2.0",
       "info": {
@@ -101,7 +101,7 @@ describe('resolve', async () => {
   })
 })
 
-it('resolves a simple reference', async () => {
+it('dereferences a simple reference', async () => {
   const openapi = {
     openapi: '3.1.0',
     info: {
@@ -167,4 +167,29 @@ it('resolves a simple reference', async () => {
       },
     },
   })
+})
+
+it('throws an error', async () => {
+  expect(async () => {
+    await dereference(
+      {
+        openapi: '3.1.0',
+        info: {},
+        paths: {
+          '/foobar': {
+            post: {
+              requestBody: {
+                $ref: '#/components/requestBodies/DoesNotExist',
+              },
+            },
+          },
+        },
+      },
+      {
+        throwOnError: true,
+      },
+    )
+  }).rejects.toThrowError(
+    'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+  )
 })
