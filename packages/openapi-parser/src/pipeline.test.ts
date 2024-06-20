@@ -257,4 +257,56 @@ describe('pipeline', () => {
     expect(result.errors).toStrictEqual([])
     expect(result.schema.info.title).toBe('Hello World')
   })
+
+  it('throws an error when dereference fails', async () => {
+    expect(async () => {
+      await openapi({
+        throwOnError: true,
+      })
+        .load({
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .dereference()
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when validate fails', async () => {
+    expect(async () => {
+      await openapi({
+        throwOnError: true,
+      })
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate()
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
 })

@@ -108,7 +108,7 @@ export class Validator {
       }
 
       // Check if the references are valid
-      const resolvedReferences = resolveReferences(filesystem)
+      const resolvedReferences = resolveReferences(filesystem, options)
 
       return {
         valid: schemaResult && resolvedReferences.valid,
