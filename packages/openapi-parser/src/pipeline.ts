@@ -1,4 +1,9 @@
-import type { AnyObject, DetailsResult, Filesystem } from './types'
+import type {
+  AnyObject,
+  DetailsResult,
+  Filesystem,
+  ThrowOnErrorOption,
+} from './types'
 import {
   dereference,
   details,
@@ -33,11 +38,6 @@ export type Queue = {
   specification: AnyApiDefinitionFormat
   tasks: Action[]
 }
-
-/**
- * If `true`, the function will throw an error if the document is invalid.
- */
-export type ThrowOnErrorOption = { throwOnError?: boolean }
 
 /**
  * JSON, YAML or object representation of an OpenAPI API definition

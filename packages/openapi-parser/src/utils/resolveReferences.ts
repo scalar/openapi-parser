@@ -5,6 +5,7 @@ import type {
   ErrorObject,
   Filesystem,
   FilesystemEntry,
+  ThrowOnErrorOption,
 } from '../types'
 import { getEntrypoint } from './getEntrypoint'
 import { getSegmentsFromPath } from './getSegmentsFromPath'
@@ -38,10 +39,7 @@ export function resolveReferences(
   // Just a specification, or a set of files.
   input: AnyObject | Filesystem,
   // Additional options to control the behaviour
-  options?: {
-    // Throw an error if something goes wrong
-    throwOnError?: boolean
-  },
+  options?: ThrowOnErrorOption,
   // Fallback to the entrypoint
   file?: FilesystemEntry,
   // Errors that occurred during the process
@@ -159,7 +157,7 @@ function isCircular(schema: AnyObject) {
 function resolveUri(
   // 'foobar.json#/foo/bar'
   uri: string,
-  options: { throwOnError?: boolean },
+  options: ThrowOnErrorOption,
   // { filename: './foobar.json '}
   file: FilesystemEntry,
   // [ { filename: './foobar.json '} ]

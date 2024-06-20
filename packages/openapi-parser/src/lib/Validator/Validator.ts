@@ -8,7 +8,12 @@ import {
   type OpenApiVersion,
   OpenApiVersions,
 } from '../../configuration'
-import type { AnyObject, Filesystem, ValidateResult } from '../../types'
+import type {
+  AnyObject,
+  Filesystem,
+  ThrowOnErrorOption,
+  ValidateResult,
+} from '../../types'
 import { details as getOpenApiVersion } from '../../utils/details'
 import { resolveReferences } from '../../utils/resolveReferences'
 import { transformErrors } from '../../utils/transformErrors'
@@ -47,7 +52,7 @@ export class Validator {
    */
   async validate(
     filesystem: Filesystem,
-    options?: { throwOnError?: boolean },
+    options?: ThrowOnErrorOption,
   ): Promise<ValidateResult> {
     const entrypoint = filesystem.find((file) => file.isEntrypoint)
     const specification = entrypoint?.specification

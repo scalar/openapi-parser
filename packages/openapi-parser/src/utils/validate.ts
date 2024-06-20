@@ -1,5 +1,11 @@
 import { Validator } from '../lib/Validator'
-import type { AnyObject, Filesystem, OpenAPI, ValidateResult } from '../types'
+import type {
+  AnyObject,
+  Filesystem,
+  OpenAPI,
+  ThrowOnErrorOption,
+  ValidateResult,
+} from '../types'
 import { makeFilesystem } from './makeFilesystem'
 
 /**
@@ -7,12 +13,7 @@ import { makeFilesystem } from './makeFilesystem'
  */
 export async function validate(
   value: string | AnyObject | Filesystem,
-  options?: {
-    /**
-     * If `true`, the function will throw an error if the document is invalid.
-     */
-    throwOnError?: boolean
-  },
+  options?: ThrowOnErrorOption,
 ): Promise<ValidateResult> {
   const filesystem = makeFilesystem(value)
 

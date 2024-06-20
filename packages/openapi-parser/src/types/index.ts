@@ -69,3 +69,12 @@ export type FilesystemEntry = {
   filename: string
   specification: AnyObject
 }
+
+export type ThrowOnErrorOption = {
+  /**
+   * If `true`, the function will throw an error if the document is invalid.
+   *
+   * @default false
+   */
+  throwOnError?: boolean
+}
