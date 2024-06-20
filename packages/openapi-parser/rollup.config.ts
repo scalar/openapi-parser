@@ -4,6 +4,7 @@ import { rm } from 'node:fs/promises'
 import { builtinModules } from 'node:module'
 import type { RollupOptions } from 'rollup'
 import type { Plugin } from 'rollup'
+import outputSize from 'rollup-plugin-output-size'
 import { webpackStats } from 'rollup-plugin-webpack-stats'
 
 const input = [
@@ -52,7 +53,13 @@ const config: RollupOptions[] = [
         dir,
       },
     ],
-    plugins: [cleanBeforeWrite(dir), typescript(), json(), webpackStats()],
+    plugins: [
+      cleanBeforeWrite(dir),
+      typescript(),
+      json(),
+      outputSize(),
+      webpackStats(),
+    ],
     external: [
       ...builtinModules,
       ...builtinModules.map((m) => `node:${m}`),
