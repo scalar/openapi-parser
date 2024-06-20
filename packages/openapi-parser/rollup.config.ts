@@ -1,4 +1,5 @@
 import json from '@rollup/plugin-json'
+import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 import { rm } from 'node:fs/promises'
 import { builtinModules } from 'node:module'
@@ -57,8 +58,9 @@ const config: RollupOptions[] = [
       cleanBeforeWrite(dir),
       typescript(),
       json(),
-      outputSize(),
+      terser(),
       webpackStats(),
+      outputSize(),
     ],
     external: [
       ...builtinModules,
