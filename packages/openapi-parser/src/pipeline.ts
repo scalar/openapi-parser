@@ -1,4 +1,9 @@
-import type { AnyObject, DetailsResult, Filesystem } from './types'
+import type {
+  AnyObject,
+  DetailsResult,
+  Filesystem,
+  ThrowOnErrorOption,
+} from './types'
 import {
   dereference,
   details,
@@ -42,9 +47,18 @@ export type AnyApiDefinitionFormat = string | AnyObject
 /**
  * Creates a new pipeline
  */
-export function openapi() {
+export function openapi(globalOptions?: ThrowOnErrorOption) {
   return {
-    load: loadAction,
+    load: (
+      specification: AnyApiDefinitionFormat,
+      options?: {
+        plugins?: LoadPlugin[]
+      },
+    ) =>
+      loadAction(specification, {
+        ...(globalOptions ?? {}),
+        ...(options ?? {}),
+      }),
   }
 }
 
@@ -56,7 +70,8 @@ export function openapi() {
 function loadAction(
   specification: AnyApiDefinitionFormat,
   options?: {
-    plugins: LoadPlugin[]
+    throwOnError?: boolean
+    plugins?: LoadPlugin[]
   },
 ) {
   const queue: Queue = {
@@ -64,7 +79,9 @@ function loadAction(
     tasks: [
       {
         action: load,
-        options: options,
+        options: {
+          plugins: options?.plugins,
+        },
       },
     ],
   }
@@ -74,10 +91,22 @@ function loadAction(
     files: () => filesAction(queue),
     details: () => detailsAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(queue, callback),
-    upgrade: () => upgradeAction(queue),
-    validate: () => validateAction(queue),
-    dereference: () => dereferenceAction(queue),
+      filterAction(queue, callback, {
+        throwOnError: options?.throwOnError,
+      }),
+    upgrade: () =>
+      upgradeAction(queue, {
+        throwOnError: options?.throwOnError,
+      }),
+    validate: (validateOptions?: ThrowOnErrorOption) =>
+      validateAction(queue, {
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
+      }),
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
+      dereferenceAction(queue, {
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }
@@ -86,7 +115,7 @@ function loadAction(
 /**
  * Upgrade an OpenAPI specification.
  */
-function upgradeAction(queue: Queue) {
+function upgradeAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: upgrade,
   })
@@ -96,9 +125,18 @@ function upgradeAction(queue: Queue) {
     files: () => filesAction(queue),
     details: () => detailsAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(queue, callback),
-    validate: () => validateAction(queue),
-    dereference: () => dereferenceAction(queue),
+      filterAction(queue, callback, {
+        throwOnError: options?.throwOnError,
+      }),
+    validate: (validateOptions?: ThrowOnErrorOption) =>
+      validateAction(queue, {
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
+      }),
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
+      dereferenceAction(queue, {
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }
@@ -107,18 +145,27 @@ function upgradeAction(queue: Queue) {
 /**
  * Validate an OpenAPI specification.
  */
-function validateAction(queue: Queue) {
+function validateAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: validate,
+    options: {
+      throwOnError: options?.throwOnError,
+    },
   })
 
   return {
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(queue, callback),
+      filterAction(queue, callback, {
+        throwOnError: options?.throwOnError,
+      }),
     get: () => getAction(queue),
     files: () => filesAction(queue),
     details: () => detailsAction(queue),
-    dereference: () => dereferenceAction(queue),
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
+      dereferenceAction(queue, {
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }
@@ -127,16 +174,21 @@ function validateAction(queue: Queue) {
 /**
  * Resolve references in an OpenAPI specification.
  */
-function dereferenceAction(queue: Queue) {
+function dereferenceAction(queue: Queue, options?: ThrowOnErrorOption) {
   queue.tasks.push({
     action: dereference,
+    options: {
+      throwOnError: options?.throwOnError,
+    },
   })
 
   return {
     get: () => getAction(queue),
     files: () => filesAction(queue),
     filter: (callback: (Specification: AnyObject) => boolean) =>
-      filterAction(queue, callback),
+      filterAction(queue, callback, {
+        throwOnError: options?.throwOnError,
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }
@@ -148,6 +200,7 @@ function dereferenceAction(queue: Queue) {
 function filterAction(
   queue: Queue,
   callback: (specification: AnyApiDefinitionFormat) => boolean,
+  options?: ThrowOnErrorOption,
 ) {
   queue.tasks.push({
     action: filter,
@@ -158,16 +211,22 @@ function filterAction(
     get: () => getAction(queue),
     files: () => filesAction(queue),
     details: () => detailsAction(queue),
-    filter: () => filterAction(queue, callback),
-    upgrade: () => upgradeAction(queue),
-    validate: () => validateAction(queue),
-    dereference: () => dereferenceAction(queue),
+    filter: () => filterAction(queue, callback, options),
+    upgrade: () => upgradeAction(queue, options),
+    validate: (validateOptions?: ThrowOnErrorOption) =>
+      validateAction(queue, {
+        throwOnError: validateOptions?.throwOnError ?? options?.throwOnError,
+      }),
+    dereference: (dereferenceOptions?: ThrowOnErrorOption) =>
+      dereferenceAction(queue, {
+        ...(options ?? {}),
+        ...(dereferenceOptions ?? {}),
+      }),
     toJson: () => toJsonAction(queue),
     toYaml: () => toYamlAction(queue),
   }
 }
 
-// TODO: This type is off (function wrong return, read below)
 async function getAction(queue: Queue) {
   const result = await workThroughQueue(queue)
 

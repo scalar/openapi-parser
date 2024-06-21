@@ -257,4 +257,143 @@ describe('pipeline', () => {
     expect(result.errors).toStrictEqual([])
     expect(result.schema.info.title).toBe('Hello World')
   })
+
+  it('throws an error when dereference fails (global)', async () => {
+    expect(async () => {
+      await openapi({
+        throwOnError: true,
+      })
+        .load({
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .dereference()
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when dereference fails (only dereference)', async () => {
+    expect(async () => {
+      await openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {},
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .dereference({
+          throwOnError: true,
+        })
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when validate fails (global)', async () => {
+    expect(async () => {
+      await openapi({
+        throwOnError: true,
+      })
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate()
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('throws an error when validate fails (only validate)', async () => {
+    expect(async () => {
+      await openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate({
+          throwOnError: true,
+        })
+        .get()
+    }).rejects.toThrowError(
+      'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+    )
+  })
+
+  it('works with then & catch', async () => {
+    return new Promise((resolve, reject) => {
+      openapi()
+        .load({
+          openapi: '3.1.0',
+          info: {
+            title: 'Hello World',
+          },
+          paths: {
+            '/foobar': {
+              post: {
+                requestBody: {
+                  $ref: '#/components/requestBodies/DoesNotExist',
+                },
+              },
+            },
+          },
+        })
+        .validate({
+          throwOnError: true,
+        })
+        .get()
+        .then(() => {
+          reject()
+        })
+        .catch((error) => {
+          expect(error.message).toBe(
+            'Can’t resolve reference: #/components/requestBodies/DoesNotExist',
+          )
+
+          resolve(null)
+        })
+    })
+  })
 })

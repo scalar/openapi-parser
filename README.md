@@ -128,6 +128,26 @@ const result = openapi()
   .get()
 ```
 
+### Then/Catch syntax
+
+If you’re more the then/catch type of guy, that’s fine:
+
+```ts
+import { validate } from '@scalar/openapi-parser'
+
+const specification = …
+
+validate(specification, {
+  throwOnError: true,
+})
+.then(result => {
+  // Success
+})
+.catch(error => {
+  // Failure
+})
+```
+
 ### Advanced: URL and file references
 
 You can reference other files, too. To do that, the parser needs to know what files are available.

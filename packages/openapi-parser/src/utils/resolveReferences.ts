@@ -5,6 +5,7 @@ import type {
   ErrorObject,
   Filesystem,
   FilesystemEntry,
+  ThrowOnErrorOption,
 } from '../types'
 import { getEntrypoint } from './getEntrypoint'
 import { getSegmentsFromPath } from './getSegmentsFromPath'
@@ -37,6 +38,8 @@ type DereferenceResult = {
 export function resolveReferences(
   // Just a specification, or a set of files.
   input: AnyObject | Filesystem,
+  // Additional options to control the behaviour
+  options?: ThrowOnErrorOption,
   // Fallback to the entrypoint
   file?: FilesystemEntry,
   // Errors that occurred during the process
@@ -103,7 +106,13 @@ export function resolveReferences(
       // Ignore parts without a reference
       if (schema.$ref !== undefined) {
         // Find the referenced content
-        const target = resolveUri(schema.$ref, file, filesystem, errors)
+        const target = resolveUri(
+          schema.$ref,
+          options,
+          file,
+          filesystem,
+          errors,
+        )
 
         if (target === undefined) {
           return undefined
@@ -148,6 +157,7 @@ function isCircular(schema: AnyObject) {
 function resolveUri(
   // 'foobar.json#/foo/bar'
   uri: string,
+  options: ThrowOnErrorOption,
   // { filename: './foobar.json '}
   file: FilesystemEntry,
   // [ { filename: './foobar.json '} ]
@@ -156,6 +166,10 @@ function resolveUri(
 ) {
   // Ignore invalid URIs
   if (typeof uri !== 'string') {
+    if (options?.throwOnError) {
+      throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', uri))
+    }
+
     errors.push({
       code: 'INVALID_REFERENCE',
       message: ERRORS.INVALID_REFERENCE.replace('%s', uri),
@@ -174,6 +188,12 @@ function resolveUri(
     })
 
     if (!externalReference) {
+      if (options?.throwOnError) {
+        throw new Error(
+          ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix),
+        )
+      }
+
       errors.push({
         code: 'EXTERNAL_REFERENCE_NOT_FOUND',
         message: ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', prefix),
@@ -182,7 +202,12 @@ function resolveUri(
       return
     }
 
-    const result = resolveReferences(filesystem, externalReference, errors)
+    const result = resolveReferences(
+      filesystem,
+      options,
+      externalReference,
+      errors,
+    )
 
     // $ref: 'other-file.yaml'
     if (path === undefined) {
@@ -190,7 +215,13 @@ function resolveUri(
     }
 
     // $ref: 'other-file.yaml#/foo/bar'
-    return resolveUri(`#${path}`, externalReference, filesystem, errors)
+    return resolveUri(
+      `#${path}`,
+      options,
+      externalReference,
+      filesystem,
+      errors,
+    )
   }
 
   // Pointers
@@ -202,6 +233,10 @@ function resolveUri(
       return acc[key]
     }, file.specification)
   } catch (error) {
+    if (options?.throwOnError) {
+      throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', uri))
+    }
+
     errors.push({
       code: 'INVALID_REFERENCE',
       message: ERRORS.INVALID_REFERENCE.replace('%s', uri),

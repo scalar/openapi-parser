@@ -1,4 +1,9 @@
-import type { AnyObject, DereferenceResult, Filesystem } from '../types'
+import type {
+  AnyObject,
+  DereferenceResult,
+  Filesystem,
+  ThrowOnErrorOption,
+} from '../types'
 import { details } from './details'
 import { getEntrypoint } from './getEntrypoint'
 import { makeFilesystem } from './makeFilesystem'
@@ -9,11 +14,12 @@ import { resolveReferences } from './resolveReferences'
  */
 export async function dereference(
   value: string | AnyObject | Filesystem,
+  options?: ThrowOnErrorOption,
 ): Promise<DereferenceResult> {
   const filesystem = makeFilesystem(value)
 
   const entrypoint = getEntrypoint(filesystem)
-  const result = resolveReferences(filesystem)
+  const result = resolveReferences(filesystem, options)
 
   return {
     specification: entrypoint.specification,
