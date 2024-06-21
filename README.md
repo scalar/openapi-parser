@@ -171,7 +171,45 @@ const { filesystem } = await load('./openapi.yaml', {
 const result = await dereference(filesystem)
 ```
 
-As you see, `load()` supports plugin. You can write your own plugin, if you’d like to fetch API defintions from another data source, for example your database. Look at the source code of the `readFiles` to learn how this could look like.
+As you see, `load()` supports plugins. You can write your own plugin, if you’d like to fetch API defintions from another data source, for example your database. Look at the source code of the `readFiles` to learn how this could look like.
+
+#### Directly load URLs
+
+Once the `fetchUrls` plugin is loaded, you can also just pass an URL:
+
+```ts
+import { dereference, load } from '@scalar/openapi-parser'
+import { fetchUrls } from '@scalar/openapi-parser/plugins/fetch-urls'
+
+// Load a file and all referenced files
+const { filesystem } = await load(
+  'https://cdn.jsdelivr.net/npm/@scalar/galaxy/dist/latest.yaml',
+  {
+    plugins: [fetchUrls()],
+  },
+)
+```
+
+#### Intercept HTTP requests
+
+If you’re using the package in a browser environment, you may run into CORS issues when fetching from URLs. You can intercept the requests, for example to use a proxy, though:
+
+```ts
+import { dereference, load } from '@scalar/openapi-parser'
+import { fetchUrls } from '@scalar/openapi-parser/plugins/fetch-urls'
+
+// Load a file and all referenced files
+const { filesystem } = await load(
+  'https://cdn.jsdelivr.net/npm/@scalar/galaxy/dist/latest.yaml',
+  {
+    plugins: [
+      fetchUrls({
+        fetch: (url) => fetch(url.replace('BANANA.net', 'jsdelivr.net')),
+      }).get('https://cdn.BANANA.net/npm/@scalar/galaxy/dist/latest.yaml'),
+    ],
+  },
+)
+```
 
 ## Community
 
