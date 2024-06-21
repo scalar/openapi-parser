@@ -42,13 +42,9 @@ class SwaggerParser {
 
       validate(filesystem, {
         throwOnError: true,
+      }).then((result) => {
+        callback(null, result.schema)
       })
-        .then((result) => {
-          callback(null, result.schema)
-        })
-        .catch((error) => {
-          callback(error, null)
-        })
     } catch (error) {
       callback(error, null)
     }
