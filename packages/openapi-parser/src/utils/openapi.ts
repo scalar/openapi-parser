@@ -1,25 +1,9 @@
-<<<<<<< HEAD:packages/openapi-parser/src/pipeline.ts
 import type {
   AnyObject,
   DetailsResult,
   Filesystem,
   ThrowOnErrorOption,
-} from './types'
-import {
-  dereference,
-  details,
-  filter,
-  getEntrypoint,
-  load,
-  toJson,
-  toYaml,
-  upgrade,
-  validate,
-} from './utils'
-import { type LoadPlugin } from './utils/load/load'
-import { workThroughQueue } from './utils/workThroughQueue'
-=======
-import type { AnyObject, DetailsResult, Filesystem } from '../types'
+} from '../types'
 import { dereference } from './dereference'
 import { details } from './details'
 import { filter } from './filter'
@@ -30,7 +14,6 @@ import { toYaml } from './toYaml'
 import { upgrade } from './upgrade'
 import { validate } from './validate'
 import { workThroughQueue } from './workThroughQueue'
->>>>>>> da84525 (refactor: move files around):packages/openapi-parser/src/utils/openapi.ts
 
 /**
  * A queuable action for the pipeline
