@@ -1,4 +1,11 @@
-import type { Filesystem, LoadResult } from '../../types'
+import { ERRORS } from '../../configuration'
+import type {
+  AnyObject,
+  ErrorObject,
+  Filesystem,
+  LoadResult,
+  ThrowOnErrorOption,
+} from '../../types'
 import { getEntrypoint } from '../getEntrypoint'
 import { getListOfReferences } from '../getListOfReferences'
 import { makeFilesystem } from '../makeFilesystem'
@@ -18,8 +25,10 @@ export async function load(
     plugins?: LoadPlugin[]
     filename?: string
     filesystem?: Filesystem
-  },
+  } & ThrowOnErrorOption,
 ): Promise<LoadResult> {
+  const errors: ErrorObject[] = []
+
   // Don’t load a reference twice, check the filesystem before fetching something
   if (
     options?.filesystem &&
@@ -27,17 +36,53 @@ export async function load(
   ) {
     return {
       filesystem: options.filesystem,
+      errors,
     }
   }
 
   // Check whether the value is an URL or file path
   const plugin = options?.plugins?.find((plugin) => plugin.check(value))
-  const content = normalize(plugin ? await plugin.get(value) : value)
+
+  let content: AnyObject
+
+  if (plugin) {
+    try {
+      content = normalize(await plugin.get(value))
+    } catch (error) {
+      if (options?.throwOnError) {
+        throw new Error(
+          ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', value),
+        )
+      }
+
+      errors.push({
+        code: 'EXTERNAL_REFERENCE_NOT_FOUND',
+        message: ERRORS.EXTERNAL_REFERENCE_NOT_FOUND.replace('%s', value),
+      })
+
+      return {
+        filesystem: [],
+        errors,
+      }
+    }
+  } else {
+    content = normalize(value)
+  }
 
   // No content
   if (content === undefined) {
+    if (options?.throwOnError) {
+      throw new Error('No content to load')
+    }
+
+    errors.push({
+      code: 'NO_CONTENT',
+      message: ERRORS.NO_CONTENT,
+    })
+
     return {
       filesystem: [],
+      errors,
     }
   }
 
@@ -56,6 +101,7 @@ export async function load(
   if (listOfReferences.length === 0) {
     return {
       filesystem,
+      errors,
     }
   }
 
@@ -79,12 +125,17 @@ export async function load(
       continue
     }
 
-    const { filesystem: referencedFiles } = await load(target, {
-      ...options,
-      // Make the filename the exact same value as the $ref
-      // TODO: This leads to problems, if there are multiple references with the same file name but in different folders
-      filename: reference,
-    })
+    const { filesystem: referencedFiles, errors: newErrors } = await load(
+      target,
+      {
+        ...options,
+        // Make the filename the exact same value as the $ref
+        // TODO: This leads to problems, if there are multiple references with the same file name but in different folders
+        filename: reference,
+      },
+    )
+
+    errors.push(...newErrors)
 
     filesystem = [
       ...filesystem,
@@ -99,5 +150,6 @@ export async function load(
 
   return {
     filesystem,
+    errors,
   }
 }

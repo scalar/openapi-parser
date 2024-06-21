@@ -6,6 +6,7 @@ export type AnyObject = Record<string, any>
 
 export type LoadResult = {
   filesystem: Filesystem
+  errors?: ErrorObject[]
 }
 
 export type ValidateResult = {

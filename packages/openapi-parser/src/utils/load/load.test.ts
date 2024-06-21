@@ -395,4 +395,26 @@ describe('load', async () => {
       },
     })
   })
+
+  it('returns an error', async () => {
+    const { errors } = await load('INVALID', {
+      plugins: [readFiles(), fetchUrls()],
+    })
+
+    expect(errors).toMatchObject([
+      {
+        code: 'EXTERNAL_REFERENCE_NOT_FOUND',
+        message: 'Can’t resolve external reference: INVALID',
+      },
+    ])
+  })
+
+  it('throws an error', async () => {
+    expect(async () => {
+      await load('INVALID', {
+        plugins: [readFiles(), fetchUrls()],
+        throwOnError: true,
+      })
+    }).rejects.toThrowError('Can’t resolve external reference: INVALID')
+  })
 })

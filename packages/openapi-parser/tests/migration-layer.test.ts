@@ -1,7 +1,11 @@
 import OriginalSwaggerParser from '@apidevtools/swagger-parser'
-import { describe, expect, it } from 'vitest'
+import path from 'node:path'
+import { describe, expect, it, vi } from 'vitest'
 
 import { dereference } from '../src/utils/dereference'
+import { load } from '../src/utils/load'
+import { fetchUrls } from '../src/utils/load/plugins/fetchUrls'
+import { readFiles } from '../src/utils/load/plugins/readFiles'
 import { validate } from '../src/utils/validate'
 
 const myAPI = JSON.stringify({
@@ -30,19 +34,33 @@ const myAPI = JSON.stringify({
 
 class SwaggerParser {
   static async validate(api: string, callback: (err: any, api: any) => void) {
-    validate(api, {
-      throwOnError: true,
-    })
-      .then((result) => {
-        callback(null, result.schema)
+    try {
+      const { filesystem } = await load(api, {
+        plugins: [fetchUrls(), readFiles()],
+        throwOnError: true,
       })
-      .catch((error) => {
-        callback(error, null)
+
+      validate(filesystem, {
+        throwOnError: true,
       })
+        .then((result) => {
+          callback(null, result.schema)
+        })
+        .catch((error) => {
+          callback(error, null)
+        })
+    } catch (error) {
+      callback(error, null)
+    }
   }
 
   static async dereference(api: string) {
-    return dereference(api).then((result) => result.schema)
+    const { filesystem } = await load(api, {
+      plugins: [fetchUrls(), readFiles()],
+      throwOnError: true,
+    })
+
+    return dereference(filesystem).then((result) => result.schema)
   }
 }
 
@@ -80,6 +98,40 @@ describe('validate', async () => {
 describe('dereference', () => {
   it('dereferences', async () => {
     let api = await SwaggerParser.dereference(myAPI)
+
+    // The `api` object is a normal JavaScript object,
+    // so you can easily access any part of the API using simple dot notation
+    expect(api?.paths?.['/foobar']?.post?.requestBody?.content).toEqual({})
+  })
+
+  it('dereferences URLs', async () => {
+    global.fetch = async (url: string) =>
+      ({
+        text: async () => {
+          if (url === 'http://example.com/specification/openapi.yaml') {
+            return myAPI
+          }
+
+          throw new Error('Not found')
+        },
+      }) as Response
+
+    let api = await SwaggerParser.dereference(
+      'http://example.com/specification/openapi.yaml',
+    )
+
+    // The `api` object is a normal JavaScript object,
+    // so you can easily access any part of the API using simple dot notation
+    expect(api?.paths?.['/foobar']?.post?.requestBody?.content).toEqual({})
+  })
+
+  it('dereferences files', async () => {
+    const EXAMPLE_FILE = path.join(
+      new URL(import.meta.url).pathname,
+      '../../tests/migration-layer.json',
+    )
+
+    let api = await SwaggerParser.dereference(EXAMPLE_FILE)
 
     // The `api` object is a normal JavaScript object,
     // so you can easily access any part of the API using simple dot notation
