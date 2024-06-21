@@ -3,20 +3,17 @@ import type {
   DetailsResult,
   Filesystem,
   ThrowOnErrorOption,
-} from './types'
-import {
-  dereference,
-  details,
-  filter,
-  getEntrypoint,
-  load,
-  toJson,
-  toYaml,
-  upgrade,
-  validate,
-} from './utils'
-import { type LoadPlugin } from './utils/load/load'
-import { workThroughQueue } from './utils/workThroughQueue'
+} from '../types'
+import { dereference } from './dereference'
+import { details } from './details'
+import { filter } from './filter'
+import { getEntrypoint } from './getEntrypoint'
+import { type LoadPlugin, load } from './load'
+import { toJson } from './toJson'
+import { toYaml } from './toYaml'
+import { upgrade } from './upgrade'
+import { validate } from './validate'
+import { workThroughQueue } from './workThroughQueue'
 
 /**
  * A queuable action for the pipeline

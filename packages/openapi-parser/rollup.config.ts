@@ -1,11 +1,11 @@
 import json from '@rollup/plugin-json'
+import terser from '@rollup/plugin-terser'
+import typescript from '@rollup/plugin-typescript'
 import { rm } from 'node:fs/promises'
 import { builtinModules } from 'node:module'
 import type { RollupOptions } from 'rollup'
 import type { Plugin } from 'rollup'
-import dts from 'rollup-plugin-dts'
-import type { Options as ESBuildOptions } from 'rollup-plugin-esbuild'
-import esbuild from 'rollup-plugin-esbuild'
+import outputSize from 'rollup-plugin-output-size'
 import { webpackStats } from 'rollup-plugin-webpack-stats'
 
 const input = [
@@ -13,6 +13,7 @@ const input = [
   './src/utils/load/plugins/fetchUrls.ts',
   './src/utils/load/plugins/readFiles.ts',
 ]
+
 const dir = 'dist'
 
 /**
@@ -38,18 +39,6 @@ function cleanBeforeWrite(directory: string): Plugin {
 }
 
 /**
- * Minimal ESBuild minifier.
- */
-function esbuildMinifer(options: ESBuildOptions) {
-  const { renderChunk } = esbuild(options)
-
-  return {
-    name: 'esbuild-minifer',
-    renderChunk,
-  }
-}
-
-/**
  * Rollup configuration
  */
 const config: RollupOptions[] = [
@@ -59,20 +48,19 @@ const config: RollupOptions[] = [
     output: [
       // ESM
       {
-        dir,
-        format: 'es',
-        sourcemap: false,
+        format: 'esm',
         preserveModules: true,
+        preserveModulesRoot: 'src',
+        dir,
       },
     ],
     plugins: [
       cleanBeforeWrite(dir),
+      typescript(),
       json(),
-      esbuild({
-        exclude: /node_modules/,
-      }),
-      esbuildMinifer,
+      terser(),
       webpackStats(),
+      outputSize(),
     ],
     external: [
       ...builtinModules,
@@ -83,16 +71,9 @@ const config: RollupOptions[] = [
       'yaml',
     ],
     treeshake: {
-      moduleSideEffects: false,
-      propertyReadSideEffects: false,
-      tryCatchDeoptimization: false,
+      annotations: true,
+      preset: 'recommended',
     },
-  },
-  // Types
-  {
-    input,
-    output: [{ dir, format: 'es', sourcemap: false, preserveModules: true }],
-    plugins: [dts()],
   },
 ]
 

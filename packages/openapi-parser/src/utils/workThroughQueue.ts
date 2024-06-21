@@ -1,4 +1,3 @@
-import type { Queue } from '../pipeline'
 import type {
   DereferenceResult,
   Filesystem,
@@ -7,6 +6,7 @@ import type {
   UpgradeResult,
   ValidateResult,
 } from '../types'
+import type { Queue } from './openapi'
 
 type WorkThroughQueueResult = Partial<
   LoadResult &

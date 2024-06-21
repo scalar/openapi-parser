@@ -1,20 +1,18 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
+    "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+    "module": "ESNext" /* Specify what module code is generated. */,
     "moduleResolution": "Bundler",
-    "noEmitOnError": true,
-    "noUnusedParameters": true,
-    "pretty": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
+    // Required for isolated module compilation (ESBuild)
+    "isolatedModules": true,
+    // Support proper ESM builds
+    "esModuleInterop": true,
+    // Ensure that casing is correct in imports.
+    "forceConsistentCasingInFileNames": true,
     "strict": false,
-    "target": "ES2022",
-    "useDefineForClassFields": false,
-    "paths": {
-      "rollup": ["./node_modules/rollup"]
-    }
+    "strictNullChecks": false,
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*",
@@ -23,5 +21,13 @@
     "**/*.yaml",
     "rollup.config.ts"
   ],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "**/dist", "**/node_modules"],
+  // Required for path rewrites
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
+  // Required for path aliasing
+  "tsc-alias": {
+    "resolveFullPaths": true
+  }
 }
