@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@scalar/openapi-parser": "workspace:*",
-    "@vueuse/core": "^10.10.0",
+    "@vueuse/core": "^10.11.0",
     "vue": "^3.4.27"
   },
   "devDependencies": {
