@@ -54,7 +54,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^20.14.9",
-    "glob": "^10.4.1",
+    "glob": "^10.4.2",
     "just-diff": "^6.0.2",
     "rollup": "^4.18.0",
     "rollup-plugin-output-size": "^1.4.0",
