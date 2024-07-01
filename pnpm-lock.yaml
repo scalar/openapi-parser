@@ -82,8 +82,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       yaml:
-        specifier: ^2.4.2
-        version: 2.4.2
+        specifier: ^2.4.5
+        version: 2.4.5
     devDependencies:
       '@apidevtools/swagger-parser':
         specifier: ^10.1.0
@@ -1799,8 +1799,8 @@ packages:
   yallist@2.1.2:
     resolution: {integrity: sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==}
 
-  yaml@2.4.2:
-    resolution: {integrity: sha512-B3VqDZ+JAg1nZpaEmWtTXUlBneoGx6CPM9b0TENK6aoSu5t73dItudwdgmi6tHlIZZId4dZ9skcAQ2UbcyAeVA==}
+  yaml@2.4.5:
+    resolution: {integrity: sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==}
     engines: {node: '>= 14'}
     hasBin: true
 
@@ -3477,7 +3477,7 @@ snapshots:
 
   yallist@2.1.2: {}
 
-  yaml@2.4.2: {}
+  yaml@2.4.5: {}
 
   yocto-queue@0.1.0: {}
 
