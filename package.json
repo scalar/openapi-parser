@@ -1,7 +1,7 @@
 {
   "name": "root",
   "devDependencies": {
-    "@changesets/cli": "^2.27.5",
+    "@changesets/cli": "^2.27.7",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "github-slugger": "^2.0.0",
     "lefthook": "^1.6.15",
