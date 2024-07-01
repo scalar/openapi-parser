@@ -113,8 +113,8 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(rollup@4.18.0)
       rollup-plugin-webpack-stats:
-        specifier: ^0.2.6
-        version: 0.2.6(rollup@4.18.0)
+        specifier: ^1.0.1
+        version: 1.0.1(rollup@4.18.0)
       tinybench:
         specifier: ^2.8.0
         version: 2.8.0
@@ -1809,9 +1809,9 @@ packages:
       rollup:
         optional: true
 
-  rollup-plugin-webpack-stats@0.2.6:
-    resolution: {integrity: sha512-JqWP0FWzMily2//1WxhopsKzPO6nnGiWn1PN7l4HFQbus0MVC4hMUZPmkIDb65QV98YUA1PFFBbDHEjRbzg7+g==}
-    engines: {node: '>=14'}
+  rollup-plugin-webpack-stats@1.0.1:
+    resolution: {integrity: sha512-ycq/jckE6XhrkAcwvNNreQGfi/kxReM/kBqnxqbO/q+xDV8kQrKwPupzmDI4HVG9+INyFPbNLch9v9rIdVyYGA==}
+    engines: {node: '>=18'}
     peerDependencies:
       rollup: ^3.0.0 || ^4.0.0
 
@@ -4091,7 +4091,7 @@ snapshots:
     optionalDependencies:
       rollup: 4.18.0
 
-  rollup-plugin-webpack-stats@0.2.6(rollup@4.18.0):
+  rollup-plugin-webpack-stats@1.0.1(rollup@4.18.0):
     dependencies:
       rollup: 4.18.0
 

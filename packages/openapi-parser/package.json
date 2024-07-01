@@ -58,7 +58,7 @@
     "just-diff": "^6.0.2",
     "rollup": "^4.18.0",
     "rollup-plugin-output-size": "^1.4.0",
-    "rollup-plugin-webpack-stats": "^0.2.6",
+    "rollup-plugin-webpack-stats": "^1.0.1",
     "tinybench": "^2.8.0",
     "tsc-alias": "^1.8.10",
     "tslib": "^2.6.2"
