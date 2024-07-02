@@ -124,6 +124,9 @@ importers:
       tslib:
         specifier: ^2.6.3
         version: 2.6.3
+      typescript:
+        specifier: ^5.5.3
+        version: 5.5.3
 
 packages:
 

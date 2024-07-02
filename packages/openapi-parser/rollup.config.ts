@@ -6,7 +6,7 @@ import { builtinModules } from 'node:module'
 import type { RollupOptions } from 'rollup'
 import type { Plugin } from 'rollup'
 import outputSize from 'rollup-plugin-output-size'
-import { webpackStats } from 'rollup-plugin-webpack-stats'
+import webpackStatsPlugin from 'rollup-plugin-webpack-stats'
 
 const input = [
   './src/index.ts',
@@ -59,7 +59,7 @@ const config: RollupOptions[] = [
       typescript(),
       json(),
       terser(),
-      webpackStats(),
+      webpackStatsPlugin(),
       outputSize(),
     ],
     external: [
