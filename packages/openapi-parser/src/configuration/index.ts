@@ -28,6 +28,7 @@ export const ERRORS = {
   INVALID_REFERENCE: 'Can’t resolve reference: %s',
   EXTERNAL_REFERENCE_NOT_FOUND: 'Can’t resolve external reference: %s',
   FILE_DOES_NOT_EXIST: 'File does not exist: %s',
+  NO_CONTENT: 'No content found',
 } as const
 
 export type VALIDATOR_ERROR = keyof typeof ERRORS

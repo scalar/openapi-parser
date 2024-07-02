@@ -89,6 +89,10 @@ export class Validator {
 
       // AnyObject is not supported
       if (!version) {
+        if (options?.throwOnError) {
+          throw new Error(ERRORS.OPENAPI_VERSION_NOT_SUPPORTED)
+        }
+
         return {
           valid: false,
           errors: transformErrors(
@@ -105,6 +109,10 @@ export class Validator {
       // Error handling
       if (validateSchema.errors) {
         if (validateSchema.errors.length > 0) {
+          if (options?.throwOnError) {
+            throw new Error(validateSchema.errors[0])
+          }
+
           return {
             valid: false,
             errors: transformErrors(entrypoint, validateSchema.errors),

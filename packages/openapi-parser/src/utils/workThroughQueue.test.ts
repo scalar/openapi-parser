@@ -25,6 +25,7 @@ describe('workThroughQueue', () => {
     })
 
     expect(await result).toStrictEqual({
+      errors: [],
       filesystem: [
         {
           dir: './',
@@ -65,9 +66,9 @@ describe('workThroughQueue', () => {
     })
 
     expect(await result).toStrictEqual({
+      errors: [],
       valid: true,
       version: '3.1',
-      errors: [],
       filesystem: [
         {
           dir: './',
@@ -124,10 +125,10 @@ describe('workThroughQueue', () => {
     })
 
     expect(await result).toStrictEqual({
+      errors: [],
       specificationType: 'openapi',
       specificationVersion: '3.1.0',
       version: '3.1',
-      errors: [],
       filesystem: [
         {
           dir: './',
@@ -184,6 +185,7 @@ describe('workThroughQueue', () => {
     })
 
     expect(await result).toStrictEqual({
+      errors: [],
       version: '3.1',
       specification: {
         openapi: '3.1.0',
