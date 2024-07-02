@@ -1,5 +1,11 @@
 # @scalar/openapi-parser
 
+## 0.7.2
+
+### Patch Changes
+
+- 89dd0ef: feat: validate and dereference, throwOnError option
+
 ## 0.7.1
 
 ### Patch Changes
