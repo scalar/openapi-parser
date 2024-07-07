@@ -229,9 +229,13 @@ function resolveUri(
 
   // Try to find the URI
   try {
-    return segments.reduce((acc, key) => {
+    const result = segments.reduce((acc, key) => {
       return acc[key]
     }, file.specification)
+
+    result['x-object-name'] = segments[segments.length - 1]
+    
+    return result
   } catch (error) {
     if (options?.throwOnError) {
       throw new Error(ERRORS.INVALID_REFERENCE.replace('%s', uri))
