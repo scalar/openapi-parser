@@ -234,7 +234,7 @@ function resolveUri(
     }, file.specification)
 
     result['x-object-name'] = segments[segments.length - 1]
-    
+
     return result
   } catch (error) {
     if (options?.throwOnError) {
