@@ -14,6 +14,9 @@ importers:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^4.2.0
         version: 4.3.0(@vue/compiler-sfc@3.4.33)(prettier@3.3.3)
+      '@types/node':
+        specifier: ^20.14.11
+        version: 20.14.11
       github-slugger:
         specifier: ^2.0.0
         version: 2.0.0
@@ -23,6 +26,12 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
+      tsc-alias:
+        specifier: ^1.8.10
+        version: 1.8.10
+      tslib:
+        specifier: ^2.6.3
+        version: 2.6.3
       turbo:
         specifier: ^2.0.9
         version: 2.0.9
@@ -97,9 +106,6 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6
         version: 11.1.6(rollup@4.19.0)(tslib@2.6.3)(typescript@5.5.4)
-      '@types/node':
-        specifier: ^20.14.11
-        version: 20.14.11
       glob:
         specifier: ^11.0.0
         version: 11.0.0
@@ -118,15 +124,6 @@ importers:
       tinybench:
         specifier: ^2.8.0
         version: 2.8.0
-      tsc-alias:
-        specifier: ^1.8.10
-        version: 1.8.10
-      tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
-      typescript:
-        specifier: ^5.5.4
-        version: 5.5.4
 
 packages:
 

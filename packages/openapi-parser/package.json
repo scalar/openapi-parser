@@ -53,16 +53,12 @@
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^20.14.11",
     "glob": "^11.0.0",
     "just-diff": "^6.0.2",
     "rollup": "^4.19.0",
     "rollup-plugin-output-size": "^1.4.0",
     "rollup-plugin-webpack-stats": "^1.0.1",
-    "tinybench": "^2.8.0",
-    "tsc-alias": "^1.8.10",
-    "tslib": "^2.6.3",
-    "typescript": "^5.5.4"
+    "tinybench": "^2.8.0"
   },
   "dependencies": {
     "ajv": "^8.17.1",

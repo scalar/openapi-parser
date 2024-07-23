@@ -9,7 +9,10 @@
     "turbo": "^2.0.9",
     "typescript": "^5.5.4",
     "vite-node": "^2.0.4",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.4",
+    "@types/node": "^20.14.11",
+    "tsc-alias": "^1.8.10",
+    "tslib": "^2.6.3"
   },
   "private": true,
   "scripts": {
