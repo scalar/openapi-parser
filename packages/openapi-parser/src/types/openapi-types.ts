@@ -83,11 +83,11 @@ export namespace OpenAPIV3_1 {
       servers?: ServerObject[]
     } & (
       | (Pick<PathsWebhooksComponents<T>, 'paths'> &
-        Omit<Partial<PathsWebhooksComponents<T>>, 'paths'>)
+          Omit<Partial<PathsWebhooksComponents<T>>, 'paths'>)
       | (Pick<PathsWebhooksComponents<T>, 'webhooks'> &
-        Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
+          Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
       | (Pick<PathsWebhooksComponents<T>, 'components'> &
-        Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
+          Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
     )
   >
 
@@ -402,7 +402,7 @@ export namespace OpenAPIV3 {
     in?: string
   }
 
-  export interface HeaderObject extends ParameterBaseObject { }
+  export interface HeaderObject extends ParameterBaseObject {}
 
   export interface ParameterBaseObject {
     description?: string
