@@ -2,4 +2,4 @@
 '@scalar/openapi-parser': patch
 ---
 
-Add literal versions to OpenAPI.Document types
+feat: add literal versions to OpenAPI.Document types
