@@ -4,12 +4,12 @@
     "@changesets/cli": "^2.27.7",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "github-slugger": "^2.0.0",
-    "lefthook": "^1.6.18",
-    "prettier": "^3.3.2",
-    "turbo": "^2.0.6",
-    "typescript": "^5.5.3",
-    "vite-node": "^1.6.0",
-    "vitest": "^1.6.0"
+    "lefthook": "^1.7.5",
+    "prettier": "^3.3.3",
+    "turbo": "^2.0.9",
+    "typescript": "^5.5.4",
+    "vite-node": "^2.0.4",
+    "vitest": "^2.0.4"
   },
   "private": true,
   "scripts": {
