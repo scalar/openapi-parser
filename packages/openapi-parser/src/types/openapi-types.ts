@@ -56,7 +56,10 @@ export namespace OpenAPIV3_1 {
   export type Document<T extends {} = {}> = Modify<
     Omit<OpenAPIV3.Document<T>, 'paths' | 'components'>,
     {
-      /** Version of the OpenAPI specification */
+      /**
+       * Version of the OpenAPI specification
+       * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+       */
       openapi: '3.1.0'
       info?: InfoObject
       jsonSchemaDialect?: string
@@ -281,7 +284,10 @@ export namespace OpenAPIV3_1 {
 export namespace OpenAPIV3 {
   export interface Document<T extends {} = {}> {
     [propName: string]: any
-    /** Version of the OpenAPI specification */
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
     openapi?: '3.0.0' | '3.0.1' | '3.0.2' | '3.0.2'
     info?: InfoObject
     servers?: ServerObject[]
@@ -620,6 +626,10 @@ export namespace OpenAPIV2 {
     schemes?: string[]
     security?: SecurityRequirementObject[]
     securityDefinitions?: SecurityDefinitionsObject
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
     swagger?: '2.0'
     tags?: TagObject[]
   }
