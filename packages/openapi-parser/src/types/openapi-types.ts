@@ -24,17 +24,6 @@ export namespace OpenAPI {
     | OpenAPIV2.OperationObject<T>
     | OpenAPIV3.OperationObject<T>
     | OpenAPIV3_1.OperationObject<T>
-  export type Parameter =
-    | OpenAPIV3_1.ReferenceObject
-    | OpenAPIV3_1.ParameterObject
-    | OpenAPIV3.ReferenceObject
-    | OpenAPIV3.ParameterObject
-    | OpenAPIV2.ReferenceObject
-    | OpenAPIV2.Parameter
-  export type Parameters =
-    | (OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)[]
-    | (OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject)[]
-    | (OpenAPIV2.ReferenceObject | OpenAPIV2.Parameter)[]
 
   export interface Request {
     body?: any
@@ -42,6 +31,34 @@ export namespace OpenAPI {
     params?: object
     query?: object
   }
+
+  export type ResponseObject =
+    | OpenAPIV2.ResponseObject
+    | OpenAPIV3.ResponseObject
+    | OpenAPIV3_1.ResponseObject
+
+  export type Parameter =
+    | OpenAPIV3_1.ReferenceObject
+    | OpenAPIV3_1.ParameterObject
+    | OpenAPIV3.ReferenceObject
+    | OpenAPIV3.ParameterObject
+    | OpenAPIV2.ReferenceObject
+    | OpenAPIV2.Parameter
+
+  export type Parameters =
+    | (OpenAPIV3_1.ReferenceObject | OpenAPIV3_1.ParameterObject)[]
+    | (OpenAPIV3.ReferenceObject | OpenAPIV3.ParameterObject)[]
+    | (OpenAPIV2.ReferenceObject | OpenAPIV2.Parameter)[]
+
+  export type ExampleObject =
+    | OpenAPIV2.ExampleObject
+    | OpenAPIV3.ExampleObject
+    | OpenAPIV3_1.ExampleObject
+
+  export type SchemaObject =
+    | OpenAPIV2.SchemaObject
+    | OpenAPIV3.SchemaObject
+    | OpenAPIV3_1.SchemaObject
 }
 
 export namespace OpenAPIV3_1 {
@@ -66,11 +83,11 @@ export namespace OpenAPIV3_1 {
       servers?: ServerObject[]
     } & (
       | (Pick<PathsWebhooksComponents<T>, 'paths'> &
-          Omit<Partial<PathsWebhooksComponents<T>>, 'paths'>)
+        Omit<Partial<PathsWebhooksComponents<T>>, 'paths'>)
       | (Pick<PathsWebhooksComponents<T>, 'webhooks'> &
-          Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
+        Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
       | (Pick<PathsWebhooksComponents<T>, 'components'> &
-          Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
+        Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
     )
   >
 
@@ -385,7 +402,7 @@ export namespace OpenAPIV3 {
     in?: string
   }
 
-  export interface HeaderObject extends ParameterBaseObject {}
+  export interface HeaderObject extends ParameterBaseObject { }
 
   export interface ParameterBaseObject {
     description?: string
