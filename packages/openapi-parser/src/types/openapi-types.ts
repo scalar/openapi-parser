@@ -18,14 +18,8 @@ export namespace OpenAPI {
       // any other attribute
       [key: string]: any
     } = {},
-  > = (
-    | OpenAPIV2.Document<T>
-    | OpenAPIV3.Document<T>
-    | OpenAPIV3_1.Document<T>
-  ) & {
-    // any other attribute
-    [key: string]: any
-  }
+  > = OpenAPIV2.Document<T> | OpenAPIV3.Document<T> | OpenAPIV3_1.Document<T>
+
   export type Operation<T extends {} = {}> =
     | OpenAPIV2.OperationObject<T>
     | OpenAPIV3.OperationObject<T>
@@ -62,6 +56,11 @@ export namespace OpenAPIV3_1 {
   export type Document<T extends {} = {}> = Modify<
     Omit<OpenAPIV3.Document<T>, 'paths' | 'components'>,
     {
+      /**
+       * Version of the OpenAPI specification
+       * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+       */
+      openapi: '3.1.0'
       info?: InfoObject
       jsonSchemaDialect?: string
       servers?: ServerObject[]
@@ -284,7 +283,12 @@ export namespace OpenAPIV3_1 {
 
 export namespace OpenAPIV3 {
   export interface Document<T extends {} = {}> {
-    openapi?: string
+    [propName: string]: any
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
+    openapi?: '3.0.0' | '3.0.1' | '3.0.2' | '3.0.2'
     info?: InfoObject
     servers?: ServerObject[]
     paths?: PathsObject<T>
@@ -606,6 +610,9 @@ export namespace OpenAPIV3 {
 
 export namespace OpenAPIV2 {
   export interface Document<T extends {} = {}> {
+    [propName: string]: any
+    /** To make it easier to use openapi as a type guard */
+    openapi: undefined
     basePath?: string
     consumes?: MimeTypes
     definitions?: DefinitionsObject
@@ -619,7 +626,11 @@ export namespace OpenAPIV2 {
     schemes?: string[]
     security?: SecurityRequirementObject[]
     securityDefinitions?: SecurityDefinitionsObject
-    swagger?: string
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
+    swagger?: '2.0'
     tags?: TagObject[]
   }
 
