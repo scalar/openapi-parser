@@ -55,8 +55,8 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "glob": "^11.0.0",
     "just-diff": "^6.0.2",
-    "rollup": "^4.19.0",
-    "rollup-plugin-output-size": "^1.4.0",
+    "rollup": "^4.19.2",
+    "rollup-plugin-output-size": "^1.4.1",
     "rollup-plugin-webpack-stats": "^1.0.1",
     "tinybench": "^2.8.0"
   },
@@ -66,6 +66,6 @@
     "ajv-formats": "^3.0.1",
     "jsonpointer": "^5.0.1",
     "leven": "^4.0.0",
-    "yaml": "^2.4.5"
+    "yaml": "^2.5.0"
   }
 }

@@ -3,16 +3,16 @@
   "devDependencies": {
     "@changesets/cli": "^2.27.7",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "@types/node": "^22.0.2",
     "github-slugger": "^2.0.0",
-    "lefthook": "^1.7.5",
+    "lefthook": "^1.7.11",
     "prettier": "^3.3.3",
-    "turbo": "^2.0.9",
-    "typescript": "^5.5.4",
-    "vite-node": "^2.0.4",
-    "vitest": "^2.0.4",
-    "@types/node": "^20.14.11",
     "tsc-alias": "^1.8.10",
-    "tslib": "^2.6.3"
+    "tslib": "^2.6.3",
+    "turbo": "^2.0.11",
+    "typescript": "^5.5.4",
+    "vite-node": "^2.0.5",
+    "vitest": "^2.0.5"
   },
   "private": true,
   "scripts": {

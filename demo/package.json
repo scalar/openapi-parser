@@ -11,13 +11,13 @@
   "dependencies": {
     "@scalar/openapi-parser": "workspace:*",
     "@vueuse/core": "^10.11.0",
-    "vue": "^3.4.33"
+    "vue": "^3.4.35"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.5",
+    "@vitejs/plugin-vue": "^5.1.1",
     "typescript": "^5.5.4",
-    "vite": "^5.3.4",
+    "vite": "^5.3.5",
     "vue-json-viewer": "3",
-    "vue-tsc": "^2.0.28"
+    "vue-tsc": "^2.0.29"
   }
 }
