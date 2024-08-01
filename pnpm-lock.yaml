@@ -116,8 +116,8 @@ importers:
         specifier: ^4.19.0
         version: 4.19.0
       rollup-plugin-output-size:
-        specifier: ^1.4.0
-        version: 1.4.0(rollup@4.19.0)
+        specifier: ^1.4.1
+        version: 1.4.1(rollup@4.19.0)
       rollup-plugin-webpack-stats:
         specifier: ^1.0.1
         version: 1.0.1(rollup@4.19.0)
@@ -1447,8 +1447,8 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
-  rollup-plugin-output-size@1.4.0:
-    resolution: {integrity: sha512-pua9S1CeNgzOiTM3p4e97YpmXDszPKY7ZHAVWVMnWD/fDGeTEG3LXiHdkQJjCYmidN9r5fCI6wM70kPuNmyutA==}
+  rollup-plugin-output-size@1.4.1:
+    resolution: {integrity: sha512-tcKAerPXSVIPFrAr30+8lEEoVzbtZS1cmOrtTpVf+iI3x0qymzihiSu+ns/7yXKB48u77xUQ1By14+GVnv+u3A==}
     engines: {node: '>=14.16.0'}
     peerDependencies:
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
@@ -3134,7 +3134,7 @@ snapshots:
 
   reusify@1.0.4: {}
 
-  rollup-plugin-output-size@1.4.0(rollup@4.19.0):
+  rollup-plugin-output-size@1.4.1(rollup@4.19.0):
     dependencies:
       colorette: 2.0.20
       gzip-size: 7.0.0
