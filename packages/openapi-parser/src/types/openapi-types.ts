@@ -7,18 +7,24 @@
  * We deal with user input and can’t assume they really stick to any official specification.
  */
 
+/* any other attribute, for example x-* extensions */
+type AnyOtherAttribute = {
+  /** OpenAPI extension */
+  [key: `x-${string}`]: any
+  /** Unknown attribute */
+  [key: string]: any
+}
+
 export namespace OpenAPI {
   // OpenAPI extensions can be declared using generics
   // e.g.:
   // OpenAPI.Document<{
   //   'x-foobar': Foobar
   // }>
-  export type Document<
-    T extends {
-      // any other attribute
-      [key: string]: any
-    } = {},
-  > = OpenAPIV2.Document<T> | OpenAPIV3.Document<T> | OpenAPIV3_1.Document<T>
+  export type Document<T extends AnyOtherAttribute = {}> =
+    | OpenAPIV2.Document<T>
+    | OpenAPIV3.Document<T>
+    | OpenAPIV3_1.Document<T>
 
   export type Operation<T extends {} = {}> =
     | OpenAPIV2.OperationObject<T>
@@ -88,7 +94,8 @@ export namespace OpenAPIV3_1 {
           Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
       | (Pick<PathsWebhooksComponents<T>, 'components'> &
           Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
-    )
+    ) &
+      T
   >
 
   export type InfoObject = Modify<
@@ -173,11 +180,13 @@ export namespace OpenAPIV3_1 {
    * 'items' will be always visible as optional
    * Casting schema object to ArraySchemaObject or NonArraySchemaObject will work fine
    */
-  export type SchemaObject =
+  export type SchemaObject = (
     | ArraySchemaObject
     | NonArraySchemaObject
     | MixedSchemaObject
     | boolean
+  ) &
+    AnyOtherAttribute
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
@@ -299,13 +308,13 @@ export namespace OpenAPIV3_1 {
 }
 
 export namespace OpenAPIV3 {
-  export interface Document<T extends {} = {}> {
+  export type Document<T extends {} = {}> = {
     [propName: string]: any
     /**
      * Version of the OpenAPI specification
      * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
      */
-    openapi?: '3.0.0' | '3.0.1' | '3.0.2' | '3.0.2'
+    openapi: '3.0.0' | '3.0.1' | '3.0.2' | '3.0.2'
     info?: InfoObject
     servers?: ServerObject[]
     paths?: PathsObject<T>
@@ -313,7 +322,7 @@ export namespace OpenAPIV3 {
     security?: SecurityRequirementObject[]
     tags?: TagObject[]
     externalDocs?: ExternalDocumentationObject
-  }
+  } & T
 
   export interface InfoObject {
     title?: string
@@ -378,7 +387,6 @@ export namespace OpenAPIV3 {
 
   export type OperationObject<T extends {} = {}> = {
     tags?: string[]
-    [key: string]: any
     summary?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
@@ -424,7 +432,8 @@ export namespace OpenAPIV3 {
     | 'string'
     | 'integer'
   export type ArraySchemaObjectType = 'array'
-  export type SchemaObject = ArraySchemaObject | NonArraySchemaObject
+  export type SchemaObject = (ArraySchemaObject | NonArraySchemaObject) &
+    AnyOtherAttribute
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
@@ -489,9 +498,8 @@ export namespace OpenAPIV3 {
     wrapped?: boolean
   }
 
-  export interface ReferenceObject {
+  export interface ReferenceObject extends AnyOtherAttribute {
     $ref?: string
-    [key: string]: any
   }
 
   export interface ExampleObject {
@@ -526,12 +534,11 @@ export namespace OpenAPIV3 {
     [code: string]: ReferenceObject | ResponseObject
   }
 
-  export interface ResponseObject {
+  export interface ResponseObject extends AnyOtherAttribute {
     description?: string
     headers?: { [header: string]: ReferenceObject | HeaderObject }
     content?: { [media: string]: MediaTypeObject }
     links?: { [link: string]: ReferenceObject | LinkObject }
-    [key: string]: any
   }
 
   export interface LinkObject {
@@ -617,19 +624,21 @@ export namespace OpenAPIV3 {
     openIdConnectUrl?: string
   }
 
-  export interface TagObject {
+  export interface TagObject extends AnyOtherAttribute {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
-    [key: string]: any
   }
 }
 
 export namespace OpenAPIV2 {
-  export interface Document<T extends {} = {}> {
+  export type Document<T extends {} = {}> = {
     [propName: string]: any
-    /** To make it easier to use openapi as a type guard */
-    openapi: undefined
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
+    swagger: '2.0'
     basePath?: string
     consumes?: MimeTypes
     definitions?: DefinitionsObject
@@ -643,19 +652,13 @@ export namespace OpenAPIV2 {
     schemes?: string[]
     security?: SecurityRequirementObject[]
     securityDefinitions?: SecurityDefinitionsObject
-    /**
-     * Version of the OpenAPI specification
-     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
-     */
-    swagger?: '2.0'
     tags?: TagObject[]
-  }
+  } & T
 
-  export interface TagObject {
+  export interface TagObject extends AnyOtherAttribute {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
-    [key: string]: any
   }
 
   export interface SecuritySchemeObjectBase {
@@ -727,9 +730,8 @@ export namespace OpenAPIV2 {
     [index: string]: string[]
   }
 
-  export interface ReferenceObject {
+  export interface ReferenceObject extends AnyOtherAttribute {
     $ref: string
-    [key: string]: any
   }
 
   export type Response = ResponseObject | ReferenceObject
@@ -740,12 +742,11 @@ export namespace OpenAPIV2 {
 
   export type Schema = SchemaObject | ReferenceObject
 
-  export interface ResponseObject {
+  export interface ResponseObject extends AnyOtherAttribute {
     description?: string
     schema?: Schema
     headers?: HeadersObject
     examples?: ExampleObject
-    [key: string]: any
   }
 
   export interface HeadersObject {
@@ -762,7 +763,6 @@ export namespace OpenAPIV2 {
 
   export type OperationObject<T extends {} = {}> = {
     tags?: string[]
-    [key: string]: any
     summary?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
@@ -907,7 +907,7 @@ export namespace OpenAPIV2 {
   }
 }
 
-export interface IJsonSchema {
+export interface IJsonSchema extends AnyOtherAttribute {
   id?: string
   $schema?: string
   title?: string
