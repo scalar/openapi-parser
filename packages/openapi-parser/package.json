@@ -55,7 +55,7 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "glob": "^11.0.0",
     "just-diff": "^6.0.2",
-    "rollup": "^4.19.0",
+    "rollup": "^4.19.2",
     "rollup-plugin-output-size": "^1.4.1",
     "rollup-plugin-webpack-stats": "^1.0.1",
     "tinybench": "^2.8.0"
