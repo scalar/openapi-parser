@@ -1,5 +1,14 @@
 # @scalar/openapi-parser
 
+## 0.7.3
+
+### Patch Changes
+
+- a52eb57: feat: add literal versions to OpenAPI.Document types
+- aec9f22: feat: types: allow to type custom extensions
+- aec9f22: feat: types: allow any attribute in schemas
+- d2493fe: feat: expose more types under the OpenAPI namespace
+
 ## 0.7.2
 
 ### Patch Changes
