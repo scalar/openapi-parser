@@ -7,20 +7,26 @@
  * We deal with user input and can’t assume they really stick to any official specification.
  */
 
+/** any other attribute, for example x-* extensions */
+type AnyOtherAttribute = {
+  /** OpenAPI extension */
+  [customExtension: `x-${string}`]: any
+  /** Unknown attribute */
+  [key: string]: any
+}
+
 export namespace OpenAPI {
   // OpenAPI extensions can be declared using generics
   // e.g.:
   // OpenAPI.Document<{
   //   'x-foobar': Foobar
   // }>
-  export type Document<
-    T extends {
-      // any other attribute
-      [key: string]: any
-    } = {},
-  > = OpenAPIV2.Document<T> | OpenAPIV3.Document<T> | OpenAPIV3_1.Document<T>
+  export type Document<T extends AnyOtherAttribute = {}> =
+    | OpenAPIV2.Document<T>
+    | OpenAPIV3.Document<T>
+    | OpenAPIV3_1.Document<T>
 
-  export type Operation<T extends {} = {}> =
+  export type Operation<T = {}> =
     | OpenAPIV2.OperationObject<T>
     | OpenAPIV3.OperationObject<T>
     | OpenAPIV3_1.OperationObject<T>
@@ -64,20 +70,20 @@ export namespace OpenAPI {
 export namespace OpenAPIV3_1 {
   type Modify<T, R> = Omit<T, keyof R> & R
 
-  type PathsWebhooksComponents<T extends {} = {}> = {
+  type PathsWebhooksComponents<T = {}> = {
     paths?: PathsObject<T>
     webhooks?: Record<string, PathItemObject | ReferenceObject>
     components?: ComponentsObject
   }
 
-  export type Document<T extends {} = {}> = Modify<
+  export type Document<T = {}> = Modify<
     Omit<OpenAPIV3.Document<T>, 'paths' | 'components'>,
     {
       /**
        * Version of the OpenAPI specification
        * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
        */
-      openapi: '3.1.0'
+      openapi?: '3.1.0'
       info?: InfoObject
       jsonSchemaDialect?: string
       servers?: ServerObject[]
@@ -88,7 +94,9 @@ export namespace OpenAPIV3_1 {
           Omit<Partial<PathsWebhooksComponents<T>>, 'webhooks'>)
       | (Pick<PathsWebhooksComponents<T>, 'components'> &
           Omit<Partial<PathsWebhooksComponents<T>>, 'components'>)
-    )
+    ) &
+      T &
+      AnyOtherAttribute
   >
 
   export type InfoObject = Modify<
@@ -124,14 +132,14 @@ export namespace OpenAPIV3_1 {
     }
   >
 
-  export type PathsObject<T extends {} = {}, P extends {} = {}> = Record<
+  export type PathsObject<T = {}, P extends {} = {}> = Record<
     string,
     (PathItemObject<T> & P) | undefined
   >
 
   export type HttpMethods = OpenAPIV3.HttpMethods
 
-  export type PathItemObject<T extends {} = {}> = Modify<
+  export type PathItemObject<T = {}> = Modify<
     OpenAPIV3.PathItemObject<T>,
     {
       servers?: ServerObject[]
@@ -141,7 +149,7 @@ export namespace OpenAPIV3_1 {
     [method in HttpMethods]?: OperationObject<T>
   }
 
-  export type OperationObject<T extends {} = {}> = Modify<
+  export type OperationObject<T = {}> = Modify<
     OpenAPIV3.OperationObject<T>,
     {
       parameters?: (ReferenceObject | ParameterObject)[]
@@ -173,11 +181,13 @@ export namespace OpenAPIV3_1 {
    * 'items' will be always visible as optional
    * Casting schema object to ArraySchemaObject or NonArraySchemaObject will work fine
    */
-  export type SchemaObject =
+  export type SchemaObject = (
     | ArraySchemaObject
     | NonArraySchemaObject
     | MixedSchemaObject
     | boolean
+  ) &
+    AnyOtherAttribute
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
@@ -299,8 +309,7 @@ export namespace OpenAPIV3_1 {
 }
 
 export namespace OpenAPIV3 {
-  export interface Document<T extends {} = {}> {
-    [propName: string]: any
+  export type Document<T = {}> = {
     /**
      * Version of the OpenAPI specification
      * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
@@ -313,7 +322,8 @@ export namespace OpenAPIV3 {
     security?: SecurityRequirementObject[]
     tags?: TagObject[]
     externalDocs?: ExternalDocumentationObject
-  }
+  } & T &
+    AnyOtherAttribute
 
   export interface InfoObject {
     title?: string
@@ -347,7 +357,7 @@ export namespace OpenAPIV3 {
     description?: string
   }
 
-  export interface PathsObject<T extends {} = {}, P extends {} = {}> {
+  export interface PathsObject<T = {}, P extends {} = {}> {
     [pattern: string]: (PathItemObject<T> & P) | undefined
   }
 
@@ -366,7 +376,7 @@ export namespace OpenAPIV3 {
     TRACE = 'trace',
   }
 
-  export type PathItemObject<T extends {} = {}> = {
+  export type PathItemObject<T = {}> = {
     $ref?: string
     summary?: string
     description?: string
@@ -374,11 +384,11 @@ export namespace OpenAPIV3 {
     parameters?: (ReferenceObject | ParameterObject)[]
   } & {
     [method in HttpMethods]?: OperationObject<T>
-  }
+  } & T &
+    AnyOtherAttribute
 
-  export type OperationObject<T extends {} = {}> = {
+  export type OperationObject<T = {}> = {
     tags?: string[]
-    [key: string]: any
     summary?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
@@ -390,7 +400,8 @@ export namespace OpenAPIV3 {
     deprecated?: boolean
     security?: SecurityRequirementObject[]
     servers?: ServerObject[]
-  } & T
+  } & T &
+    AnyOtherAttribute
 
   export interface ExternalDocumentationObject {
     description?: string
@@ -424,7 +435,8 @@ export namespace OpenAPIV3 {
     | 'string'
     | 'integer'
   export type ArraySchemaObjectType = 'array'
-  export type SchemaObject = ArraySchemaObject | NonArraySchemaObject
+  export type SchemaObject = (ArraySchemaObject | NonArraySchemaObject) &
+    AnyOtherAttribute
 
   export interface ArraySchemaObject extends BaseSchemaObject {
     type?: ArraySchemaObjectType
@@ -489,9 +501,8 @@ export namespace OpenAPIV3 {
     wrapped?: boolean
   }
 
-  export interface ReferenceObject {
+  export interface ReferenceObject extends AnyOtherAttribute {
     $ref?: string
-    [key: string]: any
   }
 
   export interface ExampleObject {
@@ -526,12 +537,11 @@ export namespace OpenAPIV3 {
     [code: string]: ReferenceObject | ResponseObject
   }
 
-  export interface ResponseObject {
+  export interface ResponseObject extends AnyOtherAttribute {
     description?: string
     headers?: { [header: string]: ReferenceObject | HeaderObject }
     content?: { [media: string]: MediaTypeObject }
     links?: { [link: string]: ReferenceObject | LinkObject }
-    [key: string]: any
   }
 
   export interface LinkObject {
@@ -617,19 +627,20 @@ export namespace OpenAPIV3 {
     openIdConnectUrl?: string
   }
 
-  export interface TagObject {
+  export interface TagObject extends AnyOtherAttribute {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
-    [key: string]: any
   }
 }
 
 export namespace OpenAPIV2 {
-  export interface Document<T extends {} = {}> {
-    [propName: string]: any
-    /** To make it easier to use openapi as a type guard */
-    openapi: undefined
+  export type Document<T = {}> = {
+    /**
+     * Version of the OpenAPI specification
+     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
+     */
+    swagger?: '2.0'
     basePath?: string
     consumes?: MimeTypes
     definitions?: DefinitionsObject
@@ -643,19 +654,15 @@ export namespace OpenAPIV2 {
     schemes?: string[]
     security?: SecurityRequirementObject[]
     securityDefinitions?: SecurityDefinitionsObject
-    /**
-     * Version of the OpenAPI specification
-     * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
-     */
-    swagger?: '2.0'
     tags?: TagObject[]
-  }
+    [key: string]: any
+  } & T &
+    AnyOtherAttribute
 
-  export interface TagObject {
+  export interface TagObject extends AnyOtherAttribute {
     name?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
-    [key: string]: any
   }
 
   export interface SecuritySchemeObjectBase {
@@ -727,9 +734,8 @@ export namespace OpenAPIV2 {
     [index: string]: string[]
   }
 
-  export interface ReferenceObject {
+  export interface ReferenceObject extends AnyOtherAttribute {
     $ref: string
-    [key: string]: any
   }
 
   export type Response = ResponseObject | ReferenceObject
@@ -740,12 +746,11 @@ export namespace OpenAPIV2 {
 
   export type Schema = SchemaObject | ReferenceObject
 
-  export interface ResponseObject {
+  export interface ResponseObject extends AnyOtherAttribute {
     description?: string
     schema?: Schema
     headers?: HeadersObject
     examples?: ExampleObject
-    [key: string]: any
   }
 
   export interface HeadersObject {
@@ -760,9 +765,8 @@ export namespace OpenAPIV2 {
     [index: string]: any
   }
 
-  export type OperationObject<T extends {} = {}> = {
+  export type OperationObject<T = {}> = {
     tags?: string[]
-    [key: string]: any
     summary?: string
     description?: string
     externalDocs?: ExternalDocumentationObject
@@ -774,7 +778,8 @@ export namespace OpenAPIV2 {
     schemes?: string[]
     deprecated?: boolean
     security?: SecurityRequirementObject[]
-  } & T
+  } & T &
+    AnyOtherAttribute
 
   export interface ResponsesObject {
     [index: string]: Response | undefined
@@ -807,14 +812,14 @@ export namespace OpenAPIV2 {
     PATCH = 'patch',
   }
 
-  export type PathItemObject<T extends {} = {}> = {
+  export type PathItemObject<T = {}> = {
     $ref?: string
     parameters?: Parameters
   } & {
     [method in HttpMethods]?: OperationObject<T>
   }
 
-  export interface PathsObject<T extends {} = {}> {
+  export interface PathsObject<T = {}> {
     [index: string]: PathItemObject<T>
   }
 
@@ -907,7 +912,7 @@ export namespace OpenAPIV2 {
   }
 }
 
-export interface IJsonSchema {
+export interface IJsonSchema extends AnyOtherAttribute {
   id?: string
   $schema?: string
   title?: string
