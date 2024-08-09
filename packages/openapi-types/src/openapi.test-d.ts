@@ -1,4 +1,4 @@
-import { expectTypeOf } from 'vitest'
+import { assertType, expectTypeOf } from 'vitest'
 import { describe, it } from 'vitest'
 
 import { OpenAPI, OpenAPIV2, OpenAPIV3, OpenAPIV3_1 } from './index'
@@ -34,5 +34,14 @@ describe('OpenAPI', () => {
     }
 
     expectTypeOf(specification).toMatchTypeOf<OpenAPIV3_1.Document>()
+  })
+
+  it('types a custom extension', () => {
+    const specification: OpenAPI.Document<{
+      'x-custom'?: boolean
+    }> = {}
+
+    expectTypeOf(specification['random-attribute']).toEqualTypeOf<any>()
+    expectTypeOf(specification['x-custom']).toEqualTypeOf<boolean>()
   })
 })
