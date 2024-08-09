@@ -84,6 +84,7 @@ export namespace OpenAPIV3_1 {
        * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
        */
       openapi?: '3.1.0'
+      swagger?: undefined
       info?: InfoObject
       jsonSchemaDialect?: string
       servers?: ServerObject[]
@@ -315,6 +316,7 @@ export namespace OpenAPIV3 {
      * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
      */
     openapi?: '3.0.0' | '3.0.1' | '3.0.2' | '3.0.2'
+    swagger?: undefined
     info?: InfoObject
     servers?: ServerObject[]
     paths?: PathsObject<T>
@@ -641,7 +643,7 @@ export namespace OpenAPIV2 {
      * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
      */
     swagger?: '2.0'
-    openapi: never
+    openapi?: never
     basePath?: string
     consumes?: MimeTypes
     definitions?: DefinitionsObject
@@ -656,7 +658,6 @@ export namespace OpenAPIV2 {
     security?: SecurityRequirementObject[]
     securityDefinitions?: SecurityDefinitionsObject
     tags?: TagObject[]
-    [key: string]: any
   } & T &
     AnyOtherAttribute
 
