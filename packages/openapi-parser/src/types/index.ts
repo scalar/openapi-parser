@@ -1,12 +1,6 @@
-import { ERRORS, OpenApiVersion } from '../configuration'
-import type { OpenAPI } from './openapi-types'
+import type { OpenAPI } from '@scalar/openapi-types'
 
-export type {
-  OpenAPI,
-  OpenAPIV2,
-  OpenAPIV3,
-  OpenAPIV3_1,
-} from './openapi-types'
+import { ERRORS, OpenApiVersion } from '../configuration'
 
 export type AnyObject = Record<string, any>
 

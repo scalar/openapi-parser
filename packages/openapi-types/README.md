@@ -1,4 +1,4 @@
-# Scalar OpenAPI Parser
+# Scalar OpenAPI Types
 
 [![CI](https://github.com/scalar/openapi-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/scalar/openapi-parser/actions/workflows/ci.yml)
 [![Release](https://github.com/scalar/openapi-parser/actions/workflows/release.yml/badge.svg)](https://github.com/scalar/openapi-parser/actions/workflows/release.yml)
@@ -11,66 +11,20 @@ Modern OpenAPI parser written in TypeScript, with support for Swagger 2.0, OpenA
 ## Installation
 
 ```bash
-npm add @scalar/openapi-parser
+npm add @scalar/openapi-types
 ```
 
 ## Usage
 
-### Parse
-
 ```ts
-import { dereference } from '@scalar/openapi-parser'
+import type { OpenAPI } from '@scalar/openapi-types'
 
-const file = `{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Hello World",
-    "version": "1.0.0"
+const file: OpenAPI.Document = {
+  openapi: '3.1.0',
+  info: {
+    title: 'Hello World',
+    version: '1.0.0',
   },
-  "paths": {}
-}`
-
-const result = await dereference(file)
-```
-
-### Validate
-
-```ts
-import { validate } from '@scalar/openapi-parser'
-
-const file = `{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Hello World",
-    "version": "1.0.0"
-  },
-  "paths": {}
-}`
-
-const { valid, errors } = await validate(file)
-
-console.log(valid)
-
-if (!valid) {
-  console.log(errors)
+  paths: {},
 }
-```
-
-### Version
-
-```ts
-import { dereference } from '@scalar/openapi-parser'
-
-const file = `{
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Hello World",
-    "version": "1.0.0"
-  },
-  "paths": {}
-}`
-
-const { version } = await dereference(file)
-
-console.log(version)
 ```

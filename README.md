@@ -16,15 +16,9 @@ Modern OpenAPI parser written in TypeScript with support for OpenAPI 3.1, OpenAP
 - [ ] Amazing error output
 - [ ] Support for OpenAPI 4.0 👀
 
-## Limitations
-
-References are hard and the following features aren’t implemented yet (but will be in the future):
-
-- URLs
-
 ## Installation
 
-```
+```bash
 npm add @scalar/openapi-parser
 ```
 
@@ -146,6 +140,29 @@ validate(specification, {
 .catch(error => {
   // Failure
 })
+```
+
+### TypeScript
+
+If you just look for our types, you can install the package separately:
+
+```bash
+npm add @scalar/openapi-types
+```
+
+And use it like this:
+
+```ts
+import type { OpenAPI } from '@scalar/openapi-types'
+
+const file: OpenAPI.Document = {
+  openapi: '3.1.0',
+  info: {
+    title: 'Hello World',
+    version: '1.0.0',
+  },
+  paths: {},
+}
 ```
 
 ### Advanced: URL and file references

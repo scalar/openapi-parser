@@ -8,11 +8,7 @@ import type { Plugin } from 'rollup'
 import outputSize from 'rollup-plugin-output-size'
 import webpackStatsPlugin from 'rollup-plugin-webpack-stats'
 
-const input = [
-  './src/index.ts',
-  './src/utils/load/plugins/fetchUrls.ts',
-  './src/utils/load/plugins/readFiles.ts',
-]
+const input = ['./src/index.ts']
 
 const dir = 'dist'
 
@@ -61,15 +57,6 @@ const config: RollupOptions[] = [
       terser(),
       webpackStatsPlugin(),
       outputSize(),
-    ],
-    external: [
-      ...builtinModules,
-      ...builtinModules.map((m) => `node:${m}`),
-      'ajv/dist/2020',
-      'ajv-draft-04',
-      'ajv-formats',
-      'yaml',
-      '@scalar/openapi-types',
     ],
     treeshake: {
       annotations: true,
