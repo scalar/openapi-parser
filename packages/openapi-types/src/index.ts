@@ -641,6 +641,7 @@ export namespace OpenAPIV2 {
      * @see https://github.com/OAI/OpenAPI-Specification/tree/main/versions
      */
     swagger?: '2.0'
+    openapi: never
     basePath?: string
     consumes?: MimeTypes
     definitions?: DefinitionsObject

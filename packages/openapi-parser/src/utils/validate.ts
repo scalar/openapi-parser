@@ -1,8 +1,9 @@
+import type { OpenAPI } from '@scalar/openapi-types'
+
 import { Validator } from '../lib/Validator'
 import type {
   AnyObject,
   Filesystem,
-  OpenAPI,
   ThrowOnErrorOption,
   ValidateResult,
 } from '../types'

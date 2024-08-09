@@ -106,6 +106,9 @@ importers:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6
         version: 11.1.6(rollup@4.19.2)(tslib@2.6.3)(typescript@5.5.4)
+      '@scalar/openapi-types':
+        specifier: workspace:*
+        version: link:../openapi-types
       glob:
         specifier: ^11.0.0
         version: 11.0.0
@@ -124,6 +127,27 @@ importers:
       tinybench:
         specifier: ^2.8.0
         version: 2.8.0
+
+  packages/openapi-types:
+    devDependencies:
+      '@rollup/plugin-json':
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@4.19.2)
+      '@rollup/plugin-terser':
+        specifier: ^0.4.4
+        version: 0.4.4(rollup@4.19.2)
+      '@rollup/plugin-typescript':
+        specifier: ^11.1.6
+        version: 11.1.6(rollup@4.19.2)(tslib@2.6.3)(typescript@5.5.4)
+      rollup:
+        specifier: ^4.19.2
+        version: 4.19.2
+      rollup-plugin-output-size:
+        specifier: ^1.4.1
+        version: 1.4.1(rollup@4.19.2)
+      rollup-plugin-webpack-stats:
+        specifier: ^1.0.1
+        version: 1.0.1(rollup@4.19.2)
 
 packages:
 
