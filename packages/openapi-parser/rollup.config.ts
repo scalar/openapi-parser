@@ -69,6 +69,7 @@ const config: RollupOptions[] = [
       'ajv-draft-04',
       'ajv-formats',
       'yaml',
+      '@scalar/openapi-types',
     ],
     treeshake: {
       annotations: true,
