@@ -1,5 +1,6 @@
+import type { OpenAPI } from '@scalar/openapi-types'
+
 import { ERRORS } from '../configuration'
-import { OpenAPI } from '../types'
 import type {
   AnyObject,
   ErrorObject,
