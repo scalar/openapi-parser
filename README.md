@@ -1,3 +1,6 @@
+> [!WARNING]  
+> We moved `@scalar/openapi-parser` to [https://github.com/scalar/scalar](https://github.com/scalar/scalar/tree/main/packages/openapi-parser)
+
 # Scalar OpenAPI Parser
 
 [![CI](https://github.com/scalar/openapi-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/scalar/openapi-parser/actions/workflows/ci.yml)
